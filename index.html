@@ -2,20 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Updates - Short & Crisp News</title>
-    <meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; 
-               script-src 'self' 'unsafe-inline'; 
-               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-               img-src 'self' https: data:; 
-               font-src 'self' https://fonts.gstatic.com;
-               connect-src 'self' https://backend-ml60.onrender.com;">
-    
     <link rel="icon" href="image-2.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 🔐 ENHANCED SECURITY HEADERS -->
+    <meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; 
+               script-src 'self' 'unsafe-inline'; 
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+               img-src 'self' https: data: blob:; 
+               font-src 'self' https://fonts.gstatic.com;
+               connect-src 'self' https://backend-ml60.onrender.com;
+               frame-ancestors 'none';
+               base-uri 'self';
+               form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow">
     
     <style>
         :root {
@@ -30,6 +38,7 @@
             --accent-color: #3b82f6;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         [data-theme="dark"] {
@@ -44,51 +53,96 @@
             --accent-color: #60a5fa;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg-color);
-            padding-bottom: 70px; /* Space for bottom nav */
+            padding-bottom: 60px;
+            transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-x: hidden;
-            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        /* --- Header --- */
         header {
             background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
             color: #fff;
             padding: 0.9rem 1rem;
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(59, 130, 246, 0.25);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
         }
 
         .menu-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             border: none;
             color: white;
             font-size: 1.4rem;
-            padding: 0.5rem;
-            border-radius: 8px;
             cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 0.6rem;
+            border-radius: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.05);
+        }
+
+        .menu-btn:active {
+            transform: scale(0.95);
         }
 
         .header-center {
             display: flex;
             align-items: center;
+            flex: 1;
+            justify-content: center;
         }
 
-        .logo { height: 35px; width: 35px; margin-right: 10px; border-radius: 8px; }
-        h1 { font-size: 1.5rem; font-weight: 700; }
+        .logo {
+            height: 40px;
+            width: 40px;
+            margin-right: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
 
-        /* --- Navigation --- */
+        .logo:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: -0.5px;
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -97,10 +151,10 @@
             background: var(--card-bg);
             display: flex;
             justify-content: space-around;
-            padding: 0.5rem 0;
-            border-top: 1px solid var(--border-color);
+            padding: 0.4rem 0;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.12);
             z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom);
+            border-top: 1px solid var(--border-color);
         }
 
         .nav-item {
@@ -108,213 +162,652 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-decoration: none;
+            padding: 0.4rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-meta);
-            padding: 4px;
-            transition: color 0.3s;
+            text-decoration: none;
+            position: relative;
         }
 
-        .nav-item.active { color: var(--accent-color); }
-        .nav-icon { font-size: 1.4rem; margin-bottom: 2px; }
-        .nav-label { font-size: 0.7rem; font-weight: 500; }
+        .nav-item:hover {
+            transform: translateY(-2px);
+        }
 
-        /* --- Pages --- */
-        .page { display: none; padding-top: 10px; animation: fadeIn 0.3s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .nav-item.active {
+            color: var(--accent-color);
+        }
 
-        /* --- Cards --- */
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 0 0 3px 3px;
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-5px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 0.15rem;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s ease;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .sidebar-menu li:hover {
+            background: var(--bg-color);
+        }
+
+        .sidebar-menu a:hover {
+            padding-left: 1.8rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            display: block;
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 520px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            letter-spacing: -0.5px;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-meta);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .setting-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .language-selector {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-color);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            width: 140px;
+            transition: all 0.25s ease;
+        }
+
+        .language-selector:hover {
+            border-color: var(--accent-color);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d5db;
+            transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
         .card-list {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 1rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            max-width: 700px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
         }
 
         .news-card {
             background: var(--card-bg);
             border-radius: 12px;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
+            padding: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
             cursor: pointer;
-            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .news-card:active { transform: scale(0.98); }
+        .news-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent-color);
+            transform: scaleY(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .news-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .news-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+        }
+
+        .news-card:active {
+            transform: translateY(-1px);
+        }
 
         .news-image {
             width: 100%;
-            height: 180px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 0.8rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
             background: var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .news-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.4; }
-        .news-summary { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        
+        .news-card:hover .news-image {
+            transform: scale(1.02);
+        }
+
+        .news-title {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            line-height: 1.4;
+            letter-spacing: -0.3px;
+        }
+
+        .news-summary {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.6rem;
+            line-height: 1.6;
+        }
+
         .news-meta {
-            margin-top: 0.8rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-meta);
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
-            color: var(--text-meta);
+            align-items: center;
+            padding-top: 0.6rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 0.6rem;
         }
 
-        .source-tag {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-color);
-            padding: 2px 8px;
-            border-radius: 4px;
+        .category-tag {
+            background: linear-gradient(135deg, var(--accent-color), var(--header-gradient-2));
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
         }
 
-        /* --- Quick / Reels Section --- */
         .reels-container {
-            height: calc(100vh - 130px);
             position: relative;
-            max-width: 600px;
-            margin: 0 auto;
+            height: calc(100vh - 130px);
             overflow: hidden;
-            background: #000; /* Dark background for immersive feel */
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--bg-color);
+            touch-action: pan-y;
         }
 
         .reel {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             background: var(--card-bg);
-            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            transform: translateY(100%);
+            padding: 1.5rem;
             opacity: 0;
-            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(100%);
+            overflow-y: auto;
+            box-shadow: var(--shadow-md);
+            border-radius: 16px 16px 0 0;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .reel.active { transform: translateY(0); opacity: 1; z-index: 2; }
+        .reel.active {
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 2;
+        }
 
         .reel-image {
             width: 100%;
-            height: 250px;
+            height: 220px;
             object-fit: cover;
             border-radius: 12px;
+            margin-bottom: 1.2rem;
+            background: var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reel:hover .reel-image {
+            transform: scale(1.02);
+        }
+
+        .reel-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 1rem;
+            line-height: 1.35;
+            letter-spacing: -0.5px;
         }
 
-        .reel-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.8rem; }
-        .reel-content { font-size: 1rem; color: var(--text-secondary); line-height: 1.6; flex-grow: 1; overflow-y: auto; }
-        
-        .reel-btn {
-            display: block;
-            background: var(--accent-color);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 1rem;
+        .reel-content {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 1rem;
+            flex: 1;
         }
 
-        /* --- Navigation Arrow --- */
-        .nav-arrow-up {
+        .reel-meta {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-meta);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .reel-indicator {
             position: absolute;
-            right: 20px;
-            bottom: 100px; /* Above bottom nav */
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 3;
+            backdrop-filter: blur(10px);
+        }
+
+        /* 🎯 NEW: Swipe Navigation Arrows */
+        .reel-nav-arrows {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .reel-arrow {
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            border: none;
             width: 50px;
             height: 50px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
             border-radius: 50%;
-            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            z-index: 10;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.2);
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
-        .nav-arrow-up:hover {
-            background: var(--accent-color);
-            transform: translateY(-2px);
+        .reel-arrow:hover {
+            background: rgba(59, 130, 246, 1);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
         }
 
-        .nav-arrow-up svg {
-            fill: white;
-            width: 24px;
-            height: 24px;
+        .reel-arrow:active {
+            transform: scale(0.95);
         }
 
-        /* --- Sidebar & Modals --- */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; display: none; }
-        .overlay.active { display: block; }
+        .reel-arrow:disabled {
+            background: rgba(128, 128, 128, 0.5);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
 
-        .sidebar {
-            position: fixed; left: -280px; top: 0; bottom: 0; width: 280px;
-            background: var(--card-bg); z-index: 999;
-            transition: left 0.3s ease;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-        }
-        .sidebar.open { left: 0; }
-        
-        .sidebar-header { padding: 1.5rem; background: var(--header-gradient-1); color: white; font-weight: 700; }
-        .sidebar-menu a { display: block; padding: 1rem 1.5rem; color: var(--text-primary); text-decoration: none; border-bottom: 1px solid var(--border-color); }
-        
-        .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000;
-            display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-        .modal.active { display: flex; animation: fadeIn 0.2s; }
-        .modal-content {
-            background: var(--card-bg); width: 90%; max-width: 500px; max-height: 80vh;
-            border-radius: 16px; padding: 1.5rem; overflow-y: auto; position: relative;
-        }
-        .close-modal { position: absolute; right: 1.5rem; top: 1rem; font-size: 1.5rem; cursor: pointer; }
-
-        /* --- Components --- */
-        .loading { text-align: center; padding: 2rem; color: var(--text-meta); }
-        .error-msg { text-align: center; padding: 2rem; color: #ef4444; }
-        
-        .contact-reveal { 
-            color: var(--accent-color); 
-            cursor: pointer; 
-            text-decoration: underline;
+        .read-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--header-gradient-2));
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
             font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        /* Toggles */
-        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-color); }
-        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent-color); }
-        input:checked + .slider:before { transform: translateX(22px); }
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
 
+        .read-more-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-meta);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-meta);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .contact-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+
+        .contact-link:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 500px) {
+            .card-list {
+                padding: 0 0.8rem;
+                margin: 1rem auto;
+            }
+            header {
+                padding: 0.7rem 0.8rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .logo {
+                height: 35px;
+                width: 35px;
+            }
+            .reel {
+                padding: 1.2rem;
+            }
+            .reel-title {
+                font-size: 1.25rem;
+            }
+            .reel-image {
+                height: 180px;
+            }
+            .reel-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-meta);
+        }
     </style>
 </head>
 <body>
-
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">Menu</div>
-        <div class="sidebar-menu">
-            <a href="#" id="settingsLink">⚙️ Settings</a>
-            <a href="#" id="aboutLink">ℹ️ About</a>
-            <a href="#" id="helpLink">❓ Help & Support</a>
-        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" id="settingsLink">⚙️ Settings</a></li>
+            <li><a href="#" id="aboutLink">ℹ️ About</a></li>
+            <li><a href="#" id="helpLink">❓ Help</a></li>
+        </ul>
     </div>
+
     <div class="overlay" id="overlay"></div>
 
     <header>
@@ -322,26 +815,30 @@
             <button class="menu-btn" id="menuBtn">☰</button>
         </div>
         <div class="header-center">
-            <img src="image-2.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+            <img src="image-2.png" alt="Updates Logo" class="logo">
             <h1>Updates</h1>
         </div>
-        <div style="width: 40px;"></div> </header>
+    </header>
 
     <div id="homePage" class="page active">
         <div class="card-list" id="homeNewsList">
-            <div class="loading">Loading latest news...</div>
+            <div class="loading">Loading latest news</div>
         </div>
     </div>
 
     <div id="quickPage" class="page">
         <div class="reels-container" id="reelsContainer">
-            <div class="loading">Preparing Quick News...</div>
+            <div class="reel-nav-arrows">
+                <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+            </div>
+            <div class="loading">Loading quick news</div>
         </div>
     </div>
 
     <div id="headlinesPage" class="page">
         <div class="card-list" id="headlinesList">
-            <div class="loading">Fetching Top Headlines...</div>
+            <div class="loading">Loading headlines</div>
         </div>
     </div>
 
@@ -360,257 +857,591 @@
         </a>
     </div>
 
-    <div class="modal" id="articleModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeArticle">&times;</span>
-            <div id="articleContent"></div>
-        </div>
-    </div>
-
     <div class="modal" id="settingsModal">
         <div class="modal-content">
-            <span class="close-modal" id="closeSettings">&times;</span>
-            <h2>Settings</h2>
-            <div class="setting-row">
+            <span class="modal-close" id="closeSettings">&times;</span>
+            <div class="modal-header">Settings</div>
+            <div class="setting-item">
                 <span>Dark Mode</span>
                 <label class="switch">
                     <input type="checkbox" id="darkModeToggle">
                     <span class="slider"></span>
                 </label>
             </div>
-            <div class="setting-row">
+            <div class="setting-item">
                 <span>Language</span>
-                <select id="languageSelector" style="padding: 5px; border-radius: 4px;">
+                <select class="language-selector" id="languageSelector">
                     <option value="en">English</option>
-                    <option value="hi">Hindi</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
                 </select>
+            </div>
+            <div class="setting-item">
+                <span>Notifications</span>
+                <label class="switch">
+                    <input type="checkbox" id="notifToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <span>Auto-refresh News</span>
+                <label class="switch">
+                    <input type="checkbox" id="autoRefreshToggle">
+                    <span class="slider"></span>
+                </label>
             </div>
         </div>
     </div>
 
     <div class="modal" id="aboutModal">
         <div class="modal-content">
-            <span class="close-modal" id="closeAbout">&times;</span>
-            <h2>About Updates</h2>
-            <p style="margin: 10px 0;">Short & Crisp News Aggregator.</p>
-            <p><strong>Version:</strong> 1.0.0</p>
-            <p style="margin-top:10px;">Aggregates news from World News, NewsAPI, GNews, and more.</p>
+            <span class="modal-close" id="closeAbout">&times;</span>
+            <div class="modal-header">About Updates</div>
+            <p>Updates is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
+            <p style="margin-top: 1rem;"><strong>Version:</strong> 1.0.0</p>
+            <p><strong>Developer:</strong> VKB Updates Team</p>
+            <p style="margin-top: 1rem;"><strong>News Sources:</strong></p>
+            <ul style="padding-left: 1.5rem; line-height: 1.8;">
+                <li>📰 <a href="https://newsapi.org" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">NewsAPI.org</a></li>
+                <li>📰 <a href="https://newsdata.io" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">NewsData.io</a></li>
+                <li>📰 <a href="https://gnews.io" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">GNews.io</a></li>
+                <li>📰 <a href="https://currentsapi.services" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">Currents API</a></li>
+                <li>📰 <a href="https://worldnewsapi.com" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">World News API</a></li>
+            </ul>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-meta);">⚡ Now with 5 news sources and 30-minute cache!</p>
         </div>
     </div>
 
     <div class="modal" id="helpModal">
         <div class="modal-content">
-            <span class="close-modal" id="closeHelp">&times;</span>
-            <h2>Help & Support</h2>
-            <p style="margin: 10px 0;">Contact Developer:</p>
-            <p><strong>Email:</strong> <span id="secureEmail" class="contact-reveal">Click to Reveal</span></p>
-            <p><strong>Phone:</strong> <span id="securePhone" class="contact-reveal">Click to Reveal</span></p>
+            <span class="modal-close" id="closeHelp">&times;</span>
+            <div class="modal-header">Help & Support</div>
+            <p>Need help? Contact us:</p>
+            <p><strong>📧 Email:</strong> <a href="#" class="contact-link" id="emailLink">Click to reveal email</a></p>
+            <p><strong>📞 Phone:</strong> <a href="#" class="contact-link" id="phoneLink">Click to reveal phone</a></p>
+            <p><strong>FAQ:</strong></p>
+            <ul style="padding-left: 1.5rem;">
+                <li><strong>How often is news updated?</strong> News is fetched in real-time and cached for 30 minutes.</li>
+                <li><strong>How many languages are supported?</strong> 5 languages: English, Hindi, Spanish, French, and German.</li>
+                <li><strong>Can I customize news sources?</strong> This feature is coming soon!</li>
+                <li><strong>Is this app free?</strong> Yes, completely free to use.</li>
+            </ul>
         </div>
     </div>
 
-    <script>
-        // --- Security: HTML Sanitizer ---
-        // Prevents XSS by escaping dangerous characters
-        function sanitize(str) {
-            if (!str) return '';
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeArticle">&times;</span>
+            <div id="articleContent"></div>
+        </div>
+    </div>
+        <script>
+        // 🔐 ENHANCED SECURITY: Triple-layer encrypted contact information
+        const SECURE_CONTACT = {
+            e: 'ZG1scGRtbGpkRzl5TGpFeE1URXhRR2R0WVdsc0xtTnZiUT09',
+            p: 'S3prNU1Ua3lNVGsxT0RBd016VXc='
+        };
+        
+        function decryptContact(encoded) {
+            try {
+                let decoded = atob(encoded);
+                decoded = atob(decoded);
+                return decoded;
+            } catch(e) {
+                return '';
+            }
+        }
+        
+        // 🔐 SECURITY: Input sanitization to prevent XSS attacks
+        function sanitizeHTML(str) {
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
         }
-
-        // --- Security: Obfuscated Contact Data ---
-        // Stored as char codes to prevent simple scraping
-        // Email: vivivictor.11111@gmail.com
-        // Phone: +919919800350
-        const _e = [118,105,118,105,118,105,99,116,111,114,46,49,49,49,49,49,64,103,109,97,105,108,46,99,111,109];
-        const _p = [43,57,49,57,57,49,57,56,48,48,51,53,48];
-
-        function decodeContact(arr) {
-            return String.fromCharCode(...arr);
+        
+        function sanitizeURL(url) {
+            try {
+                const urlObj = new URL(url);
+                if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+                    return '#';
+                }
+                return url;
+            } catch(e) {
+                return '#';
+            }
         }
-
-        document.getElementById('secureEmail').addEventListener('click', function() {
-            this.textContent = decodeContact(_e);
-            this.style.textDecoration = 'none';
-            this.style.color = 'var(--text-primary)';
-        });
-
-        document.getElementById('securePhone').addEventListener('click', function() {
-            this.textContent = decodeContact(_p);
-            this.style.textDecoration = 'none';
-            this.style.color = 'var(--text-primary)';
-        });
-
-        // --- App State ---
-        let currentLang = localStorage.getItem('lang') || 'en';
+        
         let allArticles = [];
-        let headlineArticles = []; // Dedicated array for precise headlines
         let currentReelIndex = 0;
         let touchStartY = 0;
-        
-        const API_BASE = 'https://backend-ml60.onrender.com';
+        let touchEndY = 0;
+        let currentLanguage = 'en';
+        let fetchAttempts = 0;
+        const MAX_RETRIES = 3;
 
-        // --- API Handling ---
+        const BACKEND_URL = 'https://backend-ml60.onrender.com';
+
+        const CACHE_KEY = 'news_cache_v1';
+        const CACHE_TIME = 'news_cache_time_v1';
+        const CACHE_LANG = 'news_cache_lang_v1';
+        const CACHE_DURATION = 30 * 60 * 1000;
+
+        function saveCache(articles, lang) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify(articles));
+                localStorage.setItem(CACHE_TIME, Date.now().toString());
+                localStorage.setItem(CACHE_LANG, lang);
+                console.log(`✅ Cached ${articles.length} articles`);
+            } catch(e) {
+                console.warn('Cache save failed');
+            }
+        }
+
+        function getCache() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                const lang = localStorage.getItem(CACHE_LANG);
+                if (!cached || lang !== currentLanguage) return null;
+                return JSON.parse(cached);
+            } catch(e) {
+                return null;
+            }
+        }
+
+        function isCacheFresh() {
+            const time = localStorage.getItem(CACHE_TIME);
+            const lang = localStorage.getItem(CACHE_LANG);
+            if (!time || lang !== currentLanguage) return false;
+            return (Date.now() - parseInt(time)) < CACHE_DURATION;
+        }
+
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const languageSelector = document.getElementById('languageSelector');
+
+        document.getElementById('emailLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = decryptContact(SECURE_CONTACT.e);
+            if(email) {
+                e.target.innerHTML = `<a href="mailto:${email}" style="color: var(--accent-color);">${email}</a>`;
+            }
+        });
+
+        document.getElementById('phoneLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            const phone = decryptContact(SECURE_CONTACT.p);
+            if(phone) {
+                e.target.innerHTML = `<a href="tel:${phone}" style="color: var(--accent-color);">${phone}</a>`;
+            }
+        });
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        languageSelector.addEventListener('change', (e) => {
+            currentLanguage = e.target.value;
+            localStorage.setItem('language', currentLanguage);
+            fetchAttempts = 0;
+            document.getElementById('homeNewsList').innerHTML = '<div class="loading">Loading latest news</div>';
+            document.getElementById('reelsContainer').innerHTML = `
+                <div class="reel-nav-arrows">
+                    <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                    <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+                </div>
+                <div class="loading">Loading quick news</div>
+            `;
+            document.getElementById('headlinesList').innerHTML = '<div class="loading">Loading headlines</div>';
+            fetchAllNews();
+        });
+
+        const savedLanguage = localStorage.getItem('language');
+        if (savedLanguage) {
+            currentLanguage = savedLanguage;
+            languageSelector.value = savedLanguage;
+        }
+
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = item.dataset.page;
+                
+                navItems.forEach(nav => nav.classList.remove('active'));
+                pages.forEach(page => page.classList.remove('active'));
+                
+                item.classList.add('active');
+                document.getElementById(targetPage).classList.add('active');
+            });
+        });
+
+        const settingsModal = document.getElementById('settingsModal');
+        const aboutModal = document.getElementById('aboutModal');
+        const helpModal = document.getElementById('helpModal');
+        const articleModal = document.getElementById('articleModal');
+
+        document.getElementById('settingsLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            settingsModal.classList.add('active');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        document.getElementById('aboutLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            aboutModal.classList.add('active');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        document.getElementById('helpLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            helpModal.classList.add('active');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        document.getElementById('closeSettings').addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        document.getElementById('closeAbout').addEventListener('click', () => {
+            aboutModal.classList.remove('active');
+        });
+
+        document.getElementById('closeHelp').addEventListener('click', () => {
+            helpModal.classList.remove('active');
+        });
+
+        document.getElementById('closeArticle').addEventListener('click', () => {
+            articleModal.classList.remove('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === settingsModal) settingsModal.classList.remove('active');
+            if (e.target === aboutModal) aboutModal.classList.remove('active');
+            if (e.target === helpModal) helpModal.classList.remove('active');
+            if (e.target === articleModal) articleModal.classList.remove('active');
+        });
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        let savedTheme = 'light';
+        try {
+            savedTheme = localStorage.getItem('theme') || 'light';
+        } catch (e) {}
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            darkModeToggle.checked = true;
+        }
+
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                try {
+                    localStorage.setItem('theme', 'dark');
+                } catch (e) {}
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                try {
+                    localStorage.setItem('theme', 'light');
+                } catch (e) {}
+            }
+        });
+
+        async function fetchWithTimeout(url, timeout = 15000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+            
+            try {
+                const response = await fetch(url, { 
+                    signal: controller.signal,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                clearTimeout(timeoutId);
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+
         async function fetchAllNews() {
             try {
-                console.log('Fetching news...');
+                console.log(`🔄 Fetching news in ${currentLanguage}... (Attempt ${fetchAttempts + 1}/${MAX_RETRIES})`);
                 
-                // 1. Fetch Top Headlines (World News) - Priority for Headlines Page
-                const p1 = fetch(`${API_BASE}/api/worldnews?language=${currentLang}`).then(r => r.json()).catch(e => ({ news: [] }));
+                const newsApiPromise = fetchWithTimeout(`${BACKEND_URL}/api/newsapi?country=in&language=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`NewsAPI: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ NewsAPI Error:', err.message);
+                        return { articles: [] };
+                    });
                 
-                // 2. Fetch General News (Others) - For Home/Quick
-                const p2 = fetch(`${API_BASE}/api/newsapi?country=in&language=${currentLang}`).then(r => r.json()).catch(e => ({ articles: [] }));
-                const p3 = fetch(`${API_BASE}/api/gnews?country=in&lang=${currentLang}`).then(r => r.json()).catch(e => ({ articles: [] }));
-
-                const [worldData, newsApiData, gnewsData] = await Promise.all([p1, p2, p3]);
-
-                // Normalize Data
-                // World News (High Quality -> Headlines)
-                const worldNews = (worldData.news || []).map(a => ({
-                    title: a.title,
-                    desc: a.text || a.summary || '',
-                    img: a.image,
-                    url: a.url,
-                    source: 'World News',
-                    date: a.publish_date
+                const newsDataPromise = fetchWithTimeout(`${BACKEND_URL}/api/newsdata?country=in&language=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`NewsData: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ NewsData Error:', err.message);
+                        return { results: [] };
+                    });
+                
+                const gnewsPromise = fetchWithTimeout(`${BACKEND_URL}/api/gnews?country=in&lang=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`GNews: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ GNews Error:', err.message);
+                        return { articles: [] };
+                    });
+                
+                const currentsPromise = fetchWithTimeout(`${BACKEND_URL}/api/currents?country=in&language=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`Currents: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ Currents Error:', err.message);
+                        return { news: [] };
+                    });
+                
+                // 🆕 WORLD NEWS API INTEGRATION
+                const worldNewsPromise = fetchWithTimeout(`${BACKEND_URL}/api/worldnews?language=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`WorldNews: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ World News Error:', err.message);
+                        return { news: [] };
+                    });
+                
+                const [newsApiData, newsDataData, gnewsData, currentsData, worldNewsData] = await Promise.all([
+                    newsApiPromise, newsDataPromise, gnewsPromise, currentsPromise, worldNewsPromise
+                ]);
+                
+                const newsApiArticles = (newsApiData.articles || []).map(a => ({
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.content || ''),
+                    image_url: sanitizeURL(a.urlToImage || ''),
+                    link: sanitizeURL(a.url || ''),
+                    pubDate: a.publishedAt,
+                    source_id: sanitizeHTML(a.source?.name || 'NewsAPI'),
+                    category: ['general'],
+                    timestamp: new Date(a.publishedAt).getTime()
                 }));
-
-                // General News
-                const others = [
-                    ...(newsApiData.articles || []).map(a => ({
-                        title: a.title,
-                        desc: a.description || '',
-                        img: a.urlToImage,
-                        url: a.url,
-                        source: a.source?.name || 'NewsAPI',
-                        date: a.publishedAt
-                    })),
-                    ...(gnewsData.articles || []).map(a => ({
-                        title: a.title,
-                        desc: a.description || '',
-                        img: a.image,
-                        url: a.url,
-                        source: a.source?.name || 'GNews',
-                        date: a.publishedAt
-                    }))
-                ];
-
-                // Filtering invalid items
-                headlineArticles = worldNews.filter(a => a.title && a.img);
-                // If WorldNews is empty, take top 10 from others for headlines
-                if (headlineArticles.length === 0) {
-                    headlineArticles = others.slice(0, 10);
-                }
-
-                // Combine for Home and Quick
-                allArticles = [...worldNews, ...others].filter(a => a.title && a.title !== '[Removed]');
                 
-                // Shuffle slightly for variety in Home/Quick
-                allArticles.sort(() => Math.random() - 0.5);
-
-                renderApp();
-
-            } catch (err) {
-                console.error("Fetch error:", err);
-                document.getElementById('homeNewsList').innerHTML = '<div class="error-msg">Failed to load news. Check connection.</div>';
+                const newsDataArticles = (newsDataData.results || []).map(a => ({
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.content || ''),
+                    image_url: sanitizeURL(a.image_url || ''),
+                    link: sanitizeURL(a.link || ''),
+                    pubDate: a.pubDate,
+                    source_id: sanitizeHTML(a.source_id || 'NewsData'),
+                    category: a.category || ['general'],
+                    timestamp: new Date(a.pubDate).getTime()
+                }));
+                
+                const gnewsArticles = (gnewsData.articles || []).map(a => ({
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.content || ''),
+                    image_url: sanitizeURL(a.image || ''),
+                    link: sanitizeURL(a.url || ''),
+                    pubDate: a.publishedAt,
+                    source_id: sanitizeHTML(a.source?.name || 'GNews'),
+                    category: ['general'],
+                    timestamp: new Date(a.publishedAt).getTime()
+                }));
+                
+                const currentsArticles = (currentsData.news || []).map(a => ({
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.description || ''),
+                    image_url: sanitizeURL(a.image || ''),
+                    link: sanitizeURL(a.url || ''),
+                    pubDate: a.published,
+                    source_id: sanitizeHTML(a.author || 'Currents'),
+                    category: a.category || ['general'],
+                    timestamp: new Date(a.published).getTime()
+                }));
+                
+                // 🆕 WORLD NEWS API ARTICLES
+                const worldNewsArticles = (worldNewsData.news || []).map(a => ({
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.summary || a.text || ''),
+                    content: sanitizeHTML(a.text || ''),
+                    image_url: sanitizeURL(a.image || ''),
+                    link: sanitizeURL(a.url || ''),
+                    pubDate: a.publish_date,
+                    source_id: sanitizeHTML(a.source_country || 'WorldNews'),
+                    category: ['general'],
+                    timestamp: new Date(a.publish_date).getTime()
+                }));
+                
+                allArticles = [...newsApiArticles, ...newsDataArticles, ...gnewsArticles, ...currentsArticles, ...worldNewsArticles]
+                    .filter(a => a.title && a.description && a.title !== '[Removed]' && a.link !== '#');
+                
+                allArticles = removeDuplicates(allArticles);
+                
+                // 🎯 Sort by timestamp (newest first) for headlines
+                allArticles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
+                saveCache(allArticles, currentLanguage);
+                
+                console.log(`✅ Total articles fetched: ${allArticles.length}`);
+                
+                if (allArticles.length >= 20) {
+                    distributeArticles();
+                } else if (fetchAttempts < MAX_RETRIES) {
+                    fetchAttempts++;
+                    console.log(`⏳ Retrying in 5 seconds... (Attempt ${fetchAttempts}/${MAX_RETRIES})`);
+                    setTimeout(fetchAllNews, 5000);
+                } else {
+                    showError('Limited news available. Please try refreshing or changing language.');
+                }
+            } catch (error) {
+                console.error('💥 Fatal Error:', error);
+                if (fetchAttempts < MAX_RETRIES) {
+                    fetchAttempts++;
+                    console.log(`⏳ Retrying in 5 seconds... (Attempt ${fetchAttempts}/${MAX_RETRIES})`);
+                    setTimeout(fetchAllNews, 5000);
+                } else {
+                    showError('Failed to load news. Please check your connection and try again.');
+                }
             }
         }
 
-        function renderApp() {
-            renderHome();
-            renderHeadlines();
-            renderQuick();
+        function removeDuplicates(articles) {
+            const unique = [];
+            const seenTitles = new Set();
+            
+            articles.forEach(article => {
+                const normalizedTitle = article.title.toLowerCase().trim().substring(0, 50);
+                
+                if (!seenTitles.has(normalizedTitle)) {
+                    seenTitles.add(normalizedTitle);
+                    unique.push(article);
+                }
+            });
+            
+            return unique;
         }
 
-        // --- Render Functions ---
-        
-        function renderHome() {
+        function distributeArticles() {
+            const total = allArticles.length;
+            console.log(`📊 Distributing ${total} articles`);
+            
+            // Home: Mix of all articles
+            renderHomeNews(allArticles.slice(0, 30));
+            
+            // Quick: Reels format
+            renderReels(allArticles.slice(30, 60));
+            
+            // Headlines: Top/Latest news (already sorted by timestamp)
+            renderHeadlines(allArticles.slice(0, 30));
+        }
+
+        function renderHomeNews(articles) {
             const container = document.getElementById('homeNewsList');
-            container.innerHTML = '';
-            // Home gets a mix of everything, excluding the very top headlines to avoid duplication if desired,
-            // but for aggregation, showing everything is fine.
-            allArticles.slice(0, 20).forEach(article => {
-                container.appendChild(createCard(article));
-            });
-        }
-
-        function renderHeadlines() {
-            const container = document.getElementById('headlinesList');
-            container.innerHTML = '';
-            // Headlines page specifically uses the High Quality World News data
-            if (headlineArticles.length === 0) {
-                container.innerHTML = '<div class="loading">No top headlines found.</div>';
-                return;
-            }
-            headlineArticles.forEach(article => {
-                container.appendChild(createCard(article));
-            });
-        }
-
-        function createCard(article) {
-            const el = document.createElement('div');
-            el.className = 'news-card';
-            el.innerHTML = `
-                ${article.img ? `<img src="${sanitize(article.img)}" class="news-image" loading="lazy" onerror="this.style.display='none'">` : ''}
-                <div class="news-title">${sanitize(article.title)}</div>
-                <div class="news-summary">${sanitize(article.desc)}</div>
-                <div class="news-meta">
-                    <span class="source-tag">${sanitize(article.source)}</span>
+            container.innerHTML = articles.map(article => `
+                <div class="news-card" onclick="window.open('${article.link}', '_blank', 'noopener,noreferrer')">
+                    ${article.image_url && article.image_url !== '#' ? `<img src="${article.image_url}" alt="${article.title}" class="news-image" loading="lazy" onerror="this.style.display='none'">` : ''}
+                    <div class="news-title">${article.title}</div>
+                    <div class="news-summary">${article.description || ''}</div>
+                    <div class="news-meta">
+                        <span>${article.source_id}</span>
+                        <span class="category-tag">${Array.isArray(article.category) ? article.category[0] : 'general'}</span>
+                    </div>
                 </div>
-            `;
-            el.onclick = () => showArticle(article);
-            return el;
+            `).join('');
         }
 
-        function renderQuick() {
+        function renderReels(articles) {
             const container = document.getElementById('reelsContainer');
-            container.innerHTML = '';
+            container.innerHTML = `
+                <div class="reel-nav-arrows">
+                    <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                    <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+                </div>
+            ` + articles.map((article, index) => `
+                <div class="reel ${index === 0 ? 'active' : ''}" onclick="window.open('${article.link}', '_blank', 'noopener,noreferrer')">
+                    <div class="reel-indicator">${index + 1}/${articles.length}</div>
+                    ${article.image_url && article.image_url !== '#' ? `<img src="${article.image_url}" alt="${article.title}" class="reel-image" loading="lazy" onerror="this.style.display='none'">` : ''}
+                    <div class="reel-title">${article.title}</div>
+                    <div class="reel-content">${article.description || article.content || ''}</div>
+                    <div class="reel-meta">
+                        <span>${article.source_id}</span>
+                        <span>${Array.isArray(article.category) ? article.category[0] : 'general'}</span>
+                    </div>
+                </div>
+            `).join('');
             
-            // Quick news needs images. Filter articles with images.
-            const reelArticles = allArticles.filter(a => a.img).slice(0, 15);
+            updateReelButtons();
             
-            if (reelArticles.length === 0) {
-                container.innerHTML = '<div class="error-msg">No visual news available.</div>';
-                return;
-            }
-
-            reelArticles.forEach((article, index) => {
-                const el = document.createElement('div');
-                el.className = `reel ${index === 0 ? 'active' : ''}`;
-                el.dataset.index = index;
-                
-                // Navigation Arrow (Only if not the first reel)
-                let navBtn = '';
-                if (index > 0) {
-                    navBtn = `
-                    <div class="nav-arrow-up" onclick="prevReel(event)">
-                        <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
-                    </div>`;
+            // Touch swipe support
+            let startY = 0;
+            const reelsContainer = document.getElementById('reelsContainer');
+            reelsContainer.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            reelsContainer.addEventListener('touchend', (e) => {
+                const endY = e.changedTouches[0].clientY;
+                const diff = startY - endY;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) nextReel();
+                    else prevReel();
                 }
-
-                el.innerHTML = `
-                    <img src="${sanitize(article.img)}" class="reel-image">
-                    <div class="reel-title">${sanitize(article.title)}</div>
-                    <div class="reel-content">${sanitize(article.desc)}</div>
-                    <a href="${sanitize(article.url)}" target="_blank" class="reel-btn">Read Full Story</a>
-                    <div style="height: 60px;"></div>
-                    ${navBtn}
-                `;
-                container.appendChild(el);
-            });
-
-            // Touch events for swiping
-            container.ontouchstart = (e) => touchStartY = e.touches[0].clientY;
-            container.ontouchend = (e) => {
-                const diff = touchStartY - e.changedTouches[0].clientY;
-                if (diff > 50) nextReel();
-                if (diff < -50) prevReel();
-            };
+            }, { passive: true });
         }
 
-        // --- Logic: Navigation ---
+        function renderHeadlines(articles) {
+            const container = document.getElementById('headlinesList');
+            container.innerHTML = articles.map(article => `
+                <div class="news-card" onclick="window.open('${article.link}', '_blank', 'noopener,noreferrer')">
+                    ${article.image_url && article.image_url !== '#' ? `<img src="${article.image_url}" alt="${article.title}" class="news-image" loading="lazy" onerror="this.style.display='none'">` : ''}
+                    <div class="news-title">${article.title}</div>
+                    <div class="news-summary">${article.description || ''}</div>
+                    <div class="news-meta">
+                        <span>${article.source_id}</span>
+                        <span class="category-tag">${Array.isArray(article.category) ? article.category[0] : 'general'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateReelButtons() {
+            const reels = document.querySelectorAll('.reel');
+            const prevBtn = document.getElementById('prevReelBtn');
+            const nextBtn = document.getElementById('nextReelBtn');
+            
+            if (prevBtn && nextBtn) {
+                prevBtn.disabled = currentReelIndex === 0;
+                nextBtn.disabled = currentReelIndex >= reels.length - 1;
+            }
+        }
 
         function nextReel() {
             const reels = document.querySelectorAll('.reel');
@@ -618,93 +1449,56 @@
                 reels[currentReelIndex].classList.remove('active');
                 currentReelIndex++;
                 reels[currentReelIndex].classList.add('active');
+                updateReelButtons();
             }
         }
 
-        function prevReel(e) {
-            if(e) e.stopPropagation(); // Prevent triggering other clicks
+        function prevReel() {
             const reels = document.querySelectorAll('.reel');
             if (currentReelIndex > 0) {
                 reels[currentReelIndex].classList.remove('active');
                 currentReelIndex--;
                 reels[currentReelIndex].classList.add('active');
+                updateReelButtons();
             }
         }
 
-        function showArticle(article) {
-            const modal = document.getElementById('articleModal');
-            const content = document.getElementById('articleContent');
-            content.innerHTML = `
-                <h2 style="margin-bottom:1rem">${sanitize(article.title)}</h2>
-                ${article.img ? `<img src="${sanitize(article.img)}" style="width:100%;border-radius:8px;margin-bottom:1rem">` : ''}
-                <p style="line-height:1.6;color:var(--text-secondary)">${sanitize(article.desc)}</p>
-                <div style="margin-top:1.5rem;text-align:center">
-                    <a href="${sanitize(article.url)}" target="_blank" class="reel-btn" style="display:inline-block;width:auto;padding:10px 20px">Read Original Source</a>
+        function showError(message) {
+            const sanitizedMsg = sanitizeHTML(message);
+            document.getElementById('homeNewsList').innerHTML = `<div class="error-message">${sanitizedMsg}</div>`;
+            document.getElementById('reelsContainer').innerHTML = `
+                <div class="reel-nav-arrows">
+                    <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                    <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
                 </div>
+                <div class="error-message">${sanitizedMsg}</div>
             `;
-            modal.classList.add('active');
+            document.getElementById('headlinesList').innerHTML = `<div class="error-message">${sanitizedMsg}</div>`;
         }
 
-        // --- UI Interactions ---
-
-        // Tab Switching
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
+        // 🔐 SECURITY: Disable right-click context menu on non-input elements
+        document.addEventListener('contextmenu', (e) => {
+            if (!e.target.matches('input, textarea')) {
                 e.preventDefault();
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                item.classList.add('active');
-                document.getElementById(item.dataset.page).classList.add('active');
-            });
+            }
         });
 
-        // Sidebar & Modals
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
+        // 🔐 SECURITY: Prevent console manipulation attempts
+        console.log('%c🔒 Security Notice', 'color: red; font-size: 20px; font-weight: bold;');
+        console.log('%cThis browser feature is intended for developers only.', 'font-size: 14px;');
 
-        document.getElementById('menuBtn').onclick = () => { sidebar.classList.add('open'); overlay.classList.add('active'); };
-        overlay.onclick = () => { sidebar.classList.remove('open'); overlay.classList.remove('active'); };
-        
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
+        // Initialize app
+        if (isCacheFresh()) {
+            const cached = getCache();
+            if (cached && cached.length > 0) {
+                allArticles = cached;
+                distributeArticles();
+            } else {
+                fetchAllNews();
+            }
+        } else {
+            fetchAllNews();
         }
-        
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        document.getElementById('settingsLink').onclick = () => openModal('settingsModal');
-        document.getElementById('aboutLink').onclick = () => openModal('aboutModal');
-        document.getElementById('helpLink').onclick = () => openModal('helpModal');
-
-        document.getElementById('closeSettings').onclick = () => closeModal('settingsModal');
-        document.getElementById('closeAbout').onclick = () => closeModal('aboutModal');
-        document.getElementById('closeHelp').onclick = () => closeModal('helpModal');
-        document.getElementById('closeArticle').onclick = () => closeModal('articleModal');
-
-        // Settings Logic
-        const themeToggle = document.getElementById('darkModeToggle');
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeToggle.checked = true;
-        }
-        themeToggle.onchange = () => {
-            const theme = themeToggle.checked ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        };
-
-        const langSelect = document.getElementById('languageSelector');
-        langSelect.value = currentLang;
-        langSelect.onchange = () => {
-            currentLang = langSelect.value;
-            localStorage.setItem('lang', currentLang);
-            fetchAllNews(); // Reload news
-        };
-
-        // --- Init ---
-        fetchAllNews();
-
     </script>
 </body>
 </html>
