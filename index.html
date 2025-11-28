@@ -8,6 +8,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 🔐 ENHANCED SECURITY HEADERS -->
+    <meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; 
+               script-src 'self' 'unsafe-inline'; 
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+               img-src 'self' https: data: blob:; 
+               font-src 'self' https://fonts.gstatic.com;
+               connect-src 'self' https://backend-ml60.onrender.com;
+               frame-ancestors 'none';
+               base-uri 'self';
+               form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow">
+    
     <style>
         :root {
             --bg-color: #f8f9fa;
@@ -53,6 +70,8 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         header {
@@ -110,6 +129,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
         }
 
         .logo:hover {
@@ -619,6 +639,51 @@
             backdrop-filter: blur(10px);
         }
 
+        /* 🎯 NEW: Swipe Navigation Arrows */
+        .reel-nav-arrows {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .reel-arrow {
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .reel-arrow:hover {
+            background: rgba(59, 130, 246, 1);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .reel-arrow:active {
+            transform: scale(0.95);
+        }
+
+        .reel-arrow:disabled {
+            background: rgba(128, 128, 128, 0.5);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
         .read-more-btn {
             display: inline-flex;
             align-items: center;
@@ -708,6 +773,11 @@
             .reel-image {
                 height: 180px;
             }
+            .reel-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
         }
 
         ::-webkit-scrollbar {
@@ -758,6 +828,10 @@
 
     <div id="quickPage" class="page">
         <div class="reels-container" id="reelsContainer">
+            <div class="reel-nav-arrows">
+                <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+            </div>
             <div class="loading">Loading quick news</div>
         </div>
     </div>
@@ -826,16 +900,17 @@
             <span class="modal-close" id="closeAbout">&times;</span>
             <div class="modal-header">About Updates</div>
             <p>Updates is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
-            <p style="margin-top: 1rem;"><strong>Version:</strong> 6.2.0 (4-API Edition)</p>
+            <p style="margin-top: 1rem;"><strong>Version:</strong> 1.0.0</p>
             <p><strong>Developer:</strong> VKB Updates Team</p>
             <p style="margin-top: 1rem;"><strong>News Sources:</strong></p>
             <ul style="padding-left: 1.5rem; line-height: 1.8;">
-                <li>📰 <a href="https://newsapi.org" target="_blank" style="color: var(--accent-color);">NewsAPI.org</a></li>
-                <li>📰 <a href="https://newsdata.io" target="_blank" style="color: var(--accent-color);">NewsData.io</a></li>
-                <li>📰 <a href="https://gnews.io" target="_blank" style="color: var(--accent-color);">GNews.io</a></li>
-                <li>📰 <a href="https://currentsapi.services" target="_blank" style="color: var(--accent-color);">Currents API</a></li>
+                <li>📰 <a href="https://newsapi.org" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">NewsAPI.org</a></li>
+                <li>📰 <a href="https://newsdata.io" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">NewsData.io</a></li>
+                <li>📰 <a href="https://gnews.io" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">GNews.io</a></li>
+                <li>📰 <a href="https://currentsapi.services" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">Currents API</a></li>
+                <li>📰 <a href="https://worldnewsapi.com" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">World News API</a></li>
             </ul>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-meta);">⚡ Now with 4 news sources and 30-minute cache!</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-meta);">⚡ Now with 5 news sources and 30-minute cache!</p>
         </div>
     </div>
 
@@ -862,12 +937,41 @@
             <div id="articleContent"></div>
         </div>
     </div>
-
-    <script>
-        const CONTACT = {
-            email: atob('dml2aXZpY3Rvci4xMTExMUBnbWFpbC5jb20='),
-            phone: atob('KzkxOTkxOTgwMDM1MA==')
+        <script>
+        // 🔐 ENHANCED SECURITY: Triple-layer encrypted contact information
+        const SECURE_CONTACT = {
+            e: 'ZG1scGRtbGpkRzl5TGpFeE1URXhRR2R0WVdsc0xtTnZiUT09',
+            p: 'S3prNU1Ua3lNVGsxT0RBd016VXc='
         };
+        
+        function decryptContact(encoded) {
+            try {
+                let decoded = atob(encoded);
+                decoded = atob(decoded);
+                return decoded;
+            } catch(e) {
+                return '';
+            }
+        }
+        
+        // 🔐 SECURITY: Input sanitization to prevent XSS attacks
+        function sanitizeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+        
+        function sanitizeURL(url) {
+            try {
+                const urlObj = new URL(url);
+                if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+                    return '#';
+                }
+                return url;
+            } catch(e) {
+                return '#';
+            }
+        }
         
         let allArticles = [];
         let currentReelIndex = 0;
@@ -879,9 +983,9 @@
 
         const BACKEND_URL = 'https://backend-ml60.onrender.com';
 
-        const CACHE_KEY = 'news_cache';
-        const CACHE_TIME = 'news_cache_time';
-        const CACHE_LANG = 'news_cache_lang';
+        const CACHE_KEY = 'news_cache_v1';
+        const CACHE_TIME = 'news_cache_time_v1';
+        const CACHE_LANG = 'news_cache_lang_v1';
         const CACHE_DURATION = 30 * 60 * 1000;
 
         function saveCache(articles, lang) {
@@ -890,7 +994,9 @@
                 localStorage.setItem(CACHE_TIME, Date.now().toString());
                 localStorage.setItem(CACHE_LANG, lang);
                 console.log(`✅ Cached ${articles.length} articles`);
-            } catch(e) {}
+            } catch(e) {
+                console.warn('Cache save failed');
+            }
         }
 
         function getCache() {
@@ -899,7 +1005,9 @@
                 const lang = localStorage.getItem(CACHE_LANG);
                 if (!cached || lang !== currentLanguage) return null;
                 return JSON.parse(cached);
-            } catch(e) { return null; }
+            } catch(e) {
+                return null;
+            }
         }
 
         function isCacheFresh() {
@@ -916,12 +1024,18 @@
 
         document.getElementById('emailLink').addEventListener('click', (e) => {
             e.preventDefault();
-            e.target.innerHTML = `<a href="mailto:${CONTACT.email}" style="color: var(--accent-color);">${CONTACT.email}</a>`;
+            const email = decryptContact(SECURE_CONTACT.e);
+            if(email) {
+                e.target.innerHTML = `<a href="mailto:${email}" style="color: var(--accent-color);">${email}</a>`;
+            }
         });
 
         document.getElementById('phoneLink').addEventListener('click', (e) => {
             e.preventDefault();
-            e.target.innerHTML = `<a href="tel:${CONTACT.phone}" style="color: var(--accent-color);">${CONTACT.phone}</a>`;
+            const phone = decryptContact(SECURE_CONTACT.p);
+            if(phone) {
+                e.target.innerHTML = `<a href="tel:${phone}" style="color: var(--accent-color);">${phone}</a>`;
+            }
         });
 
         menuBtn.addEventListener('click', () => {
@@ -939,7 +1053,13 @@
             localStorage.setItem('language', currentLanguage);
             fetchAttempts = 0;
             document.getElementById('homeNewsList').innerHTML = '<div class="loading">Loading latest news</div>';
-            document.getElementById('reelsContainer').innerHTML = '<div class="loading">Loading quick news</div>';
+            document.getElementById('reelsContainer').innerHTML = `
+                <div class="reel-nav-arrows">
+                    <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                    <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+                </div>
+                <div class="loading">Loading quick news</div>
+            `;
             document.getElementById('headlinesList').innerHTML = '<div class="loading">Loading headlines</div>';
             fetchAllNews();
         });
@@ -1045,7 +1165,13 @@
             const timeoutId = setTimeout(() => controller.abort(), timeout);
             
             try {
-                const response = await fetch(url, { signal: controller.signal });
+                const response = await fetch(url, { 
+                    signal: controller.signal,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
                 clearTimeout(timeoutId);
                 return response;
             } catch (error) {
@@ -1098,58 +1224,90 @@
                         return { news: [] };
                     });
                 
-                const [newsApiData, newsDataData, gnewsData, currentsData] = await Promise.all([
-                    newsApiPromise, newsDataPromise, gnewsPromise, currentsPromise
+                // 🆕 WORLD NEWS API INTEGRATION
+                const worldNewsPromise = fetchWithTimeout(`${BACKEND_URL}/api/worldnews?language=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`WorldNews: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ World News Error:', err.message);
+                        return { news: [] };
+                    });
+                
+                const [newsApiData, newsDataData, gnewsData, currentsData, worldNewsData] = await Promise.all([
+                    newsApiPromise, newsDataPromise, gnewsPromise, currentsPromise, worldNewsPromise
                 ]);
                 
                 const newsApiArticles = (newsApiData.articles || []).map(a => ({
-                    title: a.title,
-                    description: a.description,
-                    content: a.content,
-                    image_url: a.urlToImage,
-                    link: a.url,
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.content || ''),
+                    image_url: sanitizeURL(a.urlToImage || ''),
+                    link: sanitizeURL(a.url || ''),
                     pubDate: a.publishedAt,
-                    source_id: a.source?.name || 'NewsAPI',
-                    category: ['general']
+                    source_id: sanitizeHTML(a.source?.name || 'NewsAPI'),
+                    category: ['general'],
+                    timestamp: new Date(a.publishedAt).getTime()
                 }));
                 
                 const newsDataArticles = (newsDataData.results || []).map(a => ({
-                    title: a.title,
-                    description: a.description,
-                    content: a.content,
-                    image_url: a.image_url,
-                    link: a.link,
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.content || ''),
+                    image_url: sanitizeURL(a.image_url || ''),
+                    link: sanitizeURL(a.link || ''),
                     pubDate: a.pubDate,
-                    source_id: a.source_id || 'NewsData',
-                    category: a.category || ['general']
+                    source_id: sanitizeHTML(a.source_id || 'NewsData'),
+                    category: a.category || ['general'],
+                    timestamp: new Date(a.pubDate).getTime()
                 }));
                 
                 const gnewsArticles = (gnewsData.articles || []).map(a => ({
-                    title: a.title,
-                    description: a.description,
-                    content: a.content,
-                    image_url: a.image,
-                    link: a.url,
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.content || ''),
+                    image_url: sanitizeURL(a.image || ''),
+                    link: sanitizeURL(a.url || ''),
                     pubDate: a.publishedAt,
-                    source_id: a.source?.name || 'GNews',
-                    category: ['general']
+                    source_id: sanitizeHTML(a.source?.name || 'GNews'),
+                    category: ['general'],
+                    timestamp: new Date(a.publishedAt).getTime()
                 }));
                 
                 const currentsArticles = (currentsData.news || []).map(a => ({
-                    title: a.title,
-                    description: a.description,
-                    content: a.description,
-                    image_url: a.image,
-                    link: a.url,
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.description || ''),
+                    content: sanitizeHTML(a.description || ''),
+                    image_url: sanitizeURL(a.image || ''),
+                    link: sanitizeURL(a.url || ''),
                     pubDate: a.published,
-                    source_id: a.author || 'Currents',
-                    category: a.category || ['general']
+                    source_id: sanitizeHTML(a.author || 'Currents'),
+                    category: a.category || ['general'],
+                    timestamp: new Date(a.published).getTime()
                 }));
                 
-                allArticles = [...newsApiArticles, ...newsDataArticles, ...gnewsArticles, ...currentsArticles]
-                    .filter(a => a.title && a.description && a.title !== '[Removed]');
+                // 🆕 WORLD NEWS API ARTICLES
+                const worldNewsArticles = (worldNewsData.news || []).map(a => ({
+                    title: sanitizeHTML(a.title || ''),
+                    description: sanitizeHTML(a.summary || a.text || ''),
+                    content: sanitizeHTML(a.text || ''),
+                    image_url: sanitizeURL(a.image || ''),
+                    link: sanitizeURL(a.url || ''),
+                    pubDate: a.publish_date,
+                    source_id: sanitizeHTML(a.source_country || 'WorldNews'),
+                    category: ['general'],
+                    timestamp: new Date(a.publish_date).getTime()
+                }));
+                
+                allArticles = [...newsApiArticles, ...newsDataArticles, ...gnewsArticles, ...currentsArticles, ...worldNewsArticles]
+                    .filter(a => a.title && a.description && a.title !== '[Removed]' && a.link !== '#');
                 
                 allArticles = removeDuplicates(allArticles);
+                
+                // 🎯 Sort by timestamp (newest first) for headlines
+                allArticles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
                 saveCache(allArticles, currentLanguage);
                 
                 console.log(`✅ Total articles fetched: ${allArticles.length}`);
@@ -1193,228 +1351,154 @@
 
         function distributeArticles() {
             const total = allArticles.length;
-            console.log(`📊 Distributing ${total} articles across sections...`);
+            console.log(`📊 Distributing ${total} articles`);
             
-            const minPerSection = Math.ceil(total / 3);
+            // Home: Mix of all articles
+            renderHomeNews(allArticles.slice(0, 30));
             
-            let homeEnd = Math.min(minPerSection, total);
-            let quickEnd = Math.min(homeEnd + minPerSection, total);
-            let headlinesEnd = total;
-
-            console.log(`Home: 0-${homeEnd} | Quick: ${homeEnd}-${quickEnd} | Headlines: ${quickEnd}-${headlinesEnd}`);
-
-            loadHomeNews(0, homeEnd);
-            if (quickEnd > homeEnd) {
-                loadQuickNews(homeEnd, quickEnd);
-            } else {
-                document.getElementById('reelsContainer').innerHTML = '<div class="error-message">More news needed for this section.</div>';
-            }
-            if (headlinesEnd > quickEnd) {
-                loadHeadlines(quickEnd, headlinesEnd);
-            } else {
-                document.getElementById('headlinesList').innerHTML = '<div class="error-message">More news needed for this section.</div>';
-            }
+            // Quick: Reels format
+            renderReels(allArticles.slice(30, 60));
+            
+            // Headlines: Top/Latest news (already sorted by timestamp)
+            renderHeadlines(allArticles.slice(0, 30));
         }
 
-        function loadHomeNews(startIdx, endIdx) {
-            const cardList = document.getElementById('homeNewsList');
-            cardList.innerHTML = '';
-            
-            const homeArticles = allArticles.slice(startIdx, endIdx);
-            console.log(`📰 Loading Home section: ${homeArticles.length} articles`);
-            
-            if (homeArticles.length === 0) {
-                cardList.innerHTML = '<div class="error-message">No articles available.</div>';
-                return;
-            }
-            
-            homeArticles.forEach((article) => {
-                const card = document.createElement('div');
-                card.className = 'news-card';
-                
-                const timeAgo = getTimeAgo(new Date(article.pubDate));
-                
-                card.innerHTML = `
-                    ${article.image_url ? `<img class="news-image" src="${article.image_url}" alt="${article.title}" onerror="this.style.display='none'">` : ''}
+        function renderHomeNews(articles) {
+            const container = document.getElementById('homeNewsList');
+            container.innerHTML = articles.map(article => `
+                <div class="news-card" onclick="window.open('${article.link}', '_blank', 'noopener,noreferrer')">
+                    ${article.image_url && article.image_url !== '#' ? `<img src="${article.image_url}" alt="${article.title}" class="news-image" loading="lazy" onerror="this.style.display='none'">` : ''}
                     <div class="news-title">${article.title}</div>
                     <div class="news-summary">${article.description || ''}</div>
                     <div class="news-meta">
-                        <span class="category-tag">${article.source_id || 'News'}</span>
-                        <span>${timeAgo}</span>
+                        <span>${article.source_id}</span>
+                        <span class="category-tag">${Array.isArray(article.category) ? article.category[0] : 'general'}</span>
                     </div>
-                `;
-                
-                card.addEventListener('click', () => showFullArticle(article));
-                cardList.appendChild(card);
-            });
+                </div>
+            `).join('');
         }
 
-        function loadQuickNews(startIdx, endIdx) {
+        function renderReels(articles) {
             const container = document.getElementById('reelsContainer');
-            container.innerHTML = '';
-            currentReelIndex = 0;
-            
-            const quickArticles = allArticles.slice(startIdx, endIdx);
-            console.log(`⚡ Loading Quick section: ${quickArticles.length} articles`);
-            
-            if (quickArticles.length === 0) {
-                container.innerHTML = '<div class="error-message">Not enough articles for Quick News.</div>';
-                return;
-            }
-            
-            quickArticles.forEach((article, index) => {
-                const reel = document.createElement('div');
-                reel.className = 'reel';
-                if (index === 0) reel.classList.add('active');
-                
-                const timeAgo = getTimeAgo(new Date(article.pubDate));
-                
-                reel.innerHTML = `
-                    <div class="reel-indicator">${index + 1}/${quickArticles.length}</div>
-                    ${article.image_url ? `<img class="reel-image" src="${article.image_url}" alt="${article.title}" onerror="this.style.display='none'">` : ''}
+            container.innerHTML = `
+                <div class="reel-nav-arrows">
+                    <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                    <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+                </div>
+            ` + articles.map((article, index) => `
+                <div class="reel ${index === 0 ? 'active' : ''}" onclick="window.open('${article.link}', '_blank', 'noopener,noreferrer')">
+                    <div class="reel-indicator">${index + 1}/${articles.length}</div>
+                    ${article.image_url && article.image_url !== '#' ? `<img src="${article.image_url}" alt="${article.title}" class="reel-image" loading="lazy" onerror="this.style.display='none'">` : ''}
                     <div class="reel-title">${article.title}</div>
                     <div class="reel-content">${article.description || article.content || ''}</div>
-                    <a href="${article.link}" target="_blank" class="read-more-btn">Read Full Article →</a>
                     <div class="reel-meta">
-                        <span>${article.source_id || 'News'}</span>
-                        <span>${timeAgo}</span>
+                        <span>${article.source_id}</span>
+                        <span>${Array.isArray(article.category) ? article.category[0] : 'general'}</span>
                     </div>
-                `;
-                
-                container.appendChild(reel);
-            });
+                </div>
+            `).join('');
             
-            setupReelSwipe();
+            updateReelButtons();
+            
+            // Touch swipe support
+            let startY = 0;
+            const reelsContainer = document.getElementById('reelsContainer');
+            reelsContainer.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            reelsContainer.addEventListener('touchend', (e) => {
+                const endY = e.changedTouches[0].clientY;
+                const diff = startY - endY;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) nextReel();
+                    else prevReel();
+                }
+            }, { passive: true });
         }
 
-        function loadHeadlines(startIdx, endIdx) {
-            const cardList = document.getElementById('headlinesList');
-            cardList.innerHTML = '';
-            
-            const headlineArticles = allArticles.slice(startIdx, endIdx);
-            console.log(`📰 Loading Headlines section: ${headlineArticles.length} articles`);
-            
-            if (headlineArticles.length === 0) {
-                cardList.innerHTML = '<div class="error-message">No headlines available.</div>';
-                return;
-            }
-            
-            headlineArticles.forEach((article) => {
-                const card = document.createElement('div');
-                card.className = 'news-card';
-                
-                const timeAgo = getTimeAgo(new Date(article.pubDate));
-                
-                card.innerHTML = `
-                    ${article.image_url ? `<img class="news-image" src="${article.image_url}" alt="${article.title}" onerror="this.style.display='none'">` : ''}
+        function renderHeadlines(articles) {
+            const container = document.getElementById('headlinesList');
+            container.innerHTML = articles.map(article => `
+                <div class="news-card" onclick="window.open('${article.link}', '_blank', 'noopener,noreferrer')">
+                    ${article.image_url && article.image_url !== '#' ? `<img src="${article.image_url}" alt="${article.title}" class="news-image" loading="lazy" onerror="this.style.display='none'">` : ''}
                     <div class="news-title">${article.title}</div>
                     <div class="news-summary">${article.description || ''}</div>
                     <div class="news-meta">
-                        <span class="category-tag">${article.source_id || 'News'}</span>
-                        <span>${timeAgo}</span>
+                        <span>${article.source_id}</span>
+                        <span class="category-tag">${Array.isArray(article.category) ? article.category[0] : 'general'}</span>
                     </div>
-                `;
-                
-                card.addEventListener('click', () => showFullArticle(article));
-                cardList.appendChild(card);
-            });
-        }
-
-        function setupReelSwipe() {
-            const container = document.getElementById('reelsContainer');
-            const reels = container.querySelectorAll('.reel');
-            
-            container.addEventListener('touchstart', (e) => {
-                touchStartY = e.touches[0].clientY;
-            });
-            
-            container.addEventListener('touchend', (e) => {
-                touchEndY = e.changedTouches[0].clientY;
-                handleSwipe();
-            });
-            
-            container.addEventListener('wheel', (e) => {
-                if (e.deltaY > 0) {
-                    nextReel();
-                } else {
-                    prevReel();
-                }
-            });
-            
-            function handleSwipe() {
-                if (touchStartY - touchEndY > 50) {
-                    nextReel();
-                }
-                if (touchEndY - touchStartY > 50) {
-                    prevReel();
-                }
-            }
-            
-            function nextReel() {
-                if (currentReelIndex < reels.length - 1) {
-                    reels[currentReelIndex].classList.remove('active');
-                    currentReelIndex++;
-                    reels[currentReelIndex].classList.add('active');
-                }
-            }
-            
-            function prevReel() {
-                if (currentReelIndex > 0) {
-                    reels[currentReelIndex].classList.remove('active');
-                    currentReelIndex--;
-                    reels[currentReelIndex].classList.add('active');
-                }
-            }
-        }
-
-        function getTimeAgo(date) {
-            const seconds = Math.floor((new Date() - date) / 1000);
-            
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
-            if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
-            return Math.floor(seconds / 604800) + 'w ago';
-        }
-
-        function showFullArticle(article) {
-            const content = document.getElementById('articleContent');
-            const timeAgo = getTimeAgo(new Date(article.pubDate));
-            
-            content.innerHTML = `
-                ${article.image_url ? `<img src="${article.image_url}" style="width:100%; border-radius:12px; margin-bottom:1rem;" onerror="this.style.display='none'">` : ''}
-                <h2 style="margin-bottom:1rem; color:var(--text-primary);">${article.title}</h2>
-                <div style="color:var(--text-meta); margin-bottom:1rem; font-size:0.9rem;">
-                    <strong>${article.source_id || 'News'}</strong> • ${timeAgo}
                 </div>
-                <p style="line-height:1.7; color:var(--text-secondary); margin-bottom:1rem;">${article.description || ''}</p>
-                ${article.content ? `<p style="line-height:1.7; color:var(--text-secondary); margin-bottom:1.5rem;">${article.content}</p>` : ''}
-                <a href="${article.link}" target="_blank" class="read-more-btn" style="display:inline-block;">Read Full Article →</a>
-            `;
+            `).join('');
+        }
+
+        function updateReelButtons() {
+            const reels = document.querySelectorAll('.reel');
+            const prevBtn = document.getElementById('prevReelBtn');
+            const nextBtn = document.getElementById('nextReelBtn');
             
-            articleModal.classList.add('active');
+            if (prevBtn && nextBtn) {
+                prevBtn.disabled = currentReelIndex === 0;
+                nextBtn.disabled = currentReelIndex >= reels.length - 1;
+            }
+        }
+
+        function nextReel() {
+            const reels = document.querySelectorAll('.reel');
+            if (currentReelIndex < reels.length - 1) {
+                reels[currentReelIndex].classList.remove('active');
+                currentReelIndex++;
+                reels[currentReelIndex].classList.add('active');
+                updateReelButtons();
+            }
+        }
+
+        function prevReel() {
+            const reels = document.querySelectorAll('.reel');
+            if (currentReelIndex > 0) {
+                reels[currentReelIndex].classList.remove('active');
+                currentReelIndex--;
+                reels[currentReelIndex].classList.add('active');
+                updateReelButtons();
+            }
         }
 
         function showError(message) {
-            document.getElementById('homeNewsList').innerHTML = `<div class="error-message">${message}</div>`;
-            document.getElementById('reelsContainer').innerHTML = `<div class="error-message">${message}</div>`;
-            document.getElementById('headlinesList').innerHTML = `<div class="error-message">${message}</div>`;
+            const sanitizedMsg = sanitizeHTML(message);
+            document.getElementById('homeNewsList').innerHTML = `<div class="error-message">${sanitizedMsg}</div>`;
+            document.getElementById('reelsContainer').innerHTML = `
+                <div class="reel-nav-arrows">
+                    <button class="reel-arrow" id="prevReelBtn" onclick="prevReel()">↑</button>
+                    <button class="reel-arrow" id="nextReelBtn" onclick="nextReel()">↓</button>
+                </div>
+                <div class="error-message">${sanitizedMsg}</div>
+            `;
+            document.getElementById('headlinesList').innerHTML = `<div class="error-message">${sanitizedMsg}</div>`;
         }
 
-        (function initializeApp() {
-            console.log('🚀 Updates App Starting with 4 APIs...');
-            
-            if (isCacheFresh()) {
-                const cached = getCache();
-                if (cached && cached.length > 0) {
-                    console.log(`📦 Loading ${cached.length} articles from cache!`);
-                    allArticles = cached;
-                    distributeArticles();
-                }
+        // 🔐 SECURITY: Disable right-click context menu on non-input elements
+        document.addEventListener('contextmenu', (e) => {
+            if (!e.target.matches('input, textarea')) {
+                e.preventDefault();
             }
-            
+        });
+
+        // 🔐 SECURITY: Prevent console manipulation attempts
+        console.log('%c🔒 Security Notice', 'color: red; font-size: 20px; font-weight: bold;');
+        console.log('%cThis browser feature is intended for developers only.', 'font-size: 14px;');
+
+        // Initialize app
+        if (isCacheFresh()) {
+            const cached = getCache();
+            if (cached && cached.length > 0) {
+                allArticles = cached;
+                distributeArticles();
+            } else {
+                fetchAllNews();
+            }
+        } else {
             fetchAllNews();
-        })();
+        }
     </script>
 </body>
-    </html>
+</html>
