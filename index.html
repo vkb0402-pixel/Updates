@@ -826,15 +826,16 @@
             <span class="modal-close" id="closeAbout">&times;</span>
             <div class="modal-header">About Updates</div>
             <p>Updates is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
-            <p style="margin-top: 1rem;"><strong>Version:</strong> 6.1.0 (Cached Edition)</p>
+            <p style="margin-top: 1rem;"><strong>Version:</strong> 6.2.0 (4-API Edition)</p>
             <p><strong>Developer:</strong> VKB Updates Team</p>
             <p style="margin-top: 1rem;"><strong>News Sources:</strong></p>
             <ul style="padding-left: 1.5rem; line-height: 1.8;">
                 <li>📰 <a href="https://newsapi.org" target="_blank" style="color: var(--accent-color);">NewsAPI.org</a></li>
                 <li>📰 <a href="https://newsdata.io" target="_blank" style="color: var(--accent-color);">NewsData.io</a></li>
                 <li>📰 <a href="https://gnews.io" target="_blank" style="color: var(--accent-color);">GNews.io</a></li>
+                <li>📰 <a href="https://currentsapi.services" target="_blank" style="color: var(--accent-color);">Currents API</a></li>
             </ul>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-meta);">⚡ Now with 30-minute cache for instant loading!</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-meta);">⚡ Now with 4 news sources and 30-minute cache!</p>
         </div>
     </div>
 
@@ -878,7 +879,6 @@
 
         const BACKEND_URL = 'https://backend-ml60.onrender.com';
 
-        // 📦 CACHE SYSTEM
         const CACHE_KEY = 'news_cache';
         const CACHE_TIME = 'news_cache_time';
         const CACHE_LANG = 'news_cache_lang';
@@ -1088,8 +1088,18 @@
                         return { articles: [] };
                     });
                 
-                const [newsApiData, newsDataData, gnewsData] = await Promise.all([
-                    newsApiPromise, newsDataPromise, gnewsPromise
+                const currentsPromise = fetchWithTimeout(`${BACKEND_URL}/api/currents?country=in&language=${currentLanguage}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`Currents: ${res.status}`);
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.error('❌ Currents Error:', err.message);
+                        return { news: [] };
+                    });
+                
+                const [newsApiData, newsDataData, gnewsData, currentsData] = await Promise.all([
+                    newsApiPromise, newsDataPromise, gnewsPromise, currentsPromise
                 ]);
                 
                 const newsApiArticles = (newsApiData.articles || []).map(a => ({
@@ -1125,7 +1135,18 @@
                     category: ['general']
                 }));
                 
-                allArticles = [...newsApiArticles, ...newsDataArticles, ...gnewsArticles]
+                const currentsArticles = (currentsData.news || []).map(a => ({
+                    title: a.title,
+                    description: a.description,
+                    content: a.description,
+                    image_url: a.image,
+                    link: a.url,
+                    pubDate: a.published,
+                    source_id: a.author || 'Currents',
+                    category: a.category || ['general']
+                }));
+                
+                allArticles = [...newsApiArticles, ...newsDataArticles, ...gnewsArticles, ...currentsArticles]
                     .filter(a => a.title && a.description && a.title !== '[Removed]');
                 
                 allArticles = removeDuplicates(allArticles);
@@ -1380,9 +1401,8 @@
             document.getElementById('headlinesList').innerHTML = `<div class="error-message">${message}</div>`;
         }
 
-        // 🚀 START APP WITH CACHE
         (function initializeApp() {
-            console.log('🚀 Updates App Starting...');
+            console.log('🚀 Updates App Starting with 4 APIs...');
             
             if (isCacheFresh()) {
                 const cached = getCache();
@@ -1397,4 +1417,4 @@
         })();
     </script>
 </body>
-                </html>
+    </html>
