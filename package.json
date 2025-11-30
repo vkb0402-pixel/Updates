@@ -1,6 +1,6 @@
 {
   "name": "news-api-proxy-secure",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Ultra-secure news API proxy with 5 news sources",
   "main": "index.js",
   "scripts": {
