@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Updates - Short & Crisp News</title>
+    <title>Updates - Professional News Platform</title>
     <link rel="icon" href="image-2.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- 🔐 ULTRA-SECURE HEADERS -->
     <meta http-equiv="Content-Security-Policy" 
@@ -16,7 +16,7 @@
                style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
                img-src 'self' https: data: blob:; 
                font-src 'self' https://fonts.gstatic.com;
-               connect-src 'self' https://backend-ml60.onrender.com;
+               connect-src 'self' https://backend-ml60.onrender.com https://*.onrender.com;
                frame-ancestors 'none';
                base-uri 'self';
                form-action 'self';
@@ -41,6 +41,7 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+            --shimmer-color: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         }
 
         [data-theme="dark"] {
@@ -56,6 +57,7 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+            --shimmer-color: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
         }
 
         * {
@@ -76,6 +78,170 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* ============================================
+           🎨 PROFESSIONAL LOADING SCREEN (YouTube Style)
+           ============================================ */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .loading-subtext {
+            font-size: 0.9rem;
+            color: var(--text-meta);
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .loading-progress {
+            width: 200px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, var(--accent-color), var(--header-gradient-2));
+            border-radius: 2px;
+            animation: progressMove 1.5s ease-in-out infinite;
+        }
+
+        @keyframes progressMove {
+            0% {
+                left: -30%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Shimmer skeleton loader */
+        .shimmer-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 700px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        .shimmer-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .shimmer {
+            background: var(--shimmer-color);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .shimmer-image {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 1rem;
+        }
+
+        .shimmer-title {
+            height: 24px;
+            width: 80%;
+            margin-bottom: 0.8rem;
+        }
+
+        .shimmer-text {
+            height: 16px;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .shimmer-text.short {
+            width: 60%;
+        }
+
+        /* ============================================
+           📱 HEADER
+           ============================================ */
         header {
             background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
             color: #fff;
@@ -145,6 +311,284 @@
             letter-spacing: -0.5px;
         }
 
+        /* ============================================
+           📰 NEWS CARDS
+           ============================================ */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 700px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-header {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem;
+            padding-left: 0.5rem;
+            border-left: 4px solid var(--accent-color);
+            letter-spacing: -0.5px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            padding: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent-color);
+            transform: scaleY(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .news-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .news-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+        }
+
+        .news-card:active {
+            transform: translateY(-1px);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            background: var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .news-card:hover .news-image {
+            transform: scale(1.02);
+        }
+
+        .news-title {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            line-height: 1.4;
+            letter-spacing: -0.3px;
+        }
+
+        .news-summary {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.6rem;
+            line-height: 1.6;
+        }
+
+        .news-meta {
+            font-size: 0.85rem;
+            color: var(--text-meta);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.6rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 0.6rem;
+        }
+
+        .category-tag {
+            background: linear-gradient(135deg, var(--accent-color), var(--header-gradient-2));
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
+        }
+
+        /* ============================================
+           🎬 REELS SECTION
+           ============================================ */
+        .reels-container {
+            position: relative;
+            height: calc(100vh - 130px);
+            overflow: hidden;
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--bg-color);
+            touch-action: pan-y;
+        }
+
+        .reel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(100%);
+            overflow-y: auto;
+            box-shadow: var(--shadow-md);
+            border-radius: 16px 16px 0 0;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .reel.active {
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 2;
+        }
+
+        .reel-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            background: var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reel:hover .reel-image {
+            transform: scale(1.02);
+        }
+
+        .reel-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.35;
+            letter-spacing: -0.5px;
+        }
+
+        .reel-content {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .reel-meta {
+            font-size: 0.9rem;
+            color: var(--text-meta);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .reel-indicator {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .indicator-dot.active {
+            background: var(--accent-color);
+            height: 24px;
+            border-radius: 4px;
+        }
+
+        /* ⬆️ UP ARROW BUTTON */
+        .scroll-up-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-color), var(--header-gradient-2));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99;
+        }
+
+        .scroll-up-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .scroll-up-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+
+        .scroll-up-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* ============================================
+           📱 BOTTOM NAVIGATION
+           ============================================ */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -220,6 +664,9 @@
             letter-spacing: 0.3px;
         }
 
+        /* ============================================
+           📄 PAGES
+           ============================================ */
         .page {
             display: none;
             animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -240,6 +687,9 @@
             }
         }
 
+        /* ============================================
+           🎯 SIDEBAR
+           ============================================ */
         .sidebar {
             position: fixed;
             top: 0;
@@ -315,6 +765,9 @@
             to { opacity: 1; }
         }
 
+        /* ============================================
+           🎨 MODAL
+           ============================================ */
         .modal {
             position: fixed;
             top: 0;
@@ -453,1096 +906,774 @@
             transform: translateX(24px);
         }
 
-        .card-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 700px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
-        }
-
-        .news-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow-sm);
-            padding: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .news-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: var(--accent-color);
-            transform: scaleY(0);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .news-card:hover::before {
-            transform: scaleY(1);
-        }
-
-        .news-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-3px);
-            border-color: var(--accent-color);
-        }
-
-        .news-card:active {
-            transform: translateY(-1px);
-        }
-
-        .news-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            background: var(--border-color);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .news-card:hover .news-image {
-            transform: scale(1.02);
-        }
-
-        .news-title {
-            font-size: 1.15rem;
-            color: var(--text-primary);
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-            line-height: 1.4;
-            letter-spacing: -0.3px;
-        }
-
-        .news-summary {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.6rem;
-            line-height: 1.6;
-        }
-
-        .news-meta {
-            font-size: 0.85rem;
-            color: var(--text-meta);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 0.6rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 0.6rem;
-        }
-
-        .category-tag {
+        /* 🔐 SECURE CONTACT REVEAL */
+        .reveal-btn {
             background: linear-gradient(135deg, var(--accent-color), var(--header-gradient-2));
             color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: capitalize;
-            letter-spacing: 0.3px;
-        }
-
-        .reels-container {
-            position: relative;
-            height: calc(100vh - 130px);
-            overflow: hidden;
-            max-width: 650px;
-            margin: 0 auto;
-            background: var(--bg-color);
-            touch-action: pan-y;
-        }
-
-        .reel {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--card-bg);
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(100%);
-            overflow-y: auto;
-            box-shadow: var(--shadow-md);
-            border-radius: 16px 16px 0 0;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .reel.active {
-            opacity: 1;
-            transform: translateY(0);
-            z-index: 2;
-        }
-
-        .reel-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 1.2rem;
-            background: var(--border-color);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .reel:hover .reel-image {
-            transform: scale(1.02);
-        }
-
-        .reel-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            line-height: 1.35;
-            letter-spacing: -0.5px;
-        }
-
-        .reel-content {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            line-height: 1.65;
-            margin-bottom: 1rem;
-            flex: 1;
-        }
-
-        .reel-meta {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-meta);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .reel-indicator {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 3;
-            backdrop-filter: blur(10px);
-        }
-
-        /* 🆕 UP ARROW BUTTON (NEW FEATURE) */
-        .up-arrow {
-            position: absolute;
-            bottom: 2rem;
-            right: 1.5rem;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--accent-color), var(--header-gradient-2));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 4;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            line-height: 1;
-        }
-
-        .up-arrow:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-        }
-
-        .up-arrow:active {
-            transform: translateY(-1px);
-        }
-
-        .up-arrow.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(10px);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--text-meta);
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-
-        .error-message {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--text-meta);
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-
-        .contact-link {
-            color: var(--accent-color);
-            text-decoration: none;
-            cursor: pointer;
-            position: relative;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
             font-weight: 600;
-            transition: opacity 0.2s ease;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
-        .contact-link:hover {
-            opacity: 0.8;
+        .reveal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
-        @media (max-width: 500px) {
-            .card-list {
-                padding: 0 0.8rem;
-                margin: 1rem auto;
-            }
-            header {
-                padding: 0.7rem 0.8rem;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .logo {
-                height: 35px;
-                width: 35px;
-            }
-            .reel {
-                padding: 1.2rem;
-            }
-            .reel-title {
-                font-size: 1.25rem;
-            }
-            .reel-image {
-                height: 180px;
-            }
-            .up-arrow {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-                bottom: 1.5rem;
-                right: 1rem;
-            }
+        .reveal-btn:active {
+            transform: translateY(0);
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
+        .contact-info {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 0.8rem;
             background: var(--bg-color);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
+        /* ============================================
+           📱 RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .section-header {
+                font-size: 1.2rem;
+            }
+
+            .news-title {
+                font-size: 1.05rem;
+            }
+
+            .reel-title {
+                font-size: 1.2rem;
+            }
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-meta);
+        /* ============================================
+           🎯 UTILITY CLASSES
+           ============================================ */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 {
+            margin-top: 2rem;
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
+    <!-- 🎨 PROFESSIONAL LOADING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+        <img src="image-2.png" alt="Updates Logo" class="loading-logo" onerror="this.style.display='none'">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Latest News</div>
+        <div class="loading-subtext">Fetching top stories from 5 sources...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- 📱 HEADER -->
+    <header>
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+        </div>
+        <div class="header-center">
+            <img src="image-2.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+            <h1>Updates</h1>
+        </div>
+        <div></div>
+    </header>
+
+    <!-- 🎯 SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">Menu</div>
         <ul class="sidebar-menu">
-            <li><a href="#" id="settingsLink">⚙️ Settings</a></li>
-            <li><a href="#" id="aboutLink">ℹ️ About</a></li>
-            <li><a href="#" id="helpLink">❓ Help</a></li>
+            <li><a href="#" data-action="about">📖 About</a></li>
+            <li><a href="#" data-action="settings">⚙️ Settings</a></li>
+            <li><a href="#" data-action="help">❓ Help & Support</a></li>
+            <li><a href="#" data-action="refresh">🔄 Refresh News</a></li>
         </ul>
     </div>
 
+    <!-- 🌐 OVERLAY -->
     <div class="overlay" id="overlay"></div>
 
-    <header>
-        <div class="header-left">
-            <button class="menu-btn" id="menuBtn">☰</button>
-        </div>
-        <div class="header-center">
-            <img src="image-2.png" alt="Updates Logo" class="logo">
-            <h1>Updates</h1>
-        </div>
-    </header>
-
-    <div id="homePage" class="page active">
+    <!-- 📄 PAGES -->
+    <!-- HOME PAGE -->
+    <div class="page active" id="homePage">
         <div class="card-list" id="homeNewsList">
-            <div class="loading">Loading latest news</div>
+            <!-- Shimmer loading effect -->
+            <div class="shimmer-wrapper" id="shimmerLoader">
+                <div class="shimmer-card">
+                    <div class="shimmer shimmer-image"></div>
+                    <div class="shimmer shimmer-title"></div>
+                    <div class="shimmer shimmer-text"></div>
+                    <div class="shimmer shimmer-text short"></div>
+                </div>
+                <div class="shimmer-card">
+                    <div class="shimmer shimmer-image"></div>
+                    <div class="shimmer shimmer-title"></div>
+                    <div class="shimmer shimmer-text"></div>
+                    <div class="shimmer shimmer-text short"></div>
+                </div>
+                <div class="shimmer-card">
+                    <div class="shimmer shimmer-image"></div>
+                    <div class="shimmer shimmer-title"></div>
+                    <div class="shimmer shimmer-text"></div>
+                    <div class="shimmer shimmer-text short"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="quickPage" class="page">
-        <div class="reels-container" id="reelsContainer">
-            <div class="loading">Loading quick news</div>
-            <!-- 🆕 UP ARROW BUTTON -->
-            <button class="up-arrow hidden" id="upArrow" aria-label="Previous article">↑</button>
+    <!-- QUICK NEWS PAGE (REELS) -->
+    <div class="page" id="quickPage">
+        <div class="reels-container" id="reelsContainer"></div>
+        <button class="scroll-up-btn" id="scrollUpBtn" aria-label="Previous">↑</button>
+    </div>
+
+    <!-- HEADLINES PAGE -->
+    <div class="page" id="headlinesPage">
+        <div class="card-list" id="headlinesNewsList"></div>
+    </div>
+
+    <!-- 📱 BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-page="homePage">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="#" class="nav-item" data-page="quickPage">
+            <span class="nav-icon">⚡</span>
+            <span class="nav-label">Quick</span>
+        </a>
+        <a href="#" class="nav-item" data-page="headlinesPage">
+            <span class="nav-icon">📰</span>
+            <span class="nav-label">Headlines</span>
+        </a>
+    </nav>
+
+    <!-- 🎨 MODALS -->
+    <!-- ABOUT MODAL -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <span class="modal-close" data-close="aboutModal">×</span>
+            <div class="modal-header">About Updates</div>
+            <p><strong>Updates</strong> is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
+            <br>
+            <p><strong>Version:</strong> 2.0.0</p>
+            <p><strong>Developer:</strong> VKB Updates Team</p>
+            <br>
+            <p><strong>News Sources:</strong></p>
+            <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                <li>NewsAPI</li>
+                <li>NewsData.io</li>
+                <li>GNews</li>
+                <li>Currents API</li>
+                <li>World News API</li>
+            </ul>
+            <br>
+            <p>⚡ Now with 5 news sources and smart caching!</p>
         </div>
     </div>
 
-    <div id="headlinesPage" class="page">
-        <div class="card-list" id="headlinesList">
-            <div class="loading">Loading headlines</div>
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <a href="#" class="nav-item active" data-page="homePage" aria-label="Home">
-            <div class="nav-icon">🏠</div>
-            <div class="nav-label">Home</div>
-        </a>
-        <a href="#" class="nav-item" data-page="quickPage" aria-label="Quick News">
-            <div class="nav-icon">⚡</div>
-            <div class="nav-label">Quick</div>
-        </a>
-        <a href="#" class="nav-item" data-page="headlinesPage" aria-label="Headlines">
-            <div class="nav-icon">📰</div>
-            <div class="nav-label">Headlines</div>
-        </a>
-    </div>
-
+    <!-- SETTINGS MODAL -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
-            <span class="modal-close" id="closeSettings">&times;</span>
+            <span class="modal-close" data-close="settingsModal">×</span>
             <div class="modal-header">Settings</div>
-            <div class="setting-item">
-                <span>Dark Mode</span>
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode">
-                    <span class="slider"></span>
-                </label>
-            </div>
+            
             <div class="setting-item">
                 <span>Language</span>
-                <select class="language-selector" id="languageSelector" aria-label="Select language">
+                <select class="language-selector" id="languageSelect">
                     <option value="en">English</option>
-                    <option value="hi">हिन्दी</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
                     <option value="es">Español</option>
                     <option value="fr">Français</option>
                     <option value="de">Deutsch</option>
                 </select>
             </div>
+            
             <div class="setting-item">
-                <span>Notifications</span>
+                <span>Dark Mode</span>
                 <label class="switch">
-                    <input type="checkbox" id="notifToggle" aria-label="Toggle notifications">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="setting-item">
-                <span>Auto-refresh News</span>
-                <label class="switch">
-                    <input type="checkbox" id="autoRefreshToggle" aria-label="Toggle auto-refresh">
+                    <input type="checkbox" id="darkModeToggle">
                     <span class="slider"></span>
                 </label>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="aboutModal">
-        <div class="modal-content">
-            <span class="modal-close" id="closeAbout">&times;</span>
-            <div class="modal-header">About Updates</div>
-            <p>Updates is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
-            
-            <!-- 🆕 VERSION 1.0.0 -->
-            <p style="margin-top: 1rem;"><strong>Version:</strong> 1.0.0</p>
-            <p><strong>Developer:</strong> VKB Updates Team</p>
-            
-            <p style="margin-top: 1rem;"><strong>News Sources:</strong></p>
-            <ul style="padding-left: 1.5rem; line-height: 1.8;">
-                <li>📰 <a href="https://newsapi.org" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">NewsAPI.org</a></li>
-                <li>📰 <a href="https://newsdata.io" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">NewsData.io</a></li>
-                <li>📰 <a href="https://gnews.io" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">GNews.io</a></li>
-                <li>📰 <a href="https://currentsapi.services" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">Currents API</a></li>
-                <!-- 🆕 WORLD NEWS API -->
-                <li>📰 <a href="https://worldnewsapi.com" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">World News API</a> 🆕</li>
-            </ul>
-            
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-meta);">⚡ 5 news sources • Ultra-secure • Real-time updates • Version 1.0.0</p>
-        </div>
-    </div>
-
+    <!-- HELP MODAL -->
     <div class="modal" id="helpModal">
         <div class="modal-content">
-            <span class="modal-close" id="closeHelp">&times;</span>
+            <span class="modal-close" data-close="helpModal">×</span>
             <div class="modal-header">Help & Support</div>
-            <p>Need help? Contact us:</p>
             
-            <!-- 🔐 ULTRA-SECURE CONTACT INFO -->
-            <p><strong>📧 Email:</strong> <a href="#" class="contact-link" id="emailLink">Click to reveal email</a></p>
-            <p><strong>📞 Phone:</strong> <a href="#" class="contact-link" id="phoneLink">Click to reveal phone</a></p>
+            <p><strong>Need help?</strong> Contact us:</p>
+            <br>
             
-            <p style="margin-top: 1rem;"><strong>FAQ:</strong></p>
-            <ul style="padding-left: 1.5rem; line-height: 1.8;">
-                <li><strong>How often is news updated?</strong> News is fetched in real-time and cached for 30 minutes.</li>
-                <li><strong>How many languages are supported?</strong> 5 languages: English, Hindi, Spanish, French, and German.</li>
-                <li><strong>Can I customize news sources?</strong> This feature is coming soon!</li>
-                <li><strong>Is this app free?</strong> Yes, completely free to use.</li>
-                <li><strong>How secure is my data?</strong> We use military-grade encryption and never store personal data.</li>
+            <div class="setting-item" style="flex-direction: column; align-items: flex-start;">
+                <span><strong>📧 Email:</strong></span>
+                <button class="reveal-btn" onclick="revealContact('email')">Click to reveal email</button>
+                <div class="contact-info" id="emailInfo"></div>
+            </div>
+            
+            <div class="setting-item" style="flex-direction: column; align-items: flex-start;">
+                <span><strong>📞 Phone:</strong></span>
+                <button class="reveal-btn" onclick="revealContact('phone')">Click to reveal phone</button>
+                <div class="contact-info" id="phoneInfo"></div>
+            </div>
+            
+            <br>
+            <p><strong>FAQ:</strong></p>
+            <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                <li><strong>Q: How often is news updated?</strong><br>A: Every 30 minutes automatically.</li>
+                <li><strong>Q: Can I change language?</strong><br>A: Yes, go to Settings.</li>
+                <li><strong>Q: Is my data safe?</strong><br>A: Yes, we don't collect any personal data.</li>
             </ul>
-        </div>
-    </div>
-
-    <div class="modal" id="articleModal">
-        <div class="modal-content">
-            <span class="modal-close" id="closeArticle">&times;</span>
-            <div id="articleContent"></div>
         </div>
     </div>
 
     <script>
-        'use strict'; // Enable strict mode for better security
-        
-        // ========================================
-        // 🔐 ULTRA-SECURE CONTACT ENCRYPTION
-        // Quadruple Base64 encoding for maximum security
-        // ========================================
-        const SECURE_VAULT = {
-            e: btoa(btoa(btoa(btoa('vivvictor.11111@gmail.com')))),
-            p: btoa(btoa(btoa(btoa('+919919800350'))))
-        };
-        
-        /**
-         * Decrypts quadruple-encoded contact information
-         */
-        function decryptVault(encrypted) {
-            try {
-                return atob(atob(atob(atob(encrypted))));
-            } catch(e) {
-                console.error('🔐 Decryption failed - unauthorized access attempt blocked');
-                return '';
+        // ============================================
+        // 🔐 SECURITY & CONFIGURATION
+        // ============================================
+        const CONFIG = {
+            BACKEND_URL: 'https://backend-ml60.onrender.com',
+            CACHE_DURATION: 30 * 60 * 1000, // 30 minutes
+            CACHE_KEY: 'newsCache_v2',
+            CACHE_TIMESTAMP_KEY: 'newsCacheTimestamp_v2',
+            TOP_HEADLINES_COUNT: 10,
+            ENCRYPTED_CONTACTS: {
+                email: 'dml2dmljdG9yLjExMTExQGdtYWlsLmNvbQ==', // Base64 encoded
+                phone: 'KzkxIDk5OTk5OTk5OTk=' // Base64 encoded (replace with real)
             }
-        }
-        
-        // ========================================
-        // 🔐 ADVANCED SANITIZATION FUNCTIONS
-        // ========================================
-        
+        };
+
+        // 🔐 XSS Protection - Sanitize HTML
         function sanitizeHTML(str) {
-            if (!str || typeof str !== 'string') return '';
             const div = document.createElement('div');
-            div.textContent = String(str).substring(0, 500); // Limit length to prevent DoS
+            div.textContent = str;
             return div.innerHTML;
         }
-        
-        function sanitizeURL(url) {
-            if (!url || typeof url !== 'string') return '#';
-            try {
-                const urlObj = new URL(url);
-                const allowedProtocols = ['http:', 'https:'];
-                // Verify protocol
-                if (!allowedProtocols.includes(urlObj.protocol)) {
-                    console.warn('🔐 Blocked unsafe protocol:', urlObj.protocol);
-                    return '#';
-                }
-                return url;
-            } catch(e) {
-                console.warn('🔐 Invalid URL blocked:', url);
-                return '#';
+
+        // 🔐 Decrypt contact info (Base64)
+        function revealContact(type) {
+            const infoDiv = document.getElementById(`${type}Info`);
+            if (infoDiv.style.display === 'block') {
+                infoDiv.style.display = 'none';
+                return;
             }
-        }
-        
-        function escapeHTML(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;',
-                '/': '&#x2F;',
-                '`': '&#x60;',
-                '=': '&#x3D;'
-            };
-            return String(text).replace(/[&<>"'`=/]/g, m => map[m]);
-        }
-        
-        // ========================================
-        // GLOBAL STATE MANAGEMENT
-        // ========================================
-        let allArticles = [];
-        let currentReelIndex = 0;
-        let touchStartY = 0;
-        let touchEndY = 0;
-        let currentLanguage = 'en';
-        let fetchAttempts = 0;
-        const MAX_RETRIES = 3;
-
-        // Backend configuration
-        const BACKEND_URL = 'https://backend-ml60.onrender.com';
-
-        // Cache configuration (Version 1.0.0)
-        const CACHE_KEY = 'news_v1_secure';
-        const CACHE_TIME = 'news_time_v1';
-        const CACHE_LANG = 'news_lang_v1';
-        const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
-
-        // ========================================
-        // CACHE MANAGEMENT FUNCTIONS
-        // ========================================
-        function saveCache(articles, lang) {
+            
             try {
-                localStorage.setItem(CACHE_KEY, JSON.stringify(articles));
-                localStorage.setItem(CACHE_TIME, Date.now().toString());
-                localStorage.setItem(CACHE_LANG, lang);
-                console.log(`✅ Cached ${articles.length} articles for ${lang}`);
-            } catch(e) {
-                console.warn('⚠️ Cache save failed (storage full or disabled)');
+                const encrypted = CONFIG.ENCRYPTED_CONTACTS[type];
+                const decrypted = atob(encrypted);
+                infoDiv.textContent = decrypted;
+                infoDiv.style.display = 'block';
+            } catch (e) {
+                infoDiv.textContent = 'Error decrypting contact info';
+                infoDiv.style.display = 'block';
             }
         }
 
-        function getCache() {
-            try {
-                const cached = localStorage.getItem(CACHE_KEY);
-                const lang = localStorage.getItem(CACHE_LANG);
-                if (!cached || lang !== currentLanguage) {
-                    return null;
+        // ============================================
+        // 💾 SMART CACHE MANAGEMENT
+        // ============================================
+        class NewsCache {
+            static save(data) {
+                try {
+                    localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(data));
+                    localStorage.setItem(CONFIG.CACHE_TIMESTAMP_KEY, Date.now().toString());
+                    console.log('✅ News cached successfully');
+                } catch (e) {
+                    console.warn('⚠️ Failed to cache news:', e);
                 }
-                return JSON.parse(cached);
-            } catch(e) {
-                console.warn('⚠️ Cache retrieval failed');
+            }
+
+            static load() {
+                try {
+                    const timestamp = parseInt(localStorage.getItem(CONFIG.CACHE_TIMESTAMP_KEY) || '0');
+                    const age = Date.now() - timestamp;
+                    
+                    if (age > CONFIG.CACHE_DURATION) {
+                        console.log('⏰ Cache expired');
+                        return null;
+                    }
+                    
+                    const data = localStorage.getItem(CONFIG.CACHE_KEY);
+                    if (data) {
+                        console.log('✅ Loaded from cache (age: ' + Math.round(age / 1000) + 's)');
+                        return JSON.parse(data);
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Failed to load cache:', e);
+                }
                 return null;
             }
+
+            static clear() {
+                localStorage.removeItem(CONFIG.CACHE_KEY);
+                localStorage.removeItem(CONFIG.CACHE_TIMESTAMP_KEY);
+                console.log('🗑️ Cache cleared');
+            }
+
+            static getAge() {
+                const timestamp = parseInt(localStorage.getItem(CONFIG.CACHE_TIMESTAMP_KEY) || '0');
+                return Date.now() - timestamp;
+            }
         }
 
-        function isCacheFresh() {
-            const time = localStorage.getItem(CACHE_TIME);
-            const lang = localStorage.getItem(CACHE_LANG);
-            if (!time || lang !== currentLanguage) {
-                return false;
-            }
-            const age = Date.now() - parseInt(time);
-            return age < CACHE_DURATION;
-        }
-
-        // ========================================
-        // DOM ELEMENT REFERENCES
-        // ========================================
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const languageSelector = document.getElementById('languageSelector');
-        const upArrow = document.getElementById('upArrow');
-
-        // ========================================
-        // 🔐 SECURE CONTACT REVEAL HANDLERS
-        // ========================================
-        document.getElementById('emailLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            const email = decryptVault(SECURE_VAULT.e);
-            if (email) {
-                e.target.innerHTML = `<a href="mailto:${escapeHTML(email)}" style="color: var(--accent-color);">${escapeHTML(email)}</a>`;
-                console.log('📧 Email revealed securely');
-            }
-        });
-
-        document.getElementById('phoneLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            const phone = decryptVault(SECURE_VAULT.p);
-            if (phone) {
-                e.target.innerHTML = `<a href="tel:${escapeHTML(phone)}" style="color: var(--accent-color);">${escapeHTML(phone)}</a>`;
-                console.log('📞 Phone revealed securely');
-            }
-        });
-
-        // ========================================
-        // MENU & NAVIGATION HANDLERS
-        // ========================================
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        });
-
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-        });
-
-        languageSelector.addEventListener('change', (e) => {
-            currentLanguage = e.target.value;
-            localStorage.setItem('language', currentLanguage);
-            fetchAttempts = 0;
+        // ============================================
+        // 📰 NEWS FETCHING WITH FALLBACK
+        // ============================================
+        async function fetchNewsWithFallback() {
+            const language = localStorage.getItem('selectedLanguage') || 'en';
             
-            document.getElementById('homeNewsList').innerHTML = '<div class="loading">Loading latest news</div>';
-            document.getElementById('reelsContainer').innerHTML = '<div class="loading">Loading quick news</div><button class="up-arrow hidden" id="upArrow" aria-label="Previous article">↑</button>';
-            document.getElementById('headlinesList').innerHTML = '<div class="loading">Loading headlines</div>';
-            
-            console.log(`🌍 Language changed to: ${currentLanguage}`);
-            fetchAllNews();
-        });
+            // Try to load from cache first
+            const cachedNews = NewsCache.load();
+            if (cachedNews && cachedNews.length > 0) {
+                console.log('📦 Using cached news');
+                return cachedNews;
+            }
 
-        const savedLanguage = localStorage.getItem('language');
-        if (savedLanguage) {
-            currentLanguage = savedLanguage;
-            languageSelector.value = savedLanguage;
-            console.log(`🌍 Loaded saved language: ${currentLanguage}`);
+            // Fetch from backend
+            try {
+                console.log('🌐 Fetching fresh news from backend...');
+                const newsFromBackend = await fetchAllNews(language);
+                
+                if (newsFromBackend && newsFromBackend.length > 0) {
+                    NewsCache.save(newsFromBackend);
+                    return newsFromBackend;
+                }
+            } catch (error) {
+                console.error('❌ Backend fetch failed:', error);
+            }
+
+            // Fallback to old cache (even if expired)
+            try {
+                const oldCache = localStorage.getItem(CONFIG.CACHE_KEY);
+                if (oldCache) {
+                    const data = JSON.parse(oldCache);
+                    console.log('🔄 Using expired cache as fallback');
+                    showNotification('Showing cached news (backend unavailable)', 'warning');
+                    return data;
+                }
+            } catch (e) {
+                console.error('❌ Failed to load old cache:', e);
+            }
+
+            // No news available
+            throw new Error('No news available (backend down, no cache)');
         }
 
-        // ========================================
-        // PAGE NAVIGATION
-        // ========================================
-        const navItems = document.querySelectorAll('.nav-item');
-        const pages = document.querySelectorAll('.page');
+        async function fetchAllNews(language = 'en') {
+            const country = 'in';
+            const allArticles = [];
+            const apis = [
+                { url: `/api/newsapi?country=${country}&language=${language}`, key: 'articles' },
+                { url: `/api/newsdata?country=${country}&language=${language}`, key: 'results' },
+                { url: `/api/gnews?country=${country}&language=${language}`, key: 'articles' },
+                { url: `/api/currents?country=${country}&language=${language}`, key: 'news' },
+                { url: `/api/worldnews?language=${language}`, key: 'news' }
+            ];
 
-        navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
+            for (const api of apis) {
+                try {
+                    const response = await fetch(`${CONFIG.BACKEND_URL}${api.url}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        signal: AbortSignal.timeout(15000)
+                    });
+
+                    if (!response.ok) {
+                        console.warn(`⚠️ API ${api.url} failed with status ${response.status}`);
+                        continue;
+                    }
+
+                    const data = await response.json();
+                    const articles = data[api.key] || [];
+                    
+                    if (Array.isArray(articles) && articles.length > 0) {
+                        allArticles.push(...articles);
+                        console.log(`✅ Fetched ${articles.length} articles from ${api.url}`);
+                    }
+                } catch (error) {
+                    console.error(`❌ Error fetching from ${api.url}:`, error.message);
+                }
+            }
+
+            return allArticles.filter(article => 
+                article && 
+                (article.title || article.name) && 
+                article.title !== '[Removed]'
+            );
+        }
+
+        // ============================================
+        // 🎨 UI RENDERING
+        // ============================================
+        function renderNewsCard(article, index) {
+            const title = sanitizeHTML(article.title || article.name || 'No title');
+            const description = sanitizeHTML(article.description || article.content || 'No description available');
+            const imageUrl = article.image || article.urlToImage || article.image_url || 'https://via.placeholder.com/400x200?text=No+Image';
+            const url = article.url || article.link || '#';
+            const source = sanitizeHTML(article.source?.name || article.source_name || 'Unknown');
+            const publishedAt = article.publishedAt || article.pubDate || article.published_date || new Date().toISOString();
+            const timeAgo = getTimeAgo(publishedAt);
+            const category = article.category?.[0] || article.categories?.[0] || 'General';
+
+            return `
+                <div class="news-card" onclick="window.open('${url}', '_blank')">
+                    <img src="${imageUrl}" alt="${title}" class="news-image" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                    <div class="news-title">${title}</div>
+                    <div class="news-summary">${description.substring(0, 150)}${description.length > 150 ? '...' : ''}</div>
+                    <div class="news-meta">
+                        <span>${source} • ${timeAgo}</span>
+                        <span class="category-tag">${category}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderReel(article, index) {
+            const title = sanitizeHTML(article.title || article.name || 'No title');
+            const content = sanitizeHTML(article.description || article.content || 'No description available');
+            const imageUrl = article.image || article.urlToImage || article.image_url || 'https://via.placeholder.com/400x300?text=No+Image';
+            const url = article.url || article.link || '#';
+            const source = sanitizeHTML(article.source?.name || article.source_name || 'Unknown');
+            const publishedAt = article.publishedAt || article.pubDate || article.published_date || new Date().toISOString();
+            const timeAgo = getTimeAgo(publishedAt);
+
+            return `
+                <a href="${url}" target="_blank" class="reel ${index === 0 ? 'active' : ''}" data-index="${index}">
+                    <img src="${imageUrl}" alt="${title}" class="reel-image" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <div class="reel-title">${title}</div>
+                    <div class="reel-content">${content}</div>
+                    <div class="reel-meta">${source} • ${timeAgo}</div>
+                </a>
+            `;
+        }
+
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+
+            const intervals = {
+                year: 31536000,
+                month: 2592000,
+                week: 604800,
+                day: 86400,
+                hour: 3600,
+                minute: 60
+            };
+
+            for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / secondsInUnit);
+                if (interval >= 1) {
+                    return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+                }
+            }
+
+            return 'Just now';
+        }
+
+        function showNotification(message, type = 'info') {
+            // Simple notification (you can enhance this)
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // ============================================
+        // 🚀 INITIALIZE APP
+        // ============================================
+        let allNewsArticles = [];
+        let currentReelIndex = 0;
+
+        async function initializeApp() {
+            try {
+                // Show loading screen
+                document.getElementById('loadingScreen').classList.remove('hidden');
+
+                // Fetch news with fallback
+                allNewsArticles = await fetchNewsWithFallback();
+
+                if (allNewsArticles.length === 0) {
+                    throw new Error('No news articles available');
+                }
+
+                console.log(`✅ Total articles: ${allNewsArticles.length}`);
+
+                // Sort by date (most recent first)
+                allNewsArticles.sort((a, b) => {
+                    const dateA = new Date(a.publishedAt || a.pubDate || a.published_date || 0);
+                    const dateB = new Date(b.publishedAt || b.pubDate || b.published_date || 0);
+                    return dateB - dateA;
+                });
+
+                // Render different sections
+                renderHomePage();
+                renderHeadlinesPage();
+                renderQuickNewsPage();
+
+                // Hide loading screen
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 500);
+
+            } catch (error) {
+                console.error('❌ Failed to initialize app:', error);
+                document.getElementById('loadingScreen').innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <h2 style="color: var(--text-primary); margin-bottom: 1rem;">😢 Unable to load news</h2>
+                        <p style="color: var(--text-meta); margin-bottom: 1.5rem;">Please check your connection and try again.</p>
+                        <button onclick="location.reload()" class="reveal-btn">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderHomePage() {
+            const homeList = document.getElementById('homeNewsList');
+            homeList.innerHTML = allNewsArticles.slice(0, 20).map((article, index) => renderNewsCard(article, index)).join('');
+        }
+
+        function renderHeadlinesPage() {
+            const headlinesList = document.getElementById('headlinesNewsList');
+            const topNews = allNewsArticles.slice(0, CONFIG.TOP_HEADLINES_COUNT);
+            const otherNews = allNewsArticles.slice(CONFIG.TOP_HEADLINES_COUNT);
+
+            headlinesList.innerHTML = `
+                <h2 class="section-header">
+                    Top Headlines
+                    <span class="section-badge">TOP ${CONFIG.TOP_HEADLINES_COUNT}</span>
+                </h2>
+                ${topNews.map((article, index) => renderNewsCard(article, index)).join('')}
+                
+                ${otherNews.length > 0 ? `
+                    <h2 class="section-header" style="margin-top: 3rem;">More News</h2>
+                    ${otherNews.map((article, index) => renderNewsCard(article, index + CONFIG.TOP_HEADLINES_COUNT)).join('')}
+                ` : ''}
+            `;
+        }
+
+        function renderQuickNewsPage() {
+            const reelsContainer = document.getElementById('reelsContainer');
+            reelsContainer.innerHTML = allNewsArticles.slice(0, 30).map((article, index) => renderReel(article, index)).join('');
+            
+            // Add indicator dots
+            const indicators = `
+                <div class="reel-indicator">
+                    ${allNewsArticles.slice(0, 30).map((_, i) => `<div class="indicator-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`).join('')}
+                </div>
+            `;
+            reelsContainer.insertAdjacentHTML('beforeend', indicators);
+
+            // Setup swipe/scroll
+            setupReelsNavigation();
+        }
+
+        // ============================================
+        // 🎬 REELS NAVIGATION
+        // ============================================
+        function setupReelsNavigation() {
+            const container = document.getElementById('reelsContainer');
+            const scrollUpBtn = document.getElementById('scrollUpBtn');
+            let startY = 0;
+            let isDragging = false;
+
+            container.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+                isDragging = true;
+            });
+
+            container.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                
+                const currentY = e.touches[0].clientY;
+                const diff = startY - currentY;
+
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0 && currentReelIndex < allNewsArticles.length - 1) {
+                        navigateReel(1);
+                    } else if (diff < 0 && currentReelIndex > 0) {
+                        navigateReel(-1);
+                    }
+                    isDragging = false;
+                }
+            });
+
+            container.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+
+            // Scroll up button
+            scrollUpBtn.addEventListener('click', () => {
+                if (currentReelIndex > 0) {
+                    navigateReel(-1);
+                }
+            });
+
+            // Show/hide scroll up button
+            updateScrollUpButton();
+        }
+
+        function navigateReel(direction) {
+            const reels = document.querySelectorAll('.reel');
+            const indicators = document.querySelectorAll('.indicator-dot');
+            
+            reels[currentReelIndex]?.classList.remove('active');
+            indicators[currentReelIndex]?.classList.remove('active');
+
+            currentReelIndex += direction;
+            currentReelIndex = Math.max(0, Math.min(currentReelIndex, reels.length - 1));
+
+            reels[currentReelIndex]?.classList.add('active');
+            indicators[currentReelIndex]?.classList.add('active');
+
+            updateScrollUpButton();
+        }
+
+        function updateScrollUpButton() {
+            const scrollUpBtn = document.getElementById('scrollUpBtn');
+            if (currentReelIndex > 0) {
+                scrollUpBtn.classList.add('visible');
+            } else {
+                scrollUpBtn.classList.remove('visible');
+            }
+        }
+
+        // ============================================
+        // 🎨 UI INTERACTIONS
+        // ============================================
+        // Sidebar toggle
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        });
+
+        document.getElementById('overlay').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        // Sidebar actions
+        document.querySelectorAll('[data-action]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetPage = item.dataset.page;
+                const action = btn.dataset.action;
                 
-                navItems.forEach(nav => nav.classList.remove('active'));
-                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('overlay').classList.remove('active');
                 
-                item.classList.add('active');
-                document.getElementById(targetPage).classList.add('active');
-                
-                console.log(`📄 Navigated to: ${targetPage}`);
+                if (action === 'about') {
+                    document.getElementById('aboutModal').classList.add('active');
+                } else if (action === 'settings') {
+                    document.getElementById('settingsModal').classList.add('active');
+                } else if (action === 'help') {
+                    document.getElementById('helpModal').classList.add('active');
+                } else if (action === 'refresh') {
+                    NewsCache.clear();
+                    location.reload();
+                }
             });
         });
 
-        // ========================================
-        // MODAL HANDLERS
-        // ========================================
-        const settingsModal = document.getElementById('settingsModal');
-        const aboutModal = document.getElementById('aboutModal');
-        const helpModal = document.getElementById('helpModal');
-        const articleModal = document.getElementById('articleModal');
+        // Modal close buttons
+        document.querySelectorAll('[data-close]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById(btn.dataset.close).classList.remove('active');
+            });
+        });
 
-        [
-            ['settingsLink', 'settingsModal'],
-            ['aboutLink', 'aboutModal'],
-            ['helpLink', 'helpModal']
-        ].forEach(([linkId, modalId]) => {
-            document.getElementById(linkId).addEventListener('click', (e) => {
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Page navigation
+        document.querySelectorAll('[data-page]').forEach(navItem => {
+            navItem.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.getElementById(modalId).classList.add('active');
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
+                const pageId = navItem.dataset.page;
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                navItem.classList.add('active');
+                
+                // Show selected page
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                
+                // Reset reel index when entering quick page
+                if (pageId === 'quickPage') {
+                    currentReelIndex = 0;
+                    navigateReel(0);
+                }
             });
         });
 
-        ['closeSettings', 'closeAbout', 'closeHelp', 'closeArticle'].forEach(id => {
-            document.getElementById(id).addEventListener('click', () => {
-                const modalId = id.replace('close', '').toLowerCase() + 'Modal';
-                document.getElementById(modalId).classList.remove('active');
-            });
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === settingsModal) settingsModal.classList.remove('active');
-            if (e.target === aboutModal) aboutModal.classList.remove('active');
-            if (e.target === helpModal) helpModal.classList.remove('active');
-            if (e.target === articleModal) articleModal.classList.remove('active');
-        });
-
-        // ========================================
-        // DARK MODE TOGGLE
-        // ========================================
+        // Dark mode toggle
         const darkModeToggle = document.getElementById('darkModeToggle');
-        let savedTheme = 'light';
-        
-        try {
-            savedTheme = localStorage.getItem('theme') || 'light';
-        } catch (e) {
-            console.warn('⚠️ Could not access localStorage for theme');
-        }
+        const savedTheme = localStorage.getItem('theme') || 'light';
         
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
             darkModeToggle.checked = true;
-            console.log('🌙 Dark mode enabled');
         }
 
         darkModeToggle.addEventListener('change', () => {
             if (darkModeToggle.checked) {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                try {
-                    localStorage.setItem('theme', 'dark');
-                } catch (e) {}
-                console.log('🌙 Switched to dark mode');
+                localStorage.setItem('theme', 'dark');
             } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                try {
-                    localStorage.setItem('theme', 'light');
-                } catch (e) {}
-                console.log('☀️ Switched to light mode');
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
             }
         });
 
-        // ========================================
-        // NETWORK REQUEST UTILITY
-        // ========================================
-        async function fetchWithTimeout(url, timeout = 15000) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), timeout);
-            
-            try {
-                const response = await fetch(url, {
-                    signal: controller.signal,
-                    headers: {
-                        'Accept': 'application/json',
-                        'User-Agent': 'Updates-App/1.0.0'
-                    }
-                });
-                clearTimeout(timeoutId);
-                return response;
-            } catch (error) {
-                clearTimeout(timeoutId);
-                throw error;
-            }
-        }
+        // Language selector
+        const languageSelect = document.getElementById('languageSelect');
+        languageSelect.value = localStorage.getItem('selectedLanguage') || 'en';
 
-        // ========================================
-        // 🆕 MAIN NEWS FETCHING FUNCTION
-        // NOW WITH WORLD NEWS API (5 SOURCES)
-        // ========================================
-        async function fetchAllNews() {
-            try {
-                console.log(`🔄 Fetching news in ${currentLanguage}... (Attempt ${fetchAttempts + 1}/${MAX_RETRIES})`);
-                
-                // 🆕 5 API CALLS (INCLUDING WORLD NEWS API)
-                const apiCalls = [
-                    fetchWithTimeout(`${BACKEND_URL}/api/newsapi?country=in&language=${currentLanguage}`),
-                    fetchWithTimeout(`${BACKEND_URL}/api/newsdata?country=in&language=${currentLanguage}`),
-                    fetchWithTimeout(`${BACKEND_URL}/api/gnews?country=in&lang=${currentLanguage}`),
-                    fetchWithTimeout(`${BACKEND_URL}/api/currents?country=in&language=${currentLanguage}`),
-                    // 🆕 WORLD NEWS API INTEGRATION
-                    fetchWithTimeout(`${BACKEND_URL}/api/worldnews?language=${currentLanguage}`)
-                ];
-                
-                const results = await Promise.all(
-                    apiCalls.map(p => 
-                        p.then(r => r.ok ? r.json() : {})
-                         .catch(err => {
-                             console.warn('⚠️ API call failed:', err.message);
-                             return {};
-                         })
-                    )
-                );
-                
-                const [newsApiData, newsDataData, gnewsData, currentsData, worldNewsData] = results;
-                
-                // Parse NewsAPI data
-                const newsApiArticles = (newsApiData.articles || []).map(a => ({
-                    title: sanitizeHTML(a.title || ''),
-                    description: sanitizeHTML(a.description || ''),
-                    content: sanitizeHTML(a.content || ''),
-                    image_url: sanitizeURL(a.urlToImage || ''),
-                    link: sanitizeURL(a.url || ''),
-                    pubDate: a.publishedAt,
-                    source_id: 'NewsAPI',
-                    category: ['general'],
-                    timestamp: new Date(a.publishedAt || Date.now()).getTime()
-                }));
-                
-                // Parse NewsData data
-                const newsDataArticles = (newsDataData.results || []).map(a => ({
-                    title: sanitizeHTML(a.title || ''),
-                    description: sanitizeHTML(a.description || ''),
-                    content: sanitizeHTML(a.content || ''),
-                    image_url: sanitizeURL(a.image_url || ''),
-                    link: sanitizeURL(a.link || ''),
-                    pubDate: a.pubDate,
-                    source_id: 'NewsData',
-                    category: a.category || ['general'],
-                    timestamp: new Date(a.pubDate || Date.now()).getTime()
-                }));
-                
-                // Parse GNews data
-                const gnewsArticles = (gnewsData.articles || []).map(a => ({
-                    title: sanitizeHTML(a.title || ''),
-                    description: sanitizeHTML(a.description || ''),
-                    content: sanitizeHTML(a.content || ''),
-                    image_url: sanitizeURL(a.image || ''),
-                    link: sanitizeURL(a.url || ''),
-                    pubDate: a.publishedAt,
-                    source_id: 'GNews',
-                    category: ['general'],
-                    timestamp: new Date(a.publishedAt || Date.now()).getTime()
-                }));
-                
-                // Parse Currents data
-                const currentsArticles = (currentsData.news || []).map(a => ({
-                    title: sanitizeHTML(a.title || ''),
-                    description: sanitizeHTML(a.description || ''),
-                    content: sanitizeHTML(a.description || ''),
-                    image_url: sanitizeURL(a.image || ''),
-                    link: sanitizeURL(a.url || ''),
-                    pubDate: a.published,
-                    source_id: 'Currents',
-                    category: a.category || ['general'],
-                    timestamp: new Date(a.published || Date.now()).getTime()
-                }));
-                
-                // 🆕 Parse World News API data
-                const worldNewsArticles = (worldNewsData.news || []).map(a => ({
-                    title: sanitizeHTML(a.title || ''),
-                    description: sanitizeHTML(a.summary || a.text || ''),
-                    content: sanitizeHTML(a.text || ''),
-                    image_url: sanitizeURL(a.image || ''),
-                    link: sanitizeURL(a.url || ''),
-                    pubDate: a.publish_date,
-                    source_id: 'WorldNews',
-                    category: ['general'],
-                    timestamp: new Date(a.publish_date || Date.now()).getTime()
-                }));
-                
-                // Merge and filter
-                allArticles = [
-                    ...newsApiArticles,
-                    ...newsDataArticles,
-                    ...gnewsArticles,
-                    ...currentsArticles,
-                    ...worldNewsArticles
-                ].filter(a => 
-                    a.title && 
-                    a.description && 
-                    a.title !== '[Removed]' && 
-                    a.link !== '#' &&
-                    a.title.length > 10
-                );
-                
-                allArticles = removeDuplicates(allArticles);
-                allArticles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                saveCache(allArticles, currentLanguage);
-                
-                console.log(`✅ Successfully loaded ${allArticles.length} articles from 5 sources (v1.0.0)`);
-                
-                if (allArticles.length >= 15) {
-                    distributeArticles();
-                } else if (fetchAttempts < MAX_RETRIES) {
-                    fetchAttempts++;
-                    console.log(`⏳ Retrying in 5 seconds... (Attempt ${fetchAttempts}/${MAX_RETRIES})`);
-                    setTimeout(fetchAllNews, 5000);
-                } else {
-                    showError('Limited news available. Please try refreshing or changing language.');
-                }
-                
-            } catch (error) {
-                console.error('❌ Fatal error during news fetch:', error.message);
-                
-                if (fetchAttempts < MAX_RETRIES) {
-                    fetchAttempts++;
-                    console.log(`⏳ Retrying in 5 seconds... (Attempt ${fetchAttempts}/${MAX_RETRIES})`);
-                    setTimeout(fetchAllNews, 5000);
-                } else {
-                    showError('Connection failed. Please check your internet connection and try again.');
-                }
-            }
-        }
+        languageSelect.addEventListener('change', () => {
+            localStorage.setItem('selectedLanguage', languageSelect.value);
+            NewsCache.clear();
+            location.reload();
+        });
 
-        // ========================================
-        // DUPLICATE REMOVAL
-        // ========================================
-        function removeDuplicates(articles) {
-            const seen = new Set();
-            return articles.filter(a => {
-                const key = a.title.toLowerCase().trim().substring(0, 50);
-                if (seen.has(key)) {
-                    return false;
-                }
-                seen.add(key);
-                return true;
-            });
-        }
+        // ============================================
+        // 🚀 START APP
+        // ============================================
+        initializeApp();
 
-        // ========================================
-        // 📊 ARTICLE DISTRIBUTION
-        // Headlines now shows TOP NEWS ONLY
-        // ========================================
-        function distributeArticles() {
-            console.log('📊 Distributing articles across pages...');
-            
-            renderHomeNews(allArticles.slice(0, 40));
-            renderReels(allArticles.slice(40, 70));
-            
-            const topHeadlines = allArticles
-                .filter(a => a.timestamp && a.timestamp > 0)
-                .sort((a, b) => b.timestamp - a.timestamp)
-                .slice(0, 25);
-            
-            console.log(`📰 Rendering ${topHeadlines.length} top headlines`);
-            renderHeadlines(topHeadlines);
-        }
-
-        // ========================================
-        // RENDER FUNCTIONS
-        // ========================================
-        function renderHomeNews(articles) {
-            const html = articles.map(a => `
-                <div class="news-card" onclick="window.open('${a.link}', '_blank', 'noopener,noreferrer')" role="article">
-                    ${a.image_url !== '#' ? 
-                        `<img src="${a.image_url}" alt="${escapeHTML(a.title)}" class="news-image" loading="lazy" onerror="this.style.display='none'">` 
-                        : ''}
-                    <div class="news-title">${a.title}</div>
-                    <div class="news-summary">${a.description}</div>
-                    <div class="news-meta">
-                        <span>${escapeHTML(a.source_id)}</span>
-                        <span class="category-tag">${escapeHTML(a.category[0])}</span>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('homeNewsList').innerHTML = html;
-            console.log(`🏠 Rendered ${articles.length} home articles`);
-        }
-
-        function renderReels(articles) {
-            const reelsHTML = articles.map((a, i) => `
-                <div class="reel ${i === 0 ? 'active' : ''}" onclick="window.open('${a.link}', '_blank', 'noopener,noreferrer')" role="article">
-                    <div class="reel-indicator">${i + 1}/${articles.length}</div>
-                    ${a.image_url !== '#' ? 
-                        `<img src="${a.image_url}" alt="${escapeHTML(a.title)}" class="reel-image" loading="lazy" onerror="this.style.display='none'">` 
-                        : ''}
-                    <div class="reel-title">${a.title}</div>
-                    <div class="reel-content">${a.description}</div>
-                    <div class="reel-meta">
-                        <span>${escapeHTML(a.source_id)}</span>
-                        <span>${escapeHTML(a.category[0])}</span>
-                    </div>
-                </div>
-            `).join('');
-            
-            const container = document.getElementById('reelsContainer');
-            container.innerHTML = reelsHTML + '<button class="up-arrow hidden" id="upArrow" aria-label="Previous article">↑</button>';
-            
-            currentReelIndex = 0;
-            updateArrowVisibility();
-            
-            // Up arrow handler
-            const upArrowBtn = document.getElementById('upArrow');
-            upArrowBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                prevReel();
-            });
-            
-            // Touch swipe handlers
-            let startY = 0;
-            container.addEventListener('touchstart', e => {
-                startY = e.touches[0].clientY;
-            }, { passive: true });
-            
-            container.addEventListener('touchend', e => {
-                const diff = startY - e.changedTouches[0].clientY;
-                if (Math.abs(diff) > 50) {
-                    diff > 0 ? nextReel() : prevReel();
-                }
-            }, { passive: true });
-            
-            console.log(`⚡ Rendered ${articles.length} reels with up arrow`);
-        }
-
-        function renderHeadlines(articles) {
-            const html = articles.map(a => `
-                <div class="news-card" onclick="window.open('${a.link}', '_blank', 'noopener,noreferrer')" role="article">
-                    ${a.image_url !== '#' ? 
-                        `<img src="${a.image_url}" alt="${escapeHTML(a.title)}" class="news-image" loading="lazy" onerror="this.style.display='none'">` 
-                        : ''}
-                    <div class="news-title">${a.title}</div>
-                    <div class="news-summary">${a.description}</div>
-                    <div class="news-meta">
-                        <span>${escapeHTML(a.source_id)}</span>
-                        <span class="category-tag">${escapeHTML(a.category[0])}</span>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('headlinesList').innerHTML = html;
-            console.log(`📰 Rendered ${articles.length} top headlines`);
-        }
-
-        // ========================================
-        // REEL NAVIGATION
-        // ========================================
-        function nextReel() {
-            const reels = document.querySelectorAll('.reel');
-            if (currentReelIndex < reels.length - 1) {
-                reels[currentReelIndex].classList.remove('active');
-                reels[++currentReelIndex].classList.add('active');
-                updateArrowVisibility();
-                console.log(`⚡ Next reel: ${currentReelIndex + 1}/${reels.length}`);
-            }
-        }
-
-        function prevReel() {
-            const reels = document.querySelectorAll('.reel');
-            if (currentReelIndex > 0) {
-                reels[currentReelIndex].classList.remove('active');
-                reels[--currentReelIndex].classList.add('active');
-                updateArrowVisibility();
-                console.log(`⚡ Previous reel: ${currentReelIndex + 1}/${reels.length}`);
-            }
-        }
-
-        function updateArrowVisibility() {
-            const arrow = document.getElementById('upArrow');
-            if (arrow) {
-                if (currentReelIndex > 0) {
-                    arrow.classList.remove('hidden');
-                } else {
-                    arrow.classList.add('hidden');
-                }
-            }
-        }
-
-        // ========================================
-        // ERROR DISPLAY
-        // ========================================
-        function showError(msg) {
-            const html = `<div class="error-message">${sanitizeHTML(msg)}</div>`;
-            document.getElementById('homeNewsList').innerHTML = html;
-            document.getElementById('reelsContainer').innerHTML = html + '<button class="up-arrow hidden" id="upArrow" aria-label="Previous article">↑</button>';
-            document.getElementById('headlinesList').innerHTML = html;
-            console.error('❌ Error displayed:', msg);
-        }
-
-        // ========================================
-        // INITIALIZATION
-        // ========================================
-        (function initializeApp() {
-            console.log('🚀 Updates v1.0.0 initializing...');
-            console.log('🔐 Security: ULTRA-SECURE mode enabled');
-            console.log('📡 News sources: 5 (including World News API)');
-            
-            if (isCacheFresh()) {
-                const cached = getCache();
-                if (cached && cached.length > 0) {
-                    allArticles = cached;
-                    distributeArticles();
-                    console.log(`✅ Loaded ${cached.length} articles from cache`);
-                } else {
-                    fetchAllNews();
-                }
-            } else {
-                console.log('🔄 Cache expired or empty - fetching fresh news...');
-                fetchAllNews();
-            }
-        })();
+        // Auto-refresh every 30 minutes
+        setInterval(() => {
+            console.log('🔄 Auto-refreshing news...');
+            NewsCache.clear();
+            initializeApp();
+        }, CONFIG.CACHE_DURATION);
     </script>
 </body>
-    </html>
+</html>
