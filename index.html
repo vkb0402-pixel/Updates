@@ -1077,7 +1077,7 @@
             <p><strong>Updates</strong> is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
             <br>
             <p><strong>Version:</strong> 2.0.0</p>
-            <p><strong>Developer:</strong> VKB Updates Team</p>
+            <p><strong>Developer:</strong> VIC Team</p>
             <br>
             <p><strong>News Sources:</strong></p>
             <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
@@ -1159,7 +1159,7 @@
             CACHE_DURATION: 30 * 60 * 1000, // 30 minutes
             CACHE_KEY: 'newsCache_v2',
             CACHE_TIMESTAMP_KEY: 'newsCacheTimestamp_v2',
-            TOP_HEADLINES_COUNT: 10,
+            TOP_HEADLINES_COUNT: 10, // ✅ EXACTLY 10 HEADLINES
             ENCRYPTED_CONTACTS: {
                 email: 'dml2dmljdG9yLjExMTExQGdtYWlsLmNvbQ==', // Base64 encoded
                 phone: 'KzkxIDk5OTk5OTk5OTk=' // Base64 encoded (replace with real)
@@ -1455,10 +1455,12 @@
             homeList.innerHTML = allNewsArticles.slice(0, 20).map((article, index) => renderNewsCard(article, index)).join('');
         }
 
+        // ✅ FIXED: Headlines shows EXACTLY 10 articles
         function renderHeadlinesPage() {
             const headlinesList = document.getElementById('headlinesNewsList');
+            
+            // ✅ EXACTLY 10 articles in Headlines
             const topNews = allNewsArticles.slice(0, CONFIG.TOP_HEADLINES_COUNT);
-            const otherNews = allNewsArticles.slice(CONFIG.TOP_HEADLINES_COUNT);
 
             headlinesList.innerHTML = `
                 <h2 class="section-header">
@@ -1466,25 +1468,29 @@
                     <span class="section-badge">TOP ${CONFIG.TOP_HEADLINES_COUNT}</span>
                 </h2>
                 ${topNews.map((article, index) => renderNewsCard(article, index)).join('')}
-                
-                ${otherNews.length > 0 ? `
-                    <h2 class="section-header" style="margin-top: 3rem;">More News</h2>
-                    ${otherNews.map((article, index) => renderNewsCard(article, index + CONFIG.TOP_HEADLINES_COUNT)).join('')}
-                ` : ''}
             `;
+            
+            console.log(`✅ Headlines: Showing exactly ${topNews.length} articles`);
         }
 
+        // ✅ FIXED: Quick News shows articles from 11 onwards
         function renderQuickNewsPage() {
             const reelsContainer = document.getElementById('reelsContainer');
-            reelsContainer.innerHTML = allNewsArticles.slice(0, 30).map((article, index) => renderReel(article, index)).join('');
+            
+            // ✅ Quick News shows articles AFTER the first 10
+            const quickNewsArticles = allNewsArticles.slice(CONFIG.TOP_HEADLINES_COUNT, CONFIG.TOP_HEADLINES_COUNT + 40);
+            
+            reelsContainer.innerHTML = quickNewsArticles.map((article, index) => renderReel(article, index)).join('');
             
             // Add indicator dots
             const indicators = `
                 <div class="reel-indicator">
-                    ${allNewsArticles.slice(0, 30).map((_, i) => `<div class="indicator-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`).join('')}
+                    ${quickNewsArticles.map((_, i) => `<div class="indicator-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`).join('')}
                 </div>
             `;
             reelsContainer.insertAdjacentHTML('beforeend', indicators);
+
+            console.log(`✅ Quick News: Showing ${quickNewsArticles.length} articles (from #${CONFIG.TOP_HEADLINES_COUNT + 1})`);
 
             // Setup swipe/scroll
             setupReelsNavigation();
@@ -1511,7 +1517,8 @@
                 const diff = startY - currentY;
 
                 if (Math.abs(diff) > 50) {
-                    if (diff > 0 && currentReelIndex < allNewsArticles.length - 1) {
+                    const maxReels = container.querySelectorAll('.reel').length;
+                    if (diff > 0 && currentReelIndex < maxReels - 1) {
                         navigateReel(1);
                     } else if (diff < 0 && currentReelIndex > 0) {
                         navigateReel(-1);
