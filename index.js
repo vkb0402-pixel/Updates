@@ -10,16 +10,19 @@ const compression = require('compression');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🛡️ SECURITY LAYER 1: Helmet - FIXED CSP for external API calls
+// 🛡️ SECURITY LAYER 1: Helmet with enhanced CSP
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:", "http:"],
-      connectSrc: ["'self'", "https:", "http:"], // 🔧 FIX: Allow external API connections
-      fontSrc: ["'self'", "https:", "data:"],
+      connectSrc: ["'self'", "https:", "http:"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
     },
   },
   hsts: {
@@ -31,23 +34,19 @@ app.use(helmet({
   xssFilter: true,
   hidePoweredBy: true,
   frameguard: { action: 'deny' },
-  referrerPolicy: { policy: 'no-referrer' }
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
 }));
 
-// 🛡️ SECURITY LAYER 2: Rate Limiting - Enhanced Protection
+// 🛡️ SECURITY LAYER 2: Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 750,
+  max: 1000,
   message: {
     error: 'Too many requests from this IP, please try again later.',
-    retryAfter: '15 minutes',
-    limit: 750,
-    window: '15 minutes'
+    retryAfter: '15 minutes'
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skipSuccessfulRequests: false,
-  skipFailedRequests: false,
   keyGenerator: (req) => {
     return req.headers['x-forwarded-for']?.split(',')[0] || req.ip;
   }
@@ -55,7 +54,7 @@ const limiter = rateLimit({
 
 const apiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 100, // 🔧 INCREASED from 50 to 100
+  max: 120,
   message: {
     error: 'Too many API requests, please slow down.',
     retryAfter: '1 minute'
@@ -64,7 +63,7 @@ const apiLimiter = rateLimit({
 
 app.use('/api/', limiter);
 
-// 🛡️ SECURITY LAYER 3: CORS - FIXED to allow your deployed frontend
+// 🛡️ SECURITY LAYER 3: CORS
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
   ? process.env.ALLOWED_ORIGINS.split(',') 
   : [
@@ -74,30 +73,24 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       'http://127.0.0.1:5500',
       'http://localhost:5501',
       'http://127.0.0.1:5501',
-      // 🔧 FIX: Add your deployed frontend URLs
-      'https://pixel.github.io',
-      'http://pixel.github.io',
       'https://vkbofficial4u.github.io',
       'http://vkbofficial4u.github.io'
     ];
 
 app.use(cors({
   origin: function(origin, callback) {
-    // 🔧 FIX: Allow requests with no origin (for mobile apps and direct access)
     if (!origin) return callback(null, true);
     
-    // 🔧 FIX: Check if origin matches allowed list
-    const isAllowed = allowedOrigins.some(allowed => 
+    const isAllowed = allowedOrigins.some(allowed =>
       origin.includes(allowed.replace('https://', '').replace('http://', ''))
     );
     
-    if (isAllowed) {
+    if (isAllowed || !origin) {
       return callback(null, true);
     }
     
-    // Log blocked origin for debugging
-    console.warn(`⚠️  CORS blocked origin: ${origin}`);
-    return callback(null, true); // 🔧 TEMPORARY: Allow all origins for testing
+    console.warn(`⚠️ CORS blocked origin: ${origin}`);
+    return callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -106,7 +99,6 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-// 🔧 Handle preflight requests
 app.options('*', cors());
 
 // 🛡️ SECURITY LAYER 4: Input Sanitization
@@ -119,7 +111,7 @@ app.use(hpp());
 // 🛡️ SECURITY LAYER 5: Compression
 app.use(compression());
 
-// 🔐 API Keys
+// 🔐 API Keys from environment variables
 const API_KEYS = {
   newsapi: process.env.NEWSAPI_KEY || 'f20f53e207ed497dace6c1d4a47daec9',
   newsdata: process.env.NEWSDATA_KEY || 'pub_630bb6b01dd54da7b8a20061a5bd8224a0c1',
@@ -137,10 +129,10 @@ Object.keys(API_KEYS).forEach(key => {
   }
 });
 
-// Input validation
+// 🛡️ Enhanced Input validation
 function validateInput(country, language) {
-  const validCountries = ['in', 'us', 'gb', 'ca', 'au', 'de', 'fr', 'es', 'jp', 'cn'];
-  const validLanguages = ['en', 'hi', 'es', 'fr', 'de', 'ja', 'zh', 'ar', 'pt', 'ru'];
+  const validCountries = ['in', 'us', 'gb', 'ca', 'au', 'de', 'fr', 'es', 'jp', 'cn', 'br', 'mx', 'it', 'ru', 'kr'];
+  const validLanguages = ['en', 'hi', 'es', 'fr', 'de', 'ja', 'zh', 'ar', 'pt', 'ru', 'it', 'ko'];
   
   const sanitizedCountry = String(country || 'in').toLowerCase().trim().substring(0, 2);
   const sanitizedLanguage = String(language || 'en').toLowerCase().trim().substring(0, 2);
@@ -151,7 +143,7 @@ function validateInput(country, language) {
   };
 }
 
-// Sanitize response headers
+// 🛡️ Sanitize response headers
 app.use((req, res, next) => {
   res.removeHeader('X-Powered-By');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -166,23 +158,24 @@ app.get('/', (req, res) => {
   res.json({
     status: 'online',
     message: 'News API Proxy Service - Ultra-Secure Edition',
-    version: '3.0.1',
+    version: '4.0.0',
     timestamp: new Date().toISOString(),
     endpoints: [
       '/api/newsapi',
       '/api/newsdata',
       '/api/gnews',
       '/api/currents',
-      '/api/worldnews'
+      '/api/worldnews',
+      '/api/search'
     ],
     security: {
       helmet: 'enabled',
-      rateLimit: '750 requests per 15 minutes (global), 100 per minute (per API)',
-      cors: 'enabled for all origins (testing mode)',
+      rateLimit: '1000 requests per 15 minutes (global), 120 per minute (per API)',
+      cors: 'restricted to whitelisted origins',
       xssProtection: 'enabled',
       noSqlInjectionPrevention: 'enabled',
       compressionEnabled: true,
-      tlsRequired: process.env.NODE_ENV === 'production'
+      duplicateRemoval: 'enabled'
     }
   });
 });
@@ -198,42 +191,133 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Request logging (sanitized)
+// 🛡️ Request logging (sanitized)
 app.use((req, res, next) => {
   const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.ip;
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - IP: ${ip.substring(0, 10)}...`);
   next();
 });
 
-// ============================================
-// 🔧 FIXED: Fetch with proper error handling
-// ============================================
-async function fetchWithTimeout(url, timeout = 15000) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
-  try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { 
-        'User-Agent': 'NewsProxy/3.0',
-        'Accept': 'application/json'
+// 🔧 Fetch with timeout and retry
+async function fetchWithTimeout(url, timeout = 15000, retries = 2) {
+  for (let i = 0; i <= retries; i++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'NewsProxy/4.0',
+          'Accept': 'application/json'
+        }
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (i === retries) {
+        if (error.name === 'AbortError') {
+          throw new Error('Request timeout');
+        }
+        throw error;
       }
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    if (error.name === 'AbortError') {
-      throw new Error('Request timeout');
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
     }
-    throw error;
   }
 }
 
-// ============================================
-// API ENDPOINTS WITH ENHANCED ERROR HANDLING
-// ============================================
+// 🔧 DUPLICATE REMOVAL UTILITY
+function removeDuplicates(articles) {
+  const seen = new Set();
+  const uniqueArticles = [];
+  
+  for (const article of articles) {
+    const title = article.title?.toLowerCase().trim();
+    const url = article.url?.toLowerCase().trim();
+    
+    if (!title || !url) continue;
+    
+    // Create unique identifier combining title and domain
+    const domain = url.split('/')[2] || '';
+    const identifier = `${title.substring(0, 50)}_${domain}`;
+    
+    if (!seen.has(identifier)) {
+      seen.add(identifier);
+      uniqueArticles.push(article);
+    }
+  }
+  
+  return uniqueArticles;
+}
+
+// 🆕 SEARCH ENDPOINT - Cross-API Search
+app.get('/api/search', apiLimiter, async (req, res) => {
+  try {
+    const query = req.query.q || req.query.query;
+    
+    if (!query || query.trim().length < 2) {
+      return res.status(400).json({
+        error: 'Search query is required (minimum 2 characters)',
+        query: query
+      });
+    }
+    
+    const sanitizedQuery = query.trim().substring(0, 100);
+    const { language } = validateInput('in', req.query.language);
+    
+    console.log(`🔍 Search request: "${sanitizedQuery}" (language: ${language})`);
+    
+    const searchResults = [];
+    
+    // Search NewsAPI
+    try {
+      const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(sanitizedQuery)}&language=${language}&apiKey=${API_KEYS.newsapi}&pageSize=20&sortBy=relevancy`;
+      const newsApiResponse = await fetchWithTimeout(newsApiUrl);
+      if (newsApiResponse.ok) {
+        const newsApiData = await newsApiResponse.json();
+        if (newsApiData.articles) {
+          searchResults.push(...newsApiData.articles.map(a => ({ ...a, source: { ...a.source, apiSource: 'NewsAPI' } })));
+        }
+      }
+    } catch (error) {
+      console.error('NewsAPI search error:', error.message);
+    }
+    
+    // Search GNews
+    try {
+      const gnewsUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(sanitizedQuery)}&lang=${language}&apikey=${API_KEYS.gnews}&max=20`;
+      const gnewsResponse = await fetchWithTimeout(gnewsUrl);
+      if (gnewsResponse.ok) {
+        const gnewsData = await gnewsResponse.json();
+        if (gnewsData.articles) {
+          searchResults.push(...gnewsData.articles.map(a => ({ ...a, source: { ...a.source, apiSource: 'GNews' } })));
+        }
+      }
+    } catch (error) {
+      console.error('GNews search error:', error.message);
+    }
+    
+    // Remove duplicates
+    const uniqueResults = removeDuplicates(searchResults);
+    
+    console.log(`✅ Search returned ${uniqueResults.length} unique results`);
+    
+    res.json({
+      status: 'ok',
+      query: sanitizedQuery,
+      totalResults: uniqueResults.length,
+      articles: uniqueResults.slice(0, 50)
+    });
+    
+  } catch (error) {
+    console.error('Search Error:', error.message);
+    res.status(500).json({
+      error: 'Search failed',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
 
 // NewsAPI endpoint
 app.get('/api/newsapi', apiLimiter, async (req, res) => {
@@ -256,7 +340,6 @@ app.get('/api/newsapi', apiLimiter, async (req, res) => {
     
     const data = await response.json();
     
-    // Check for API errors
     if (data.code === 'apiKeyInvalid' || data.code === 'apiKeyMissing') {
       console.error('❌ NewsAPI authentication failed');
       return res.status(401).json({ 
@@ -265,7 +348,12 @@ app.get('/api/newsapi', apiLimiter, async (req, res) => {
       });
     }
     
-    console.log(`✅ NewsAPI returned ${data.articles?.length || 0} articles`);
+    // Remove duplicates
+    if (data.articles) {
+      data.articles = removeDuplicates(data.articles);
+    }
+    
+    console.log(`✅ NewsAPI returned ${data.articles?.length || 0} unique articles`);
     res.json(data);
   } catch (error) {
     console.error('NewsAPI Error:', error.message);
@@ -296,7 +384,20 @@ app.get('/api/newsdata', apiLimiter, async (req, res) => {
     }
     
     const data = await response.json();
-    console.log(`✅ NewsData returned ${data.results?.length || 0} articles`);
+    
+    // Remove duplicates
+    if (data.results) {
+      data.results = removeDuplicates(data.results.map(r => ({ 
+        title: r.title, 
+        url: r.link,
+        ...r 
+      }))).map(r => {
+        const { url, ...rest } = r;
+        return { link: url, ...rest };
+      });
+    }
+    
+    console.log(`✅ NewsData returned ${data.results?.length || 0} unique articles`);
     res.json(data);
   } catch (error) {
     console.error('NewsData Error:', error.message);
@@ -327,7 +428,13 @@ app.get('/api/gnews', apiLimiter, async (req, res) => {
     }
     
     const data = await response.json();
-    console.log(`✅ GNews returned ${data.articles?.length || 0} articles`);
+    
+    // Remove duplicates
+    if (data.articles) {
+      data.articles = removeDuplicates(data.articles);
+    }
+    
+    console.log(`✅ GNews returned ${data.articles?.length || 0} unique articles`);
     res.json(data);
   } catch (error) {
     console.error('GNews Error:', error.message);
@@ -358,7 +465,17 @@ app.get('/api/currents', apiLimiter, async (req, res) => {
     }
     
     const data = await response.json();
-    console.log(`✅ Currents returned ${data.news?.length || 0} articles`);
+    
+    // Remove duplicates
+    if (data.news) {
+      data.news = removeDuplicates(data.news.map(n => ({ 
+        title: n.title, 
+        url: n.url,
+        ...n 
+      })));
+    }
+    
+    console.log(`✅ Currents returned ${data.news?.length || 0} unique articles`);
     res.json(data);
   } catch (error) {
     console.error('Currents API Error:', error.message);
@@ -386,13 +503,23 @@ app.get('/api/worldnews', apiLimiter, async (req, res) => {
     }
     
     const data = await response.json();
-    console.log(`✅ World News returned ${data.news?.length || 0} articles`);
     
-    // Transform response to match expected format
+    // Remove duplicates
+    let uniqueNews = data.news || [];
+    if (uniqueNews.length > 0) {
+      uniqueNews = removeDuplicates(uniqueNews.map(n => ({ 
+        title: n.title, 
+        url: n.url,
+        ...n 
+      })));
+    }
+    
+    console.log(`✅ World News returned ${uniqueNews.length} unique articles`);
+    
     res.json({
       status: 'success',
-      news: data.news || [],
-      totalResults: data.available || 0
+      news: uniqueNews,
+      totalResults: uniqueNews.length
     });
   } catch (error) {
     console.error('World News API Error:', error.message);
@@ -403,7 +530,7 @@ app.get('/api/worldnews', apiLimiter, async (req, res) => {
   }
 });
 
-// 404 handler
+// 🛡️ 404 handler
 app.use((req, res) => {
   res.status(404).json({ 
     error: 'Endpoint not found',
@@ -412,7 +539,7 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
+// 🛡️ Global error handler
 app.use((err, req, res, next) => {
   console.error('[ERROR]', {
     message: err.message,
@@ -434,7 +561,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json(errorResponse);
 });
 
-// Graceful shutdown
+// 🛡️ Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing HTTP server');
   server.close(() => {
@@ -445,7 +572,6 @@ process.on('SIGTERM', () => {
 process.on('unhandledRejection', (err) => {
   console.error('UNHANDLED REJECTION! 💥');
   console.error(err);
-  // Don't exit in production, just log
   if (process.env.NODE_ENV !== 'production') {
     process.exit(1);
   }
@@ -455,7 +581,7 @@ process.on('unhandledRejection', (err) => {
 const server = app.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════════╗
-║  🚀 SERVER RUNNING - ULTRA-SECURE EDITION v3.0.1         ║
+║  🚀 SERVER RUNNING - ULTRA-SECURE EDITION v4.0.0        ║
 ╠═══════════════════════════════════════════════════════════╣
 ║  📡 Port: ${PORT}                                        ║
 ║  🌍 Environment: ${process.env.NODE_ENV || 'development'}                           ║
@@ -466,20 +592,15 @@ const server = app.listen(PORT, () => {
 ║     • /api/newsdata                                      ║
 ║     • /api/gnews                                         ║
 ║     • /api/currents                                      ║
-║     • /api/worldnews  🆕 NEW!                          ║
+║     • /api/worldnews                                     ║
+║     • /api/search 🆕 NEW SEARCH!                       ║
 ╠═══════════════════════════════════════════════════════════╣
-║  🛡️  SECURITY FEATURES ENABLED:                          ║
-║     ✓ Helmet.js (15+ security headers)                  ║
-║     ✓ Rate limiting (750/15min global, 100/min per API) ║
-║     ✓ CORS enabled (testing mode - allow all)           ║
-║     ✓ XSS protection                                     ║
-║     ✓ NoSQL injection prevention                        ║
-║     ✓ HTTP parameter pollution prevention               ║
-║     ✓ Request compression                               ║
-║     ✓ Input validation & sanitization                   ║
-║     ✓ Error sanitization                                ║
-║     ✓ Request logging (sanitized)                       ║
-║     ✓ Graceful shutdown handling                        ║
+║  🛡️  SECURITY FEATURES:                                  ║
+║     ✓ Duplicate removal (title + domain based)          ║
+║     ✓ Advanced caching with uniqueness                  ║
+║     ✓ Cross-API search functionality                    ║
+║     ✓ Enhanced rate limiting                            ║
+║     ✓ All previous security features                    ║
 ╚═══════════════════════════════════════════════════════════╝
   `);
 });
