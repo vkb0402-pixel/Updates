@@ -4,17 +4,23 @@
 .env.production
 .env.development
 .env.test
+.env.backup
 
 # Node modules
 node_modules/
-npm-debug.log
+npm-debug.log*
 yarn-error.log
-yarn-debug.log
+yarn-debug.log*
+package-lock.json
+yarn.lock
+pnpm-debug.log*
 
 # Build files
 dist/
 build/
 *.log
+logs/
+*.tgz
 
 # IDE files
 .vscode/
@@ -22,17 +28,89 @@ build/
 *.swp
 *.swo
 *~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
 
 # OS files
 .DS_Store
 Thumbs.db
+Desktop.ini
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 
-# Secrets
+# Secrets & Certificates
 secrets/
 *.pem
 *.key
 *.cert
+*.p12
+*.pfx
+credentials.json
+service-account.json
 
 # Backup files
 *.backup
 *.bak
+*.tmp
+*.temp
+*.old
+*.orig
+
+# Coverage & Testing
+coverage/
+.nyc_output/
+test-results/
+*.test.js.snap
+__tests__/coverage/
+
+# Cache
+.cache/
+.eslintcache
+.stylelintcache
+*.cache
+.parcel-cache/
+
+# Dependencies
+bower_components/
+jspm_packages/
+
+# Production
+/build
+/dist
+/out
+.next/
+.nuxt/
+.vercel
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Local development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# PM2
+.pm2/
+pm2.config.js
+ecosystem.config.js
+
+# Documentation
+/docs/build
+
+# Miscellaneous
+.sass-cache/
+connect.lock
+typings/
