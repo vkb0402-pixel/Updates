@@ -1,12 +1,43 @@
 {
   "name": "news-api-proxy-secure",
-  "version": "3.0.1",
-  "description": "Ultra-secure news API proxy with 5 news sources",
+  "version": "4.0.0",
+  "description": "Ultra-secure news API proxy with multi-source aggregation, intelligent search, duplicate removal, and offline support",
   "main": "index.js",
+  "author": "VKB Official <vivvictor.11111@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vkbofficial4u/news-api-proxy"
+  },
+  "keywords": [
+    "news",
+    "api",
+    "proxy",
+    "secure",
+    "express",
+    "newsapi",
+    "gnews",
+    "search",
+    "multilingual",
+    "duplicate-removal",
+    "cache",
+    "offline-support"
+  ],
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "prod": "NODE_ENV=production node index.js"
+    "prod": "NODE_ENV=production node index.js",
+    "test": "echo "Error: no test specified" && exit 1",
+    "lint": "eslint .",
+    "format": "prettier --write "**/*.{js,json,md}"",
+    "check": "npm run lint && npm run format",
+    "logs": "tail -f logs/news-proxy.log",
+    "clean": "rm -rf node_modules package-lock.json && npm install",
+    "build": "echo 'No build step required - Node.js backend'",
+    "postinstall": "echo '✅ Installation complete! Run npm start to begin.'",
+    "health": "curl http://localhost:3000/health",
+    "deploy": "git push origin main && echo '🚀 Deployed to production'",
+    "inspect": "node --inspect index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -16,12 +47,56 @@
     "express-mongo-sanitize": "^2.2.0",
     "xss-clean": "^0.1.4",
     "hpp": "^0.2.3",
-    "compression": "^1.7.4"
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "index.js",
+      ".env"
+    ],
+    "ext": "js,json",
+    "ignore": [
+      "node_modules/",
+      "logs/",
+      "*.log"
+    ],
+    "delay": 1000,
+    "execMap": {
+      "js": "node"
+    },
+    "verbose": true
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 12
+    },
+    "rules": {
+      "no-console": "off",
+      "no-unused-vars": "warn",
+      "no-undef": "error"
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "arrowParens": "avoid"
   }
 }
