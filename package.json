@@ -1,5 +1,5 @@
 {
-  "name": "news-api-proxy-secure",
+  "name": "https://backend-ml60.onrender.com",
   "version": "4.0.0",
   "description": "Ultra-secure news API proxy with multi-source aggregation and search",
   "main": "index.js",
@@ -29,3 +29,4 @@
     "npm": ">=9.0.0"
   }
 }
+
