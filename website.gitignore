@@ -1,12 +1,20 @@
-# Environment variables
+# ============================================
+# 🔐 ENVIRONMENT & SECRETS - NEVER COMMIT
+# ============================================
 .env
 .env.local
 .env.production
 .env.development
 .env.test
+.env.staging
 .env.backup
+.env.*
+website.env
+secrets.env
 
-# Node modules
+# ============================================
+# 📦 DEPENDENCIES
+# ============================================
 node_modules/
 npm-debug.log*
 yarn-error.log
@@ -14,16 +22,33 @@ yarn-debug.log*
 package-lock.json
 yarn.lock
 pnpm-debug.log*
+pnpm-lock.yaml
+.pnpm-debug.log*
+bower_components/
+jspm_packages/
 
-# Build files
+# ============================================
+# 🏗️ BUILD FILES & OUTPUTS
+# ============================================
 dist/
 build/
+out/
 *.log
 logs/
 *.tgz
+*.tar.gz
+.next/
+.nuxt/
+.vercel
+.netlify/
+.cache/
 
-# IDE files
+# ============================================
+# 💻 IDE & EDITOR FILES
+# ============================================
 .vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo
@@ -33,9 +58,13 @@ logs/
 *.sublime-project
 *.sublime-workspace
 .DS_Store
+*.code-workspace
 
-# OS files
+# ============================================
+# 🖥️ OS-SPECIFIC FILES
+# ============================================
 .DS_Store
+.DS_Store?
 Thumbs.db
 Desktop.ini
 .AppleDouble
@@ -44,73 +73,134 @@ Desktop.ini
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+ehthumbs_vista.db
+*.lnk
+$RECYCLE.BIN/
 
-# Secrets & Certificates
+# ============================================
+# 🔒 SECRETS, KEYS & CERTIFICATES
+# ============================================
 secrets/
 *.pem
 *.key
 *.cert
+*.crt
 *.p12
 *.pfx
 credentials.json
 service-account.json
+private-key.json
+*.asc
+*.gpg
 
-# Backup files
+# ============================================
+# 💾 BACKUP & TEMPORARY FILES
+# ============================================
 *.backup
 *.bak
 *.tmp
 *.temp
 *.old
 *.orig
+*~
+*.swn
+*.swo
+*.swp
+.~lock.*
 
-# Coverage & Testing
+# ============================================
+# 🧪 TESTING & COVERAGE
+# ============================================
 coverage/
 .nyc_output/
 test-results/
 *.test.js.snap
 __tests__/coverage/
+junit.xml
+.jest-cache/
+*.lcov
+htmlcov/
+.coverage
+.pytest_cache/
 
-# Cache
+# ============================================
+# 📊 CACHE FILES
+# ============================================
 .cache/
 .eslintcache
 .stylelintcache
 *.cache
 .parcel-cache/
+.sass-cache/
+.npm/
+.yarn/
 
-# Dependencies
-bower_components/
-jspm_packages/
-
-# Production
+# ============================================
+# 🚀 DEPLOYMENT & PRODUCTION
+# ============================================
 /build
 /dist
 /out
-.next/
-.nuxt/
 .vercel
+.netlify
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
 
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
-
-# Local development
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# PM2
+# ============================================
+# 🔄 PROCESS MANAGERS
+# ============================================
 .pm2/
 pm2.config.js
 ecosystem.config.js
+.pid
+*.pid
+*.seed
+*.pid.lock
 
-# Documentation
+# ============================================
+# 📖 DOCUMENTATION BUILD
+# ============================================
 /docs/build
+/docs/_build
+/docs/.doctrees
 
-# Miscellaneous
-.sass-cache/
+# ============================================
+# 🎨 DESIGN FILES (optional - uncomment if needed)
+# ============================================
+# *.psd
+# *.ai
+# *.sketch
+# *.fig
+
+# ============================================
+# 🎥 MEDIA FILES (optional - uncomment if needed)
+# ============================================
+# *.mp4
+# *.avi
+# *.mov
+# *.wmv
+# *.flv
+
+# ============================================
+# 📱 MOBILE DEVELOPMENT (optional)
+# ============================================
+# *.mobileprovision
+# *.dSYM.zip
+# *.dSYM
+# *.ipa
+# *.apk
+
+# ============================================
+# 🔧 MISCELLANEOUS
+# ============================================
 connect.lock
 typings/
+.tern-project
+.history/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
