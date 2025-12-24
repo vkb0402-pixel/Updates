@@ -1,49 +1,20 @@
 {
-  "name": "news-api-proxy-ultra-secure",
-  "version": "6.0.0",
-  "description": "Ultra-secure news API proxy with 5 premium news sources - Production Ready",
+  "name": "news-api-proxy",
+  "version": "1.0.0",
+  "description": "News API Proxy",
   "main": "index.js",
-  "author": "VKB Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vkbofficial4u/news-api-backend"
-  },
-  "keywords": [
-    "news",
-    "api",
-    "proxy",
-    "newsapi",
-    "gnews",
-    "newsdata",
-    "currents",
-    "worldnews",
-    "secure",
-    "express",
-    "nodejs"
-  ],
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "prod": "NODE_ENV=production node index.js",
-    "test": "echo "No tests yet" && exit 0"
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "helmet": "^7.1.0",
     "express-rate-limit": "^7.1.5",
-    "express-mongo-sanitize": "^2.2.0",
-    "xss-clean": "^0.1.4",
-    "hpp": "^0.2.3",
-    "compression": "^1.7.4",
-    "dotenv": "^16.3.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
+    "dotenv": "^16.3.1",
+    "compression": "^1.7.4"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=18.0.0"
   }
 }
