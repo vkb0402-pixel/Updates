@@ -3,2295 +3,616 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Updates - Your source for latest news and breaking headlines from around the world">
-    <meta name="keywords" content="news, updates, breaking news, headlines, world news">
-    <title>Updates - Latest News & Breaking Headlines</title>
+    <title>Updates - Short & Crisp News</title>
     
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>">
-    
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://backend-ml60.onrender.com https://*.onrender.com;">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="no-referrer">
-    
-    <!-- Fonts -->
+    <!-- Favicon and Icons -->
+    <link rel="icon" href="image-2.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* ============================================
-           🎨 CSS VARIABLES - PROFESSIONAL THEME
-           ============================================ */
         :root {
-            /* Light Theme Colors */
-            --primary: #2563eb;
-            --secondary: #1e40af;
-            --accent: #3b82f6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark: #0f172a;
-            --dark-card: #1e293b;
-            --dark-border: #334155;
-            --light: #f8fafc;
-            --light-card: #ffffff;
-            --light-border: #e2e8f0;
-            --text-primary: #0f172a;
-            --text-secondary: #64748b;
-            --text-light: #94a3b8;
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
-            
-            /* Border Radius */
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
-            --radius-full: 9999px;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-meta: #888888;
+            --header-gradient-1: #3b82f6;
+            --header-gradient-2: #2563eb;
+            --border-color: #e5e7eb;
+            --accent-color: #3b82f6;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        /* Dark Mode Variables */
-        body.dark-mode {
-            --light: #0f172a;
-            --light-card: #1e293b;
-            --light-border: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --text-light: #94a3b8;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-            --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+        [data-theme="dark"] {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #c0c0c0;
+            --text-meta: #888888;
+            --header-gradient-1: #1e3a8a;
+            --header-gradient-2: #1e40af;
+            --border-color: #2d2d2d;
+            --accent-color: #60a5fa;
         }
 
-        /* ============================================
-           🔧 RESET & BASE STYLES
-           ============================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            padding-bottom: 70px;
+            transition: background 0.3s ease;
             color: var(--text-primary);
-            background: var(--light);
-            overflow-x: hidden;
-            transition: all 0.3s ease;
         }
 
-        body.dark-mode {
-            background: var(--dark);
-            color: #f1f5f9;
-        }
-
-        /* ============================================
-           📱 HEADER & NAVIGATION
-           ============================================ */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-        }
-
-        body.dark-mode .header {
-            background: rgba(15,23,42,0.95);
-        }
-
-        .header-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem;
+        /* --- Header --- */
+        header {
+            background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
+            color: #fff;
+            padding: 0.8rem 1rem;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
+            box-shadow: 0 2px 12px rgba(59, 130, 246, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .logo {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: transform 0.2s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: var(--primary);
+        .header-left { display: flex; align-items: center; }
+        .menu-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
             color: white;
-            transform: translateY(-2px);
-        }
-
-        body.dark-mode .nav-link {
-            color: #cbd5e1;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
+            font-size: 1.4rem;
             cursor: pointer;
             padding: 0.5rem;
+            margin-right: 0.8rem;
+            border-radius: 8px;
+            transition: 0.2s;
         }
 
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-primary);
-            border-radius: var(--radius-full);
-            transition: all 0.3s;
-        }
-
-        body.dark-mode .hamburger span {
-            background: #f1f5f9;
-        }
-
-        /* ============================================
-           📄 MAIN CONTENT
-           ============================================ */
-        .main-content {
-            margin-top: 80px;
-            padding: 2rem 1.5rem;
-            max-width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
-            min-height: calc(100vh - 80px);
-        }
-
-        .section {
-            display: none;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section-header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        body.dark-mode .section-title {
-            background: linear-gradient(135deg, #60a5fa, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-        }
-
-        /* ============================================
-           🔍 SEARCH SECTION
-           ============================================ */
-        .search-section {
-            margin-bottom: 2rem;
-        }
-
-        .search-container {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem 3rem 1rem 3rem;
-            border: 2px solid var(--light-border);
-            border-radius: var(--radius-full);
-            font-size: 1rem;
-            transition: all 0.3s;
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-        }
-
-        body.dark-mode .search-input {
-            background: var(--dark-card);
-            border-color: var(--dark-border);
-            color: #f1f5f9;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-        }
-
-        .search-clear {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: none;
-            font-size: 1.2rem;
-            padding: 0.25rem;
-        }
-
-        .search-clear:hover {
-            color: var(--danger);
-        }
-
-        .search-stats {
-            text-align: center;
-            margin-top: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ============================================
-           📰 NEWS CARDS GRID
-           ============================================ */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .news-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        body.dark-mode .news-card {
-            background: var(--dark-card);
-        }
-
-        .news-image-container {
-            position: relative;
-            width: 100%;
-            padding-top: 60%;
-            overflow: hidden;
-            background: var(--light-border);
-        }
-
-        body.dark-mode .news-image-container {
-            background: var(--dark-border);
-        }
-
-        .news-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .news-card:hover .news-image {
-            transform: scale(1.05);
-        }
-
-        .news-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(37,99,235,0.9);
-            color: white;
-            padding: 0.25rem 1rem;
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            backdrop-filter: blur(10px);
-        }
-
-        .news-content {
-            padding: 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .news-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .news-source {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            color: var(--primary);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .news-time {
-            color: var(--text-light);
-            font-size: 0.85rem;
-        }
-
-        .news-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        body.dark-mode .news-title {
-            color: #f1f5f9;
-        }
-
-        .news-description {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            flex: 1;
-        }
-
-        body.dark-mode .news-description {
-            color: #94a3b8;
-        }
-
-        .news-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid var(--light-border);
-        }
-
-        body.dark-mode .news-actions {
-            border-top-color: var(--dark-border);
-        }
-
-        .read-more-btn {
-            color: var(--primary);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            transition: gap 0.2s;
-        }
-
-        .read-more-btn:hover {
-            gap: 0.75rem;
-        }
-
-        .bookmark-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--radius-full);
-            transition: all 0.2s;
-            font-size: 1.2rem;
-        }
-
-        .bookmark-btn:hover {
-            background: var(--light-border);
-            color: var(--warning);
-        }
-
-        body.dark-mode .bookmark-btn:hover {
-            background: var(--dark-border);
-        }
-
-        .bookmark-btn.bookmarked {
-            color: var(--warning);
-        }
-
-        /* ============================================
-           ⏳ LOADING & EMPTY STATES
-           ============================================ */
-        .loading-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--light-border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        body.dark-mode .loading-spinner {
-            border-color: var(--dark-border);
-            border-top-color: var(--accent);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .empty-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.5;
-        }
-
-        .empty-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        body.dark-mode .empty-title {
-            color: #f1f5f9;
-        }
-
-        .empty-description {
-            color: var(--text-secondary);
-        }
-
-        /* ============================================
-           🎯 MODAL & SETTINGS
-           ============================================ */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: var(--radius-xl);
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-xl);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        body.dark-mode .modal-content {
-            background: var(--dark-card);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--light-border);
-        }
-
-        body.dark-mode .modal-header {
-            border-bottom-color: var(--dark-border);
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        body.dark-mode .modal-title {
-            color: #f1f5f9;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 0.25rem;
-            border-radius: var(--radius-md);
-            transition: all 0.2s;
-        }
-
-        .modal-close:hover {
-            background: var(--light-border);
-            color: var(--text-primary);
-        }
-
-        body.dark-mode .modal-close:hover {
-            background: var(--dark-border);
-            color: #f1f5f9;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .setting-group {
-            margin-bottom: 2rem;
-        }
-
-        .setting-label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        body.dark-mode .setting-label {
-            color: #f1f5f9;
-        }
-
-        .setting-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .setting-select {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid var(--light-border);
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .setting-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-        }
-
-        body.dark-mode .setting-select {
-            background: var(--dark);
-            border-color: var(--dark-border);
-            color: #f1f5f9;
-        }
-
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--light-border);
-            transition: 0.4s;
-            border-radius: var(--radius-full);
-        }
-
-        body.dark-mode .toggle-slider {
-            background-color: var(--dark-border);
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--primary);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(30px);
-        }
-
-        /* ============================================
-           🍞 TOAST NOTIFICATION
-           ============================================ */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            max-width: 400px;
-            transform: translateX(500px);
-            transition: transform 0.3s;
-            z-index: 3000;
-        }
-
-        body.dark-mode .toast {
-            background: var(--dark-card);
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast-icon {
-            font-size: 1.5rem;
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            color: var(--text-primary);
-        }
-
-        body.dark-mode .toast-title {
-            color: #f1f5f9;
-        }
-
-        .toast-message {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .toast.success {
-            border-left: 4px solid var(--success);
-        }
-
-        .toast.error {
-            border-left: 4px solid var(--danger);
-        }
-
-        .toast.info {
-            border-left: 4px solid var(--primary);
-        }
-                /* ============================================
-           📱 RESPONSIVE DESIGN
-           ============================================ */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 1.5rem;
-                box-shadow: var(--shadow-lg);
-                transform: translateY(-100%);
-                opacity: 0;
-                transition: all 0.3s;
-            }
-
-            body.dark-mode .nav-menu {
-                background: var(--dark-card);
-            }
-
-            .nav-menu.active {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .news-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .toast {
-                right: 1rem;
-                left: 1rem;
-                max-width: none;
-            }
-        }
+        .header-center { display: flex; align-items: center; flex: 1; justify-content: center; }
+        .logo { height: 38px; width: 38px; margin-right: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* ============================================
-           🎨 SIDEBAR MENU
-           ============================================ */
+        /* --- Sidebar & Overlay --- */
         .sidebar {
             position: fixed;
             top: 0;
             left: -300px;
             width: 280px;
-            height: 100vh;
-            background: var(--light-card);
-            box-shadow: var(--shadow-lg);
-            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2500;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+            transition: 0.35s ease;
+            z-index: 1000;
             overflow-y: auto;
         }
-
-        body.dark-mode .sidebar {
-            background: var(--dark-card);
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
+        .sidebar.open { left: 0; }
         .sidebar-header {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
             color: white;
-            padding: 1.5rem;
-            font-size: 1.3rem;
+            padding: 2rem 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            letter-spacing: -0.3px;
         }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu li {
-            border-bottom: 1px solid var(--light-border);
-            transition: background 0.2s ease;
-        }
-
-        body.dark-mode .sidebar-menu li {
-            border-bottom-color: var(--dark-border);
-        }
-
+        .sidebar-menu { list-style: none; }
         .sidebar-menu a {
             display: block;
             padding: 1rem 1.5rem;
             color: var(--text-primary);
             text-decoration: none;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid var(--border-color);
             font-weight: 500;
+            transition: 0.2s;
         }
-
-        .sidebar-menu li:hover {
-            background: var(--light);
-        }
-
-        body.dark-mode .sidebar-menu li:hover {
-            background: var(--dark);
-        }
-
-        .sidebar-menu a:hover {
-            padding-left: 1.8rem;
-        }
-
-        /* Overlay for sidebar */
+        .sidebar-menu a:hover { background: var(--bg-color); padding-left: 1.8rem; }
+        
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             display: none;
-            z-index: 2000;
+            z-index: 999;
             backdrop-filter: blur(2px);
-            transition: opacity 0.3s ease;
         }
+        .overlay.active { display: block; }
 
-        .overlay.active {
-            display: block;
-            animation: fadeInOverlay 0.3s ease;
+        /* --- Main Content --- */
+        .page { display: none; animation: fadeIn 0.4s ease; padding: 1rem; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { text-align: center; margin: 1.5rem 0 2rem; }
+        .section-title { font-size: 2rem; font-weight: 800; color: var(--accent-color); margin-bottom: 0.5rem; }
+
+        /* --- Search Bar --- */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
         }
-
-        @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
         }
+        .search-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .search-icon { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); font-size: 1.3rem; color: var(--text-meta); }
 
-        /* ============================================
-           🎯 UTILITY CLASSES
-           ============================================ */
-        .hidden {
-            display: none !important;
+        /* --- News Cards --- */
+        .card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-2 {
-            margin-top: 2rem;
-        }
-
-        /* ============================================
-           🎨 MENU BUTTON IN HEADER
-           ============================================ */
-        .menu-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
             cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--radius-md);
-            transition: all 0.2s ease;
+            transition: 0.3s;
             display: flex;
+            flex-direction: column;
+        }
+        .news-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--accent-color); }
+        .news-image { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        .news-content { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
+        .news-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; color: var(--text-primary); }
+        .news-summary { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; flex: 1; }
+        .news-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 0.8rem; border-top: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-meta); }
+        .source-tag { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 5px; font-weight: 600; font-size: 0.75rem; }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.6rem 0;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-top: 1px solid var(--border-color);
+        }
+        .nav-item {
+            text-align: center;
+            color: var(--text-meta);
+            text-decoration: none;
+            flex: 1;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .nav-item.active { color: var(--accent-color); }
+        .nav-icon { font-size: 1.4rem; margin-bottom: 2px; }
+
+        /* --- Modals --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
             align-items: center;
             justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+            backdrop-filter: blur(4px);
         }
-
-        .menu-btn:hover {
-            background: var(--light);
-            color: var(--accent);
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
         }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--accent-color); }
+        .close-modal { position: absolute; top: 1.2rem; right: 1.5rem; font-size: 1.8rem; cursor: pointer; color: var(--text-meta); }
 
-        body.dark-mode .menu-btn:hover {
-            background: var(--dark-card);
+        /* --- Reels / Quick News --- */
+        .reels-container { height: calc(100vh - 150px); overflow: hidden; position: relative; max-width: 500px; margin: 0 auto; border-radius: 20px; }
+        .reel { position: absolute; width: 100%; height: 100%; background: var(--card-bg); padding: 1.5rem; display: flex; flex-direction: column; transition: 0.4s ease; transform: translateY(100%); opacity: 0; }
+        .reel.active { transform: translateY(0); opacity: 1; }
+        .reel-image { width: 100%; height: 250px; object-fit: cover; border-radius: 15px; margin-bottom: 1.5rem; }
+        .reel-title { font-size: 1.4rem; font-weight: 800; line-height: 1.3; margin-bottom: 1rem; }
+        .reel-text { font-size: 1.1rem; line-height: 1.6; color: var(--text-secondary); flex: 1; }
+
+        /* --- Utils --- */
+        .loading { text-align: center; padding: 3rem; color: var(--text-meta); }
+        .read-more { display: inline-block; background: var(--accent-color); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 1rem; transition: 0.2s; }
+        .read-more:hover { transform: scale(1.05); }
+        .footer-credit { text-align: center; margin-top: 2rem; padding: 1rem; border-top: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-meta); }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.3rem; }
+            .card-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body>
-    
-    <!-- ============================================
-         🎯 HEADER WITH MENU BUTTON
-         ============================================ -->
-    <header class="header">
-        <div class="header-container">
-            <button class="menu-btn" id="menuBtn" aria-label="Open Menu">☰</button>
-            
-            <a href="#" class="logo" onclick="showSection('home'); return false;">
-                <span>📰</span>
-                <span>Updates</span>
-            </a>
+<body data-theme="light">
 
-            <nav>
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="#" class="nav-link active" onclick="showSection('home'); return false;" data-translate="home">
-                        <span>🏠</span> <span class="translate">Home</span>
-                    </a></li>
-                    <li><a href="#" class="nav-link" onclick="showSection('search'); return false;" data-translate="search">
-                        <span>🔍</span> <span class="translate">Search</span>
-                    </a></li>
-                    <li><a href="#" class="nav-link" onclick="showSection('trending'); return false;" data-translate="trending">
-                        <span>🔥</span> <span class="translate">Trending</span>
-                    </a></li>
-                    <li><a href="#" class="nav-link" onclick="showSection('bookmarks'); return false;" data-translate="bookmarks">
-                        <span>💾</span> <span class="translate">Bookmarks</span>
-                    </a></li>
-                    <li><a href="#" class="nav-link" onclick="openSettings(); return false;" data-translate="settings">
-                        <span>⚙️</span> <span class="translate">Settings</span>
-                    </a></li>
-                </ul>
-            </nav>
-
-            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
-
-    <!-- ============================================
-         🎯 SIDEBAR MENU
-         ============================================ -->
+    <!-- Sidebar & Overlay -->
+    <div class="overlay" id="overlay"></div>
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">📰 Menu</div>
+        <div class="sidebar-header">Updates Menu</div>
         <ul class="sidebar-menu">
-            <li><a href="#" data-action="home">🏠 Home</a></li>
-            <li><a href="#" data-action="search">🔍 Search</a></li>
-            <li><a href="#" data-action="trending">🔥 Trending</a></li>
-            <li><a href="#" data-action="bookmarks">💾 Bookmarks</a></li>
-            <li><a href="#" data-action="settings">⚙️ Settings</a></li>
-            <li><a href="#" data-action="about">ℹ️ About</a></li>
-            <li><a href="#" data-action="help">❓ Help & Support</a></li>
-            <li><a href="#" data-action="refresh">🔄 Refresh News</a></li>
+            <li><a href="#" onclick="showPage('home')">🏠 Home News</a></li>
+            <li><a href="#" onclick="showPage('search')">🔍 Search Articles</a></li>
+            <li><a href="#" onclick="showPage('quick')">⚡ Quick Reels</a></li>
+            <li><a href="#" onclick="showPage('bookmarks')">🔖 Saved Stories</a></li>
+            <li><a href="#" onclick="openModal('settings')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="openModal('about')">ℹ️ About Developer</a></li>
+            <li><a href="#" onclick="location.reload()">🔄 Refresh App</a></li>
         </ul>
     </div>
 
-    <!-- Overlay for Sidebar -->
-    <div class="overlay" id="overlay"></div>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn">☰</button>
+        </div>
+        <div class="header-center">
+            <img src="image-2.jpeg" alt="Logo" class="logo">
+            <h1>Updates</h1>
+        </div>
+        <div style="width: 40px;"></div> <!-- Spacer -->
+    </header>
 
-    <!-- ============================================
-         📄 MAIN CONTENT SECTIONS
-         ============================================ -->
-    <main class="main-content">
-        
-        <!-- HOME SECTION -->
-        <section id="home" class="section active">
+    <!-- Pages -->
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page active">
             <div class="section-header">
-                <h1 class="section-title translate" data-translate="homeTitle">Latest News & Headlines</h1>
-                <p class="section-subtitle translate" data-translate="homeSubtitle">Stay updated with breaking news from around the world</p>
+                <h2 class="section-title">Latest News</h2>
+                <p>Top headlines from 5 global sources</p>
             </div>
-            <div id="homeNews" class="news-grid"></div>
-        </section>
+            <div id="newsList" class="card-list">
+                <div class="loading">Fetching fresh news...</div>
+            </div>
+        </div>
 
-        <!-- SEARCH SECTION -->
-        <section id="search" class="section">
+        <!-- Search Page -->
+        <div id="search" class="page">
             <div class="section-header">
-                <h1 class="section-title translate" data-translate="searchTitle">Search News</h1>
-                <p class="section-subtitle translate" data-translate="searchSubtitle">Find articles by keywords or topics</p>
+                <h2 class="section-title">Search</h2>
             </div>
-            
-            <div class="search-section">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        class="search-input" 
-                        placeholder="Search for news..." 
-                        data-translate-placeholder="searchPlaceholder"
-                    />
-                    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
-                </div>
-                <div id="searchStats" class="search-stats"></div>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for any topic...">
             </div>
-            
-            <div id="searchResults" class="news-grid"></div>
-        </section>
+            <div id="searchResults" class="card-list">
+                <div class="loading" style="padding:0">Type something to search...</div>
+            </div>
+        </div>
 
-        <!-- TRENDING SECTION -->
-        <section id="trending" class="section">
+        <!-- Quick News (Reels) -->
+        <div id="quick" class="page">
             <div class="section-header">
-                <h1 class="section-title translate" data-translate="trendingTitle">Trending Stories</h1>
-                <p class="section-subtitle translate" data-translate="trendingSubtitle">Most popular news right now</p>
+                <h2 class="section-title">Quick News</h2>
             </div>
-            <div id="trendingNews" class="news-grid"></div>
-        </section>
+            <div class="reels-container" id="reelsContainer">
+                <div class="loading">Loading snippets...</div>
+            </div>
+        </div>
 
-        <!-- BOOKMARKS SECTION -->
-        <section id="bookmarks" class="section">
+        <!-- Bookmarks -->
+        <div id="bookmarks" class="page">
             <div class="section-header">
-                <h1 class="section-title translate" data-translate="bookmarksTitle">Saved Articles</h1>
-                <p class="section-subtitle translate" data-translate="bookmarksSubtitle">Your bookmarked news articles</p>
+                <h2 class="section-title">Saved Articles</h2>
             </div>
-            <div id="bookmarksNews" class="news-grid"></div>
-        </section>
-        
+            <div id="bookmarksList" class="card-list">
+                <div class="loading">No bookmarks saved yet.</div>
+            </div>
+        </div>
     </main>
 
-    <!-- ============================================
-         🎯 SETTINGS MODAL
-         ============================================ -->
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showPage('home', this)">
+            <div class="nav-icon">🏠</div>
+            <div>Home</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('search', this)">
+            <div class="nav-icon">🔍</div>
+            <div>Search</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('quick', this)">
+            <div class="nav-icon">⚡</div>
+            <div>Quick</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('bookmarks', this)">
+            <div class="nav-icon">🔖</div>
+            <div>Saved</div>
+        </a>
+    </div>
+
+    <!-- Modals -->
+    <!-- Settings -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title translate" data-translate="settingsTitle">⚙️ Settings</h2>
-                <button class="modal-close" onclick="closeSettings()">✕</button>
+            <span class="close-modal" onclick="closeModal('settings')">×</span>
+            <div class="modal-header">Settings</div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom: 0.5rem; font-weight:600;">Dark Mode</label>
+                <button onclick="toggleDarkMode()" id="themeBtn" style="padding:0.6rem 1.2rem; border-radius:8px; border:1px solid var(--border-color); cursor:pointer; background:var(--accent-color); color:white; width:100%;">Toggle Theme</button>
             </div>
-            <div class="modal-body">
-                <!-- Language Setting -->
-                <div class="setting-group">
-                    <label class="setting-label translate" data-translate="languageLabel">🌐 Language</label>
-                    <p class="setting-description translate" data-translate="languageDesc">Choose your preferred language</p>
-                    <select id="languageSelect" class="setting-select" onchange="changeLanguage()">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी (Hindi)</option>
-                        <option value="es">Español (Spanish)</option>
-                        <option value="fr">Français (French)</option>
-                        <option value="de">Deutsch (German)</option>
-                        <option value="ja">日本語 (Japanese)</option>
-                        <option value="zh">中文 (Chinese)</option>
-                        <option value="ar">العربية (Arabic)</option>
-                        <option value="pt">Português (Portuguese)</option>
-                        <option value="ru">Русский (Russian)</option>
-                        <option value="it">Italiano (Italian)</option>
-                        <option value="ko">한국어 (Korean)</option>
-                    </select>
-                </div>
-
-                <!-- Country Setting -->
-                <div class="setting-group">
-                    <label class="setting-label translate" data-translate="countryLabel">🌍 Country</label>
-                    <p class="setting-description translate" data-translate="countryDesc">Select news source country</p>
-                    <select id="countrySelect" class="setting-select" onchange="changeCountry()">
-                        <option value="in">🇮🇳 India</option>
-                        <option value="us">🇺🇸 United States</option>
-                        <option value="gb">🇬🇧 United Kingdom</option>
-                        <option value="ca">🇨🇦 Canada</option>
-                        <option value="au">🇦🇺 Australia</option>
-                        <option value="de">🇩🇪 Germany</option>
-                        <option value="fr">🇫🇷 France</option>
-                        <option value="es">🇪🇸 Spain</option>
-                        <option value="jp">🇯🇵 Japan</option>
-                        <option value="cn">🇨🇳 China</option>
-                        <option value="br">🇧🇷 Brazil</option>
-                        <option value="mx">🇲🇽 Mexico</option>
-                        <option value="it">🇮🇹 Italy</option>
-                        <option value="ru">🇷🇺 Russia</option>
-                        <option value="kr">🇰🇷 South Korea</option>
-                    </select>
-                </div>
-
-                <!-- Dark Mode Toggle -->
-                <div class="setting-group">
-                    <label class="setting-label translate" data-translate="themeLabel">🌙 Dark Mode</label>
-                    <p class="setting-description translate" data-translate="themeDesc">Toggle dark mode</p>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom: 0.5rem; font-weight:600;">News Language</label>
+                <select id="langSelect" onchange="changeLanguage()" style="width:100%; padding:0.8rem; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-primary);">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                </select>
             </div>
         </div>
     </div>
 
-    <!-- ============================================
-         ℹ️ ABOUT MODAL
-         ============================================ -->
+    <!-- About -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">ℹ️ About Updates</h2>
-                <button class="modal-close" onclick="closeAbout()">✕</button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Updates v6.0</strong> is a comprehensive news aggregator providing latest news from India and around the world in multiple languages.</p>
-                <br>
-                <p><strong>Version:</strong> 6.0.0 Professional Edition</p>
-                <p><strong>Developer:</strong> VKB Team</p>
-                <br>
-                <p><strong>📰 News Sources (5 Premium APIs):</strong></p>
-                <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
-                    <li>✅ <strong>NewsAPI.org</strong> - Breaking news & headlines</li>
-                    <li>✅ <strong>NewsData.io</strong> - Global news coverage</li>
-                    <li>✅ <strong>GNews.io</strong> - Curated news articles</li>
-                    <li>✅ <strong>CurrentsAPI</strong> - Real-time news updates</li>
-                    <li>✅ <strong>WorldNewsAPI</strong> - International news</li>
-                </ul>
-                <br>
-                <p><strong>🚀 Features:</strong></p>
-                <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
-                    <li>✨ Smart caching & offline support</li>
-                    <li>🔍 Advanced search functionality</li>
-                    <li>💾 Bookmark favorite articles</li>
-                    <li>🌐 Multi-language support (12 languages)</li>
-                    <li>🌙 Dark mode support</li>
-                    <li>🔒 Enterprise-grade security</li>
-                    <li>📱 Fully responsive design</li>
-                    <li>⚡ Lightning-fast performance</li>
-                    <li>🎯 Duplicate removal algorithm</li>
-                    <li>🔄 Auto-refresh every 30 minutes</li>
-                </ul>
-                <br>
-                <p style="text-align: center; color: var(--text-secondary);">
-                    Made with ❤️ by VKB Team<br>
-                    © 2024-2025 All Rights Reserved
-                </p>
-            </div>
+            <span class="close-modal" onclick="closeModal('about')">×</span>
+            <img src="image-2.jpeg" style="width:80px; height:80px; border-radius:15px; margin-bottom: 1rem;">
+            <div class="modal-header">About Updates</div>
+            <p style="line-height:1.6; color:var(--text-secondary);">
+                Updates is a professional news aggregator bringing you the latest headlines from 5 premium sources. 
+                <br><br>
+                <strong>Developer:</strong> VIC team<br>
+                <strong>Version:</strong> 7.0.0 (Ultra-Secure)<br>
+                <strong>Backend:</strong> Powered by Render
+            </p>
+            <div class="footer-credit">Made with ❤️ by VIC team</div>
         </div>
     </div>
 
-    <!-- ============================================
-         ❓ HELP & SUPPORT MODAL
-         ============================================ -->
-    <div id="helpModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">❓ Help & Support</h2>
-                <button class="modal-close" onclick="closeHelp()">✕</button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Need help?</strong> We're here to assist you!</p>
-                <br>
-                
-                <div class="setting-group" style="flex-direction: column; align-items: flex-start;">
-                    <span><strong>📧 Email Support:</strong></span>
-                    <button class="reveal-btn" onclick="revealContact('email')" style="background: linear-gradient(135deg, var(--accent), var(--primary)); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 0.5rem;">
-                        Click to reveal email
-                    </button>
-                    <div class="contact-info" id="emailInfo" style="display: none; margin-top: 0.5rem; padding: 0.8rem; background: var(--light); border-radius: var(--radius-md); font-family: 'Courier New', monospace; word-break: break-all;"></div>
-                </div>
-
-                <div class="setting-group" style="flex-direction: column; align-items: flex-start;">
-                    <span><strong>📞 Phone Support:</strong></span>
-                    <button class="reveal-btn" onclick="revealContact('phone')" style="background: linear-gradient(135deg, var(--accent), var(--primary)); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 0.5rem;">
-                        Click to reveal phone
-                    </button>
-                    <div class="contact-info" id="phoneInfo" style="display: none; margin-top: 0.5rem; padding: 0.8rem; background: var(--light); border-radius: var(--radius-md); font-family: 'Courier New', monospace; word-break: break-all;"></div>
-                </div>
-                
-                <br>
-                <p><strong>📚 Frequently Asked Questions:</strong></p>
-                <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
-                    <li><strong>Q: How often is news updated?</strong><br>A: News is fetched from 5 sources and refreshed automatically every 30 minutes.</li>
-                    <li><strong>Q: Can I change the language?</strong><br>A: Yes! Go to Settings ⚙️ and select from 12 available languages.</li>
-                    <li><strong>Q: Is my data safe?</strong><br>A: Absolutely! We don't collect or store any personal data. All bookmarks are saved locally on your device.</li>
-                    <li><strong>Q: How does search work?</strong><br>A: Our advanced search queries all 5 news sources simultaneously and ranks results by relevance.</li>
-                    <li><strong>Q: Can I use this offline?</strong><br>A: Yes! The app caches news for offline viewing (up to 30 minutes).</li>
-                </ul>
-                
-                <br>
-                <p style="text-align: center; color: var(--text-secondary);">
-                    <strong>Response Time:</strong> Within 24 hours<br>
-                    <strong>Support Hours:</strong> 24/7
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================
-         🍞 TOAST NOTIFICATION
-         ============================================ -->
-    <div id="toast" class="toast">
-        <span class="toast-icon" id="toastIcon"></span>
-        <div class="toast-content">
-            <div class="toast-title" id="toastTitle"></div>
-            <div class="toast-message" id="toastMessage"></div>
-        </div>
-    </div>
-
-    <!-- ============================================
-         📜 JAVASCRIPT - CONFIGURATION & TRANSLATIONS
-         ============================================ -->
     <script>
-        // ============================================
-        // 🔧 CONFIGURATION
-        // ============================================
-        const CONFIG = {
-            API_BASE: 'https://backend-ml60.onrender.com/api', // ⚠️ CHANGE TO YOUR BACKEND URL
-            CACHE_KEY: 'newsCache_v6',
-            CACHE_TIMESTAMP_KEY: 'newsCacheTimestamp_v6',
-            BOOKMARKS_KEY: 'newsBookmarks_v6',
-            SETTINGS_KEY: 'newsSettings_v6',
-            CACHE_DURATION: 30 * 60 * 1000, // 30 minutes
-            MAX_ARTICLES_PER_SOURCE: 100,
-            SEARCH_DEBOUNCE_DELAY: 500
-        };
+        // --- Configuration ---
+        const BACKEND_URL = "https://backend-ml60.onrender.com/api";
+        const CACHE_TTL = 30 * 60 * 1000; // 30 Minutes
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let allArticles = [];
 
-        // ============================================
-        // 🌐 TRANSLATIONS (12 LANGUAGES)
-        // ============================================
-        const translations = {
-            en: {
-                home: 'Home',
-                search: 'Search',
-                trending: 'Trending',
-                bookmarks: 'Bookmarks',
-                settings: 'Settings',
-                homeTitle: 'Latest News & Headlines',
-                homeSubtitle: 'Stay updated with breaking news from around the world',
-                searchTitle: 'Search News',
-                searchSubtitle: 'Find articles by keywords or topics',
-                searchPlaceholder: 'Search for news...',
-                trendingTitle: 'Trending Stories',
-                trendingSubtitle: 'Most popular news right now',
-                bookmarksTitle: 'Saved Articles',
-                bookmarksSubtitle: 'Your bookmarked news articles',
-                settingsTitle: 'Settings',
-                languageLabel: 'Language',
-                languageDesc: 'Choose your preferred language',
-                countryLabel: 'Country',
-                countryDesc: 'Select news source country',
-                themeLabel: 'Dark Mode',
-                themeDesc: 'Toggle dark mode',
-                readMore: 'Read More',
-                noResults: 'No results found',
-                loading: 'Loading...',
-                searchResults: 'Found {count} results',
-                noBookmarks: 'No bookmarks yet',
-                bookmarkAdded: 'Bookmark added',
-                bookmarkRemoved: 'Bookmark removed'
-            },
-            hi: {
-                home: 'होम',
-                search: 'खोजें',
-                trending: 'ट्रेंडिंग',
-                bookmarks: 'बुकमार्क',
-                settings: 'सेटिंग्स',
-                homeTitle: 'ताज़ा समाचार और हेडलाइन्स',
-                homeSubtitle: 'दुनिया भर की ब्रेकिंग न्यूज़ से अपडेट रहें',
-                searchTitle: 'समाचार खोजें',
-                searchSubtitle: 'कीवर्ड या विषयों से लेख खोजें',
-                searchPlaceholder: 'समाचार खोजें...',
-                trendingTitle: 'ट्रेंडिंग स्टोरीज़',
-                trendingSubtitle: 'अभी सबसे लोकप्रिय समाचार',
-                bookmarksTitle: 'सहेजे गए लेख',
-                bookmarksSubtitle: 'आपके बुकमार्क किए गए समाचार लेख',
-                settingsTitle: 'सेटिंग्स',
-                languageLabel: 'भाषा',
-                languageDesc: 'अपनी पसंदीदा भाषा चुनें',
-                countryLabel: 'देश',
-                countryDesc: 'समाचार स्रोत देश चुनें',
-                themeLabel: 'डार्क मोड',
-                themeDesc: 'डार्क मोड टॉगल करें',
-                readMore: 'और पढ़ें',
-                noResults: 'कोई परिणाम नहीं मिला',
-                loading: 'लोड हो रहा है...',
-                searchResults: '{count} परिणाम मिले',
-                noBookmarks: 'अभी तक कोई बुकमार्क नहीं',
-                bookmarkAdded: 'बुकमार्क जोड़ा गया',
-                bookmarkRemoved: 'बुकमार्क हटाया गया'
-            },
-            es: {
-                home: 'Inicio',
-                search: 'Buscar',
-                trending: 'Tendencias',
-                bookmarks: 'Marcadores',
-                settings: 'Configuración',
-                homeTitle: 'Últimas Noticias y Titulares',
-                homeSubtitle: 'Mantente actualizado con noticias de última hora de todo el mundo',
-                searchTitle: 'Buscar Noticias',
-                searchSubtitle: 'Encuentra artículos por palabras clave o temas',
-                searchPlaceholder: 'Buscar noticias...',
-                trendingTitle: 'Historias en Tendencia',
-                trendingSubtitle: 'Las noticias más populares ahora',
-                bookmarksTitle: 'Artículos Guardados',
-                bookmarksSubtitle: 'Tus artículos marcados',
-                settingsTitle: 'Configuración',
-                languageLabel: 'Idioma',
-                languageDesc: 'Elige tu idioma preferido',
-                countryLabel: 'País',
-                countryDesc: 'Selecciona el país de origen de noticias',
-                themeLabel: 'Modo Oscuro',
-                themeDesc: 'Activar modo oscuro',
-                readMore: 'Leer Más',
-                noResults: 'No se encontraron resultados',
-                loading: 'Cargando...',
-                searchResults: 'Se encontraron {count} resultados',
-                noBookmarks: 'Aún no hay marcadores',
-                bookmarkAdded: 'Marcador agregado',
-                bookmarkRemoved: 'Marcador eliminado'
-            },
-            fr: {
-                home: 'Accueil',
-                search: 'Rechercher',
-                trending: 'Tendance',
-                bookmarks: 'Signets',
-                settings: 'Paramètres',
-                homeTitle: 'Dernières Nouvelles',
-                homeSubtitle: 'Restez informé avec les dernières nouvelles du monde entier',
-                searchTitle: 'Rechercher des Nouvelles',
-                searchSubtitle: 'Trouvez des articles par mots-clés ou sujets',
-                searchPlaceholder: 'Rechercher des nouvelles...',
-                trendingTitle: 'Histoires Tendance',
-                trendingSubtitle: 'Les nouvelles les plus populaires maintenant',
-                bookmarksTitle: 'Articles Enregistrés',
-                bookmarksSubtitle: 'Vos articles mis en favoris',
-                settingsTitle: 'Paramètres',
-                languageLabel: 'Langue',
-                languageDesc: 'Choisissez votre langue préférée',
-                countryLabel: 'Pays',
-                countryDesc: 'Sélectionnez le pays source des nouvelles',
-                themeLabel: 'Mode Sombre',
-                themeDesc: 'Activer le mode sombre',
-                readMore: 'Lire Plus',
-                noResults: 'Aucun résultat trouvé',
-                loading: 'Chargement...',
-                searchResults: '{count} résultats trouvés',
-                noBookmarks: 'Pas encore de signets',
-                bookmarkAdded: 'Signet ajouté',
-                bookmarkRemoved: 'Signet supprimé'
-            },
-            de: {
-                home: 'Startseite',
-                search: 'Suchen',
-                trending: 'Trends',
-                bookmarks: 'Lesezeichen',
-                settings: 'Einstellungen',
-                homeTitle: 'Neueste Nachrichten',
-                homeSubtitle: 'Bleiben Sie auf dem Laufenden mit aktuellen Nachrichten aus der ganzen Welt',
-                searchTitle: 'Nachrichten Suchen',
-                searchSubtitle: 'Finden Sie Artikel nach Schlüsselwörtern oder Themen',
-                searchPlaceholder: 'Nachrichten suchen...',
-                trendingTitle: 'Trendgeschichten',
-                trendingSubtitle: 'Die beliebtesten Nachrichten jetzt',
-                bookmarksTitle: 'Gespeicherte Artikel',
-                bookmarksSubtitle: 'Ihre mit Lesezeichen versehenen Nachrichtenartikel',
-                settingsTitle: 'Einstellungen',
-                languageLabel: 'Sprache',
-                languageDesc: 'Wählen Sie Ihre bevorzugte Sprache',
-                countryLabel: 'Land',
-                countryDesc: 'Wählen Sie das Nachrichtenquellenland aus',
-                themeLabel: 'Dunkler Modus',
-                themeDesc: 'Dunklen Modus umschalten',
-                readMore: 'Weiterlesen',
-                noResults: 'Keine Ergebnisse gefunden',
-                loading: 'Laden...',
-                searchResults: '{count} Ergebnisse gefunden',
-                noBookmarks: 'Noch keine Lesezeichen',
-                bookmarkAdded: 'Lesezeichen hinzugefügt',
-                bookmarkRemoved: 'Lesezeichen entfernt'
-            },
-            // Additional languages (ja, zh, ar, pt, ru, it, ko) - abbreviated for space
-            ja: {
-                home: 'ホーム',
-                search: '検索',
-                trending: 'トレンド',
-                bookmarks: 'ブックマーク',
-                settings: '設定',
-                homeTitle: '最新ニュースとヘッドライン',
-                homeSubtitle: '世界中の速報ニュースで最新情報を入手',
-                readMore: '続きを読む',
-                loading: '読み込み中...',
-                noResults: '結果が見つかりません'
-            },
-            zh: {
-                home: '首页',
-                search: '搜索',
-                trending: '热门',
-                bookmarks: '书签',
-                settings: '设置',
-                homeTitle: '最新新闻和头条',
-                homeSubtitle: '获取来自世界各地的突发新闻',
-                readMore: '阅读更多',
-                loading: '加载中...',
-                noResults: '未找到结果'
-            },
-            ar: {
-                home: 'الرئيسية',
-                search: 'بحث',
-                trending: 'الرائج',
-                bookmarks: 'الإشارات',
-                settings: 'الإعدادات',
-                homeTitle: 'أحدث الأخبار والعناوين',
-                homeSubtitle: 'ابق على اطلاع بآخر الأخبار من جميع أنحاء العالم',
-                readMore: 'اقرأ المزيد',
-                loading: 'جار التحميل...',
-                noResults: 'لم يتم العثور على نتائج'
-            },
-            pt: {
-                home: 'Início',
-                search: 'Pesquisar',
-                trending: 'Tendências',
-                bookmarks: 'Favoritos',
-                settings: 'Configurações',
-                homeTitle: 'Últimas Notícias e Manchetes',
-                homeSubtitle: 'Fique atualizado com notícias de última hora de todo o mundo',
-                readMore: 'Leia Mais',
-                loading: 'Carregando...',
-                noResults: 'Nenhum resultado encontrado'
-            },
-            ru: {
-                home: 'Главная',
-                search: 'Поиск',
-                trending: 'Trending',
-                bookmarks: 'Закладки',
-                settings: 'Настройки',
-                homeTitle: 'Последние новости и заголовки',
-                homeSubtitle: 'Будьте в курсе последних новостей со всего мира',
-                readMore: 'Читать далее',
-                loading: 'Загрузка...',
-                noResults: 'Результаты не найдены'
-            },
-            it: {
-                home: 'Home',
-                search: 'Cerca',
-                trending: 'Tendenze',
-                bookmarks: 'Segnalibri',
-                settings: 'Impostazioni',
-                homeTitle: 'Ultime Notizie e Titoli',
-                homeSubtitle: 'Rimani aggiornato con le ultime notizie da tutto il mondo',
-                readMore: 'Leggi di Più',
-                loading: 'Caricamento...',
-                noResults: 'Nessun risultato trovato'
-            },
-            ko: {
-                home: '홈',
-                search: '검색',
-                trending: '인기',
-                bookmarks: '북마크',
-                settings: '설정',
-                homeTitle: '최신 뉴스 및 헤드라인',
-                homeSubtitle: '전 세계의 속보를 확인하세요',
-                readMore: '더 읽기',
-                loading: '로딩 중...',
-                noResults: '결과를 찾을 수 없습니다'
+        // --- Core UI Logic ---
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuBtn.onclick = () => { sidebar.classList.add('open'); overlay.classList.add('active'); };
+        overlay.onclick = () => { sidebar.classList.remove('open'); overlay.classList.remove('active'); };
+
+        function showPage(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            if (el) {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                el.classList.add('active');
             }
-        };
-
-        // ============================================
-        // 📊 STATE MANAGEMENT
-        // ============================================
-        let currentLanguage = 'en';
-        let currentCountry = 'in';
-        let isDarkMode = false;
-        let seenArticles = new Set();
-        let bookmarks = [];
-        let searchTimeout = null;
-        let allNewsArticles = [];
-        // ============================================
-        // 🎯 INITIALIZATION
-        // ============================================
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSettings();
-            loadBookmarks();
-            initializeSearch();
-            fetchHomeNews();
             
-            // Auto-refresh every 30 minutes
-            setInterval(() => {
-                console.log('🔄 Auto-refreshing news...');
-                fetchHomeNews();
-            }, CONFIG.CACHE_DURATION);
-        });
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            window.scrollTo(0, 0);
 
-        // ============================================
-        // 💾 SETTINGS MANAGEMENT
-        // ============================================
-        function loadSettings() {
-            try {
-                const settings = JSON.parse(localStorage.getItem(CONFIG.SETTINGS_KEY) || '{}');
-                currentLanguage = settings.language || 'en';
-                currentCountry = settings.country || 'in';
-                isDarkMode = settings.darkMode || false;
-
-                document.getElementById('languageSelect').value = currentLanguage;
-                document.getElementById('countrySelect').value = currentCountry;
-                document.getElementById('darkModeToggle').checked = isDarkMode;
-
-                if (isDarkMode) {
-                    document.body.classList.add('dark-mode');
-                }
-
-                updateTranslations();
-            } catch (error) {
-                console.error('Error loading settings:', error);
-            }
+            if(id === 'bookmarks') loadBookmarks();
         }
 
-        function saveSettings() {
-            const settings = {
-                language: currentLanguage,
-                country: currentCountry,
-                darkMode: isDarkMode
-            };
-            localStorage.setItem(CONFIG.SETTINGS_KEY, JSON.stringify(settings));
-        }
+        function openModal(id) { document.getElementById(id + 'Modal').classList.add('active'); sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+        function closeModal(id) { document.getElementById(id + 'Modal').classList.remove('active'); }
 
-        function updateTranslations() {
-            const lang = translations[currentLanguage] || translations.en;
-            
-            document.querySelectorAll('.translate').forEach(el => {
-                const key = el.getAttribute('data-translate');
-                if (key && lang[key]) {
-                    el.textContent = lang[key];
-                }
-            });
-
-            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-translate-placeholder');
-                if (key && lang[key]) {
-                    el.placeholder = lang[key];
-                }
-            });
-        }
-
-        function translate(key) {
-            const lang = translations[currentLanguage] || translations.en;
-            return lang[key] || key;
-        }
-
-        // ============================================
-        // 🎨 NAVIGATION FUNCTIONS
-        // ============================================
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            
-            // Remove active class from all nav links
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked nav link
-            event.target.closest('.nav-link')?.classList.add('active');
-            
-            // Close mobile menu if open
-            if (window.innerWidth <= 768) {
-                toggleMenu();
-            }
-
-            // Load content based on section
-            if (sectionId === 'trending' && !document.getElementById('trendingNews').innerHTML) {
-                fetchTrendingNews();
-            } else if (sectionId === 'bookmarks') {
-                displayBookmarks();
-            }
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('navMenu');
-            const hamburger = document.getElementById('hamburger');
-            menu.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        }
-
-        // ============================================
-        // 🎯 SIDEBAR MENU FUNCTIONS
-        // ============================================
-        document.getElementById('menuBtn').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.add('open');
-            document.getElementById('overlay').classList.add('active');
-        });
-
-        document.getElementById('overlay').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.remove('open');
-            document.getElementById('overlay').classList.remove('active');
-        });
-
-        document.querySelectorAll('[data-action]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const action = btn.getAttribute('data-action');
-                
-                // Close sidebar
-                document.getElementById('sidebar').classList.remove('open');
-                document.getElementById('overlay').classList.remove('active');
-                
-                // Handle actions
-                if (action === 'home') {
-                    showSection('home');
-                } else if (action === 'search') {
-                    showSection('search');
-                } else if (action === 'trending') {
-                    showSection('trending');
-                } else if (action === 'bookmarks') {
-                    showSection('bookmarks');
-                } else if (action === 'settings') {
-                    openSettings();
-                } else if (action === 'about') {
-                    openAbout();
-                } else if (action === 'help') {
-                    openHelp();
-                } else if (action === 'refresh') {
-                    clearCache();
-                    fetchHomeNews();
-                    showToast('success', 'Refreshed', 'News refreshed successfully!');
-                }
-            });
-        });
-
-        // ============================================
-        // 🎭 MODAL FUNCTIONS
-        // ============================================
-        function openSettings() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function openAbout() {
-            document.getElementById('aboutModal').classList.add('active');
-        }
-
-        function closeAbout() {
-            document.getElementById('aboutModal').classList.remove('active');
-        }
-
-        function openHelp() {
-            document.getElementById('helpModal').classList.add('active');
-        }
-
-        function closeHelp() {
-            document.getElementById('helpModal').classList.remove('active');
-        }
-
-        // Close modals when clicking outside
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-        });
-
-        // ============================================
-        // ⚙️ SETTINGS HANDLERS
-        // ============================================
-        function changeLanguage() {
-            currentLanguage = document.getElementById('languageSelect').value;
-            saveSettings();
-            updateTranslations();
-            showToast('success', translate('settingsTitle'), 'Language changed successfully!');
-            clearCache();
-            fetchHomeNews();
-        }
-
-        function changeCountry() {
-            currentCountry = document.getElementById('countrySelect').value;
-            saveSettings();
-            showToast('success', translate('settingsTitle'), 'Country changed successfully!');
-            clearCache();
-            fetchHomeNews();
-        }
-
+        // --- Theme Logic ---
         function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-mode');
-            saveSettings();
-            showToast('success', translate('settingsTitle'), isDarkMode ? 'Dark mode enabled' : 'Light mode enabled');
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
+        if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
 
-        // ============================================
-        // 📞 CONTACT REVEAL (SECURITY)
-        // ============================================
-        function revealContact(type) {
-            const infoDiv = document.getElementById(type + 'Info');
-            if (infoDiv.style.display === 'block') {
-                infoDiv.style.display = 'none';
+        // --- Data Fetching ---
+        async function fetchAllNews(force = false) {
+            const cacheKey = `news_${currentLang}`;
+            const cached = localStorage.getItem(cacheKey);
+            const cacheTime = localStorage.getItem(cacheKey + '_time');
+
+            if (!force && cached && cacheTime && (Date.now() - cacheTime < CACHE_TTL)) {
+                allArticles = JSON.parse(cached);
+                displayNews(allArticles);
                 return;
             }
 
             try {
-                const encrypted = {
-                    email: 'c3VwcG9ydEB1cGRhdGVzbmV3cy5jb20=', // Base64: support@updatesnews.com
-                    phone: 'KzkxIDk4NzY1NDMyMTA=' // Base64: +91 9876543210
-                };
-                const decrypted = atob(encrypted[type]);
-                infoDiv.textContent = decrypted;
-                infoDiv.style.display = 'block';
-            } catch (e) {
-                infoDiv.textContent = 'Error decrypting contact info';
-                infoDiv.style.display = 'block';
-            }
-        }
+                // Fetch from all 5 sources simultaneously
+                const endpoints = ['newsapi', 'newsdata', 'gnews', 'currents', 'worldnews'];
+                const promises = endpoints.map(ep => 
+                    fetch(`${BACKEND_URL}/${ep}?country=in&language=${currentLang}`)
+                    .then(r => r.json())
+                    .catch(() => ({ articles: [], results: [], news: [] }))
+                );
 
-        // ============================================
-        // 💾 CACHE MANAGEMENT
-        // ============================================
-        function getCachedData(key) {
-            try {
-                const cached = localStorage.getItem(key);
-                if (!cached) return null;
+                const results = await Promise.all(promises);
+                let merged = [];
 
-                const data = JSON.parse(cached);
-                if (Date.now() - data.timestamp > CONFIG.CACHE_DURATION) {
-                    localStorage.removeItem(key);
-                    return null;
-                }
-                return data.articles;
-            } catch (error) {
-                console.error('Cache read error:', error);
-                return null;
-            }
-        }
-
-        function setCachedData(key, articles) {
-            try {
-                const data = {
-                    articles: articles,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem(key, JSON.stringify(data));
-            } catch (error) {
-                console.error('Cache write error:', error);
-            }
-        }
-
-        function clearCache() {
-            localStorage.removeItem(CONFIG.CACHE_KEY + '_home_' + currentCountry + '_' + currentLanguage);
-            seenArticles.clear();
-            console.log('Cache cleared');
-        }
-
-        // ============================================
-        // 🔍 DUPLICATE REMOVAL
-        // ============================================
-        function createArticleHash(article) {
-            const title = (article.title || '').toLowerCase().trim().substring(0, 50);
-            const url = (article.url || article.link || '').toLowerCase().trim();
-            return btoa(title + url).substring(0, 32);
-        }
-
-        function removeDuplicates(articles) {
-            const seen = new Set();
-            return articles.filter(article => {
-                if (!article.title || (!article.url && !article.link)) return false;
-                const hash = createArticleHash(article);
-                if (seen.has(hash) || seenArticles.has(hash)) return false;
-                seen.add(hash);
-                seenArticles.add(hash);
-                return true;
-            });
-        }
-
-        // ============================================
-        // 🌐 FETCH NEWS FROM ALL 5 APIS
-        // ============================================
-        async function fetchHomeNews() {
-            const container = document.getElementById('homeNews');
-            showLoading(container);
-
-            const cacheKey = CONFIG.CACHE_KEY + '_home_' + currentCountry + '_' + currentLanguage;
-            const cached = getCachedData(cacheKey);
-            
-            if (cached && cached.length > 0) {
-                console.log('📦 Using cached news');
-                displayNews(cached, container);
-                return;
-            }
-
-            try {
-                console.log('🌐 Fetching fresh news from ALL 5 APIs...');
-                
-                // 🔥 FETCH FROM ALL 5 NEWS APIS SIMULTANEOUSLY
-                const responses = await Promise.allSettled([
-                    fetch(`${CONFIG.API_BASE}/newsapi?country=${currentCountry}&language=${currentLanguage}`).then(r => r.json()),
-                    fetch(`${CONFIG.API_BASE}/gnews?country=${currentCountry}&lang=${currentLanguage}`).then(r => r.json()),
-                    fetch(`${CONFIG.API_BASE}/newsdata?country=${currentCountry}&language=${currentLanguage}`).then(r => r.json()),
-                    fetch(`${CONFIG.API_BASE}/currents?country=${currentCountry}&language=${currentLanguage}`).then(r => r.json()),
-                    fetch(`${CONFIG.API_BASE}/worldnews?language=${currentLanguage}`).then(r => r.json())
-                ]);
-
-                let allArticles = [];
-                
-                // Process NewsAPI
-                if (responses[0].status === 'fulfilled' && responses[0].value.articles) {
-                    console.log(`✅ NewsAPI: ${responses[0].value.articles.length} articles`);
-                    allArticles = allArticles.concat(responses[0].value.articles);
-                }
-                
-                // Process GNews
-                if (responses[1].status === 'fulfilled' && responses[1].value.articles) {
-                    console.log(`✅ GNews: ${responses[1].value.articles.length} articles`);
-                    allArticles = allArticles.concat(responses[1].value.articles);
-                }
-                
-                // Process NewsData
-                if (responses[2].status === 'fulfilled' && responses[2].value.results) {
-                    console.log(`✅ NewsData: ${responses[2].value.results.length} articles`);
-                    allArticles = allArticles.concat(responses[2].value.results.map(r => ({
-                        title: r.title,
-                        description: r.description,
-                        url: r.link,
-                        urlToImage: r.image_url,
-                        source: { name: r.source_id },
-                        publishedAt: r.pubDate
-                    })));
-                }
-                
-                // Process Currents
-                if (responses[3].status === 'fulfilled' && responses[3].value.news) {
-                    console.log(`✅ Currents: ${responses[3].value.news.length} articles`);
-                    allArticles = allArticles.concat(responses[3].value.news.map(n => ({
-                        title: n.title,
-                        description: n.description,
-                        url: n.url,
-                        urlToImage: n.image,
-                        source: { name: n.author || 'Currents' },
-                        publishedAt: n.published
-                    })));
-                }
-                
-                // Process WorldNews
-                if (responses[4].status === 'fulfilled' && responses[4].value.news) {
-                    console.log(`✅ WorldNews: ${responses[4].value.news.length} articles`);
-                    allArticles = allArticles.concat(responses[4].value.news.map(n => ({
-                        title: n.title,
-                        description: n.description || n.text,
-                        url: n.url,
-                        urlToImage: n.urlToImage || n.image,
-                        source: { name: n.source?.name || 'World News' },
-                        publishedAt: n.publishedAt || n.publish_date
-                    })));
-                }
-
-                if (allArticles.length === 0) {
-                    if (cached && cached.length > 0) {
-                        showToast('info', 'Offline Mode', 'Showing cached news');
-                        displayNews(cached, container);
-                        return;
-                    }
-                    showEmpty(container, translate('noResults'));
-                    return;
-                }
-
-                // Remove duplicates
-                const uniqueArticles = removeDuplicates(allArticles);
-                
-                // Sort by date (newest first)
-                uniqueArticles.sort((a, b) => {
-                    const dateA = new Date(a.publishedAt || 0);
-                    const dateB = new Date(b.publishedAt || 0);
-                    return dateB - dateA;
+                // Normalization
+                results.forEach((data, i) => {
+                    const raw = data.articles || data.results || data.news || [];
+                    raw.forEach(a => {
+                        merged.push({
+                            title: a.title,
+                            desc: a.description || a.content || "",
+                            img: a.urlToImage || a.image || a.imageurl || "image-2.jpeg",
+                            url: a.url || a.link,
+                            source: a.source?.name || a.source_id || endpoints[i],
+                            date: a.publishedAt || a.pubDate || new Date().toISOString()
+                        });
+                    });
                 });
 
-                console.log(`🎯 Total: ${uniqueArticles.length} unique articles from 5 sources`);
+                // Remove Duplicates & Sort
+                allArticles = removeDuplicates(merged).sort((a, b) => new Date(b.date) - new Date(a.date));
                 
-                // Cache and display
-                setCachedData(cacheKey, uniqueArticles);
-                allNewsArticles = uniqueArticles;
-                displayNews(uniqueArticles, container);
+                // Cache data
+                localStorage.setItem(cacheKey, JSON.stringify(allArticles));
+                localStorage.setItem(cacheKey + '_time', Date.now());
 
-            } catch (error) {
-                console.error('Fetch error:', error);
-                if (cached && cached.length > 0) {
-                    showToast('error', 'Error', 'Using cached news');
-                    displayNews(cached, container);
-                } else {
-                    showEmpty(container, 'Failed to load news. Please check your connection.');
-                }
+                displayNews(allArticles);
+            } catch (err) {
+                document.getElementById('newsList').innerHTML = `<div class='loading'>Failed to load. Check connection.</div>`;
             }
         }
 
-        // ============================================
-        // 🔥 FETCH TRENDING NEWS
-        // ============================================
-        async function fetchTrendingNews() {
-            const container = document.getElementById('trendingNews');
-            showLoading(container);
-
-            try {
-                // Use cached data if available
-                if (allNewsArticles.length > 0) {
-                    displayNews(allNewsArticles.slice(0, 30), container);
-                    return;
-                }
-
-                // Otherwise fetch from GNews (best for trending)
-                const response = await fetch(`${CONFIG.API_BASE}/gnews?country=${currentCountry}&lang=${currentLanguage}`);
-                const data = await response.json();
-                
-                if (data.articles && data.articles.length > 0) {
-                    const uniqueArticles = removeDuplicates(data.articles);
-                    displayNews(uniqueArticles, container);
-                } else {
-                    showEmpty(container, translate('noResults'));
-                }
-            } catch (error) {
-                console.error('Fetch trending error:', error);
-                showEmpty(container, 'Failed to load trending news');
-            }
-        }
-
-        // ============================================
-        // 🔍 SEARCH FUNCTIONALITY
-        // ============================================
-        function initializeSearch() {
-            const searchInput = document.getElementById('searchInput');
-            const searchClear = document.getElementById('searchClear');
-
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.trim();
-                searchClear.style.display = query ? 'block' : 'none';
-                
-                clearTimeout(searchTimeout);
-                
-                if (query.length >= 2) {
-                    searchTimeout = setTimeout(() => performSearch(query), CONFIG.SEARCH_DEBOUNCE_DELAY);
-                } else {
-                    clearSearchResults();
-                }
-            });
-
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const query = e.target.value.trim();
-                    if (query.length >= 2) {
-                        performSearch(query);
-                    }
-                }
+        function removeDuplicates(arr) {
+            const seen = new Set();
+            return arr.filter(item => {
+                const k = (item.title || "").substring(0, 40).toLowerCase();
+                return seen.has(k) ? false : seen.add(k);
             });
         }
 
-        async function performSearch(query) {
-            const container = document.getElementById('searchResults');
-            const stats = document.getElementById('searchStats');
+        function displayNews(articles) {
+            const list = document.getElementById('newsList');
+            const reels = document.getElementById('reelsContainer');
             
-            showLoading(container);
-            stats.textContent = translate('loading');
-
-            try {
-                // Search in cached articles first
-                if (allNewsArticles.length > 0) {
-                    const queryLower = query.toLowerCase();
-                    const results = allNewsArticles.filter(article => 
-                        article.title.toLowerCase().includes(queryLower) ||
-                        (article.description || '').toLowerCase().includes(queryLower)
-                    );
-
-                    if (results.length > 0) {
-                        displayNews(results, container);
-                        stats.textContent = translate('searchResults').replace('{count}', results.length);
-                        return;
-                    }
-                }
-
-                // If no cached results, search via backend
-                const response = await fetch(`${CONFIG.API_BASE}/search?q=${encodeURIComponent(query)}&language=${currentLanguage}`);
-                const data = await response.json();
-
-                if (data.articles && data.articles.length > 0) {
-                    const uniqueArticles = removeDuplicates(data.articles);
-                    displayNews(uniqueArticles, container);
-                    stats.textContent = translate('searchResults').replace('{count}', uniqueArticles.length);
-                } else {
-                    showEmpty(container, translate('noResults'));
-                    stats.textContent = translate('noResults');
-                }
-            } catch (error) {
-                console.error('Search error:', error);
-                showEmpty(container, 'Search failed');
-                stats.textContent = 'Search failed';
-            }
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('searchClear').style.display = 'none';
-            clearSearchResults();
-        }
-
-        function clearSearchResults() {
-            document.getElementById('searchResults').innerHTML = '';
-            document.getElementById('searchStats').textContent = '';
-        }
-
-        // ============================================
-        // 🎨 DISPLAY FUNCTIONS
-        // ============================================
-        function displayNews(articles, container) {
-            if (!articles || articles.length === 0) {
-                showEmpty(container, translate('noResults'));
+            if (!articles.length) {
+                list.innerHTML = "<div class='loading'>No news found for this language.</div>";
                 return;
             }
 
-            container.innerHTML = articles.map(article => createNewsCard(article)).join('');
-        }
-
-        function createNewsCard(article) {
-            const isBookmarked = bookmarks.some(b => (b.url || b.link) === (article.url || article.link));
-            const timeAgo = getTimeAgo(article.publishedAt);
-            const title = sanitizeHTML(article.title || 'No title');
-            const description = sanitizeHTML(article.description || 'No description available');
-            const imageUrl = article.urlToImage || article.image || article.image_url || 'https://via.placeholder.com/400x240?text=No+Image';
-            const url = article.url || article.link;
-            const source = sanitizeHTML(article.source?.name || 'Unknown');
-
-            return `
-                <div class="news-card" onclick="openArticle('${url}')">
-                    <div class="news-image-container">
-                        <img src="${imageUrl}" alt="${title}" class="news-image" 
-                             onerror="this.src='https://via.placeholder.com/400x240?text=No+Image'">
-                        <span class="news-badge">${source}</span>
-                    </div>
+            // Home Grid
+            list.innerHTML = articles.map((a, i) => `
+                <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                    <img src="${a.img}" class="news-image" onerror="this.src='image-2.jpeg'">
                     <div class="news-content">
+                        <div class="news-title">${a.title}</div>
+                        <div class="news-summary">${a.desc.substring(0, 120)}...</div>
                         <div class="news-meta">
-                            <span class="news-source">📰 ${source}</span>
-                            <span class="news-time">🕒 ${timeAgo}</span>
-                        </div>
-                        <h3 class="news-title">${title}</h3>
-                        <p class="news-description">${description.substring(0, 150)}...</p>
-                        <div class="news-actions">
-                            <a href="${url}" class="read-more-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
-                                ${translate('readMore')} →
-                            </a>
-                            <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
-                                    onclick="event.stopPropagation(); toggleBookmark(event, ${JSON.stringify(article).replace(/"/g, '&quot;')})">
-                                ${isBookmarked ? '★' : '☆'}
-                            </button>
+                            <span class="source-tag">${a.source}</span>
+                            <span>${new Date(a.date).toLocaleDateString()}</span>
+                            <button onclick="event.stopPropagation(); saveArticle(${i})" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">🔖</button>
                         </div>
                     </div>
                 </div>
-            `;
-        }
+            `).join('');
 
-        function showLoading(container) {
-            container.innerHTML = `
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                    <p class="loading-text">${translate('loading')}</p>
+            // Reels
+            reels.innerHTML = articles.slice(0, 15).map((a, i) => `
+                <div class="reel ${i === 0 ? 'active' : ''}" id="reel-${i}">
+                    <img src="${a.img}" class="reel-image" onerror="this.src='image-2.jpeg'">
+                    <div class="reel-title">${a.title}</div>
+                    <div class="reel-text">${a.desc.substring(0, 200)}...</div>
+                    <div style="text-align:center;">
+                        <a href="${a.url}" target="_blank" class="read-more">Read Full Story</a>
+                    </div>
                 </div>
-            `;
+            `).join('');
+
+            if(articles.length > 0) setupReelsLogic();
         }
 
-        function showEmpty(container, message) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📰</div>
-                    <h3 class="empty-title">${message}</h3>
-                    <p class="empty-description">Try adjusting your filters or check back later</p>
-                </div>
-            `;
-        }
-
-        // ============================================
-        // 💾 BOOKMARKS MANAGEMENT
-        // ============================================
-        function loadBookmarks() {
-            try {
-                bookmarks = JSON.parse(localStorage.getItem(CONFIG.BOOKMARKS_KEY) || '[]');
-            } catch (error) {
-                console.error('Error loading bookmarks:', error);
-                bookmarks = [];
-            }
-        }
-
-        function saveBookmarks() {
-            localStorage.setItem(CONFIG.BOOKMARKS_KEY, JSON.stringify(bookmarks));
-        }
-
-        function toggleBookmark(event, article) {
-            event.stopPropagation();
-            const url = article.url || article.link;
-            const index = bookmarks.findIndex(b => (b.url || b.link) === url);
-
-            if (index > -1) {
-                bookmarks.splice(index, 1);
-                showToast('info', translate('bookmarkRemoved'), article.title);
-                event.target.classList.remove('bookmarked');
-                event.target.textContent = '☆';
-            } else {
-                bookmarks.push(article);
-                showToast('success', translate('bookmarkAdded'), article.title);
-                event.target.classList.add('bookmarked');
-                event.target.textContent = '★';
-            }
-
-            saveBookmarks();
-            
-            // Refresh bookmarks page if currently viewing
-            if (document.getElementById('bookmarks').classList.contains('active')) {
-                displayBookmarks();
-            }
-        }
-
-        function displayBookmarks() {
-            const container = document.getElementById('bookmarksNews');
-            if (bookmarks.length === 0) {
-                showEmpty(container, translate('noBookmarks'));
-            } else {
-                displayNews(bookmarks, container);
-            }
-        }
-
-        // ============================================
-        // 🔧 UTILITY FUNCTIONS
-        // ============================================
-        function openArticle(url) {
-            if (url) {
-                window.open(url, '_blank', 'noopener,noreferrer');
-            }
-        }
-
-        function getTimeAgo(dateString) {
-            if (!dateString) return 'Recently';
-            
-            const now = new Date();
-            const date = new Date(dateString);
-            const seconds = Math.floor((now - date) / 1000);
-
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
-            if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
-            
-            return date.toLocaleDateString();
-        }
-
-        function sanitizeHTML(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-
-        // ============================================
-        // 🍞 TOAST NOTIFICATIONS
-        // ============================================
-        function showToast(type, title, message) {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toastIcon');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastMessage = document.getElementById('toastMessage');
-
-            toast.className = 'toast ' + type;
-
-            const icons = {
-                success: '✅',
-                error: '❌',
-                info: 'ℹ️'
+        // --- Reels Swipe Logic ---
+        let currentReel = 0;
+        function setupReelsLogic() {
+            const container = document.getElementById('reelsContainer');
+            let startY = 0;
+            container.ontouchstart = e => startY = e.touches[0].clientY;
+            container.ontouchend = e => {
+                let endY = e.changedTouches[0].clientY;
+                if (startY - endY > 50) moveReel(1);
+                else if (endY - startY > 50) moveReel(-1);
             };
-
-            icon.textContent = icons[type] || 'ℹ️';
-            toastTitle.textContent = title;
-            toastMessage.textContent = message;
-
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
         }
 
-        // ============================================
-        // 🧹 CLEANUP
-        // ============================================
-        setInterval(() => {
-            if (seenArticles.size > 1000) {
-                const entries = Array.from(seenArticles);
-                seenArticles.clear();
-                entries.slice(-500).forEach(hash => seenArticles.add(hash));
-            }
-        }, 10 * 60 * 1000); // Clean up every 10 minutes
+        function moveReel(dir) {
+            const total = document.querySelectorAll('.reel').length;
+            document.getElementById(`reel-${currentReel}`).classList.remove('active');
+            currentReel = (currentReel + dir + total) % total;
+            document.getElementById(`reel-${currentReel}`).classList.add('active');
+        }
 
-        // ============================================
-        // 📊 CONSOLE BRANDING
-        // ============================================
-        console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║  🚀 UPDATES v6.0 - PROFESSIONAL NEWS PLATFORM           ║
-╠═══════════════════════════════════════════════════════════╣
-║  📰 News Sources: 5 Premium APIs                         ║
-║  🌐 Languages: 12 Supported                              ║
-║  🔒 Security: Enterprise-Grade                           ║
-║  ⚡ Performance: Optimized & Cached                      ║
-║  📱 Design: Fully Responsive                             ║
-╠═══════════════════════════════════════════════════════════╣
-║  ✅ NewsAPI.org                                          ║
-║  ✅ NewsData.io                                          ║
-║  ✅ GNews.io                                             ║
-║  ✅ CurrentsAPI                                          ║
-║  ✅ WorldNewsAPI                                         ║
-╠═══════════════════════════════════════════════════════════╣
-║  Made with ❤️ by VKB Team                                ║
-║  © 2024-2025 All Rights Reserved                         ║
-╚═══════════════════════════════════════════════════════════╝
-        `);
+        // --- Search ---
+        let searchTimer;
+        document.getElementById('searchInput').oninput = e => {
+            clearTimeout(searchTimer);
+            const query = e.target.value.toLowerCase();
+            searchTimer = setTimeout(() => {
+                const results = allArticles.filter(a => a.title.toLowerCase().includes(query));
+                const list = document.getElementById('searchResults');
+                list.innerHTML = results.map(a => `
+                    <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                        <div class="news-content">
+                            <div class="news-title">${a.title}</div>
+                            <div class="news-meta"><span class="source-tag">${a.source}</span></div>
+                        </div>
+                    </div>
+                `).join('');
+                if(!results.length) list.innerHTML = "<div class='loading'>No matches found.</div>";
+            }, 500);
+        };
+
+        // --- Bookmarks ---
+        function saveArticle(idx) {
+            let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || "[]");
+            bookmarks.push(allArticles[idx]);
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            alert("Article saved to bookmarks!");
+        }
+
+        function loadBookmarks() {
+            const list = document.getElementById('bookmarksList');
+            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || "[]");
+            if(!bookmarks.length) { list.innerHTML = "<div class='loading'>Empty. Save articles to see them here.</div>"; return; }
+            list.innerHTML = bookmarks.map(a => `
+                <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                    <div class="news-content">
+                        <div class="news-title">${a.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- Language ---
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            localStorage.setItem('lang', currentLang);
+            closeModal('settings');
+            document.getElementById('newsList').innerHTML = `<div class='loading'>Fetching ${currentLang} news...</div>`;
+            fetchAllNews(true);
+        }
+
+        // Init
+        document.getElementById('langSelect').value = currentLang;
+        fetchAllNews();
+
+        console.log("Updates App Initialized | Developer: VIC team | Source: 5 APIs Connected");
     </script>
 </body>
-</html>
+    </html>
