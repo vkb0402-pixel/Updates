@@ -40,6 +40,7 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-color);
@@ -88,6 +89,7 @@
             cursor: pointer;
             background: rgba(255,255,255,0.06);
             padding: 4px;
+            display: block;
         }
         h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
 
@@ -138,12 +140,12 @@
         .overlay.active { display: block; }
 
         /* --- Main Content --- */
-        .page { 
-            display: none; 
-            animation: fadeIn 0.4s ease; 
-            padding: 1rem; 
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+            padding: 1rem;
             height: calc(100vh - 130px); /* Adjust for header/nav */
-            overflow-y: auto; 
+            overflow-y: auto;
         }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -192,7 +194,8 @@
             flex-direction: column;
         }
         .news-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--accent-color); }
-        .news-image { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        /* FIX: make hero images more consistent and cover block fully */
+        .news-image { width: 100%; height: 280px; object-fit: cover; object-position: center center; display: block; background: #eee; }
         .news-content { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
         .news-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; color: var(--text-primary); }
         .news-summary { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; flex: 1; }
@@ -261,22 +264,24 @@
         #quick.page {
             padding: 0;
             height: calc(100vh - 120px); /* Adjust based on header/footer */
-            overflow: hidden; 
+            overflow: hidden;
         }
 
         .reels-container {
             width: 100%;
             height: 100%;
-            overflow-y: scroll;
+            overflow-y: auto;
             scroll-snap-type: y mandatory; /* This enables the "one full news at a time" snap behavior */
             background: #000; /* Dark background for immersive feel */
             scrollbar-width: none; /* Firefox */
+            -webkit-overflow-scrolling: touch;
         }
-        
+
         .reels-container::-webkit-scrollbar {
             display: none; /* Chrome/Safari */
         }
 
+        /* Each reel is full container height so one swipe moves exactly one reel */
         .reel {
             width: 100%;
             height: 100%;
@@ -297,58 +302,92 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.6; /* Dim image to make text readable */
+            object-position: center center;
+            opacity: 0.62; /* Dim image to make text readable */
             transition: transform 0.5s ease;
+            display: block;
         }
-        
+
         .reel:hover .reel-bg-image {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .reel-content-overlay {
             position: relative;
             z-index: 2;
-            padding: 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.5), transparent);
+            padding: 28px 20px 36px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent 40%);
             color: #fff;
-            padding-bottom: 30px;
         }
 
         .reel-source {
             display: inline-block;
             background: var(--accent-color);
             color: #fff;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 10px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
 
         .reel-title {
-            font-size: 1.6rem;
+            font-size: 1.9rem;
             font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 12px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.2;
+            margin-bottom: 14px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
             color: #fff;
         }
 
         .reel-text {
             font-size: 1.05rem;
-            line-height: 1.5;
-            color: #ddd;
-            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #e6e6e6;
+            margin-bottom: 14px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tap-hint {
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.8);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        /* --- Spinner / Loading UI (more professional) --- */
+        .loader-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-direction: column;
+            color: var(--text-meta);
+            font-weight: 600;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 6px solid rgba(0,0,0,0.08);
+            border-top-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+            box-shadow: 0 6px 20px rgba(59,130,246,0.12);
+            background: white;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loader-sub {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 320px;
+            text-align: center;
         }
 
         /* --- Utils --- */
@@ -359,6 +398,9 @@
         @media (max-width: 600px) {
             h1 { font-size: 1.3rem; }
             .card-list { grid-template-columns: 1fr; }
+            .news-image { height: 240px; }
+            .reel-title { font-size: 1.6rem; }
+            .reel-text { font-size: 1rem; }
         }
     </style>
 </head>
@@ -382,7 +424,8 @@
         </div>
 
         <div class="header-center" title="Go to Home">
-            <img src="image-2.png" id="logoImg" alt="Updates Logo" class="logo" onclick="showPage('home')" onerror="this.onerror=null; this.src='image-2.jpeg'">
+            <!-- using the provided PNG logo file -->
+            <img src="image-2.png" id="logoImg" alt="Updates Logo" class="logo" onclick="showPage('home')" onerror="this.onerror=null; this.src='image-2.png'">
             <h1>Updates</h1>
         </div>
 
@@ -394,7 +437,13 @@
         <!-- Home Page -->
         <div id="home" class="page active">
             <div id="newsList" class="card-list">
-                <div class="loading">Fetching fresh news...</div>
+                <!-- Professional loader -->
+                <div class="loading">
+                    <div class="loader-wrap" id="homeLoader">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <div class="loader-sub">Fetching latest headlines — compiling top stories for you...</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -414,9 +463,14 @@
 
         <!-- Quick News (Reels) - Updated Structure -->
         <div id="quick" class="page">
-            <!-- Header removed inside this specific view for full-screen feel, or keep if preferred. Kept clean for Reels. -->
             <div class="reels-container" id="reelsContainer">
-                <div class="loading" style="color:white; padding-top: 50vh;">Loading reels...</div>
+                <!-- Professional loader for reels -->
+                <div class="loading" id="reelsLoader" style="color:white; padding-top: 50vh;">
+                    <div class="loader-wrap" style="color: #fff;">
+                        <div class="spinner" style="border-top-color: #fff;"></div>
+                        <div class="loader-sub" style="color: #ddd;">Loading quick reels — swipe up or down to move between stories</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -452,7 +506,6 @@
     </div>
 
     <!-- Modals -->
-    <!-- Settings -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('settings')">×</span>
@@ -476,11 +529,10 @@
         </div>
     </div>
 
-    <!-- About -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('about')">×</span>
-            <img src="image-2.png" style="width:80px; height:80px; border-radius:15px; margin-bottom: 1rem;" onerror="this.onerror=null; this.src='image-2.jpeg'">
+            <img src="image-2.png" style="width:80px; height:80px; border-radius:15px; margin-bottom: 1rem;" onerror="this.onerror=null; this.src='image-2.png'">
             <div class="modal-header">About Updates</div>
             <p style="line-height:1.6; color:var(--text-secondary);">
                 Updates is a professional news aggregator bringing you headlines from multiple trusted sources.
@@ -493,7 +545,7 @@
 
     <script>
         // --- Configuration ---
-        const BACKEND_URL = "https://backend-ml60.onrender.com/api"; 
+        const BACKEND_URL = "https://backend-ml60.onrender.com/api";
         const CACHE_TTL = 30 * 60 * 1000; // 30 Minutes
         let currentLang = localStorage.getItem('lang') || 'en';
         let allArticles = [];
@@ -515,7 +567,6 @@
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 el.classList.add('active');
             } else {
-                // update bottom nav active based on id
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 const bottomMap = { 'home': 0, 'search': 1, 'quick': 2, 'bookmarks': 3 };
                 const idx = bottomMap[id];
@@ -527,7 +578,7 @@
 
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
-            
+
             // Only scroll to top if not Quick News (Reels should maintain position or reset if desired)
             if(id !== 'quick') window.scrollTo(0, 0);
 
@@ -549,9 +600,78 @@
         // --- Helper: Limit to 60 words ---
         function getSummary(text) {
             if (!text) return "Click to read the full story.";
-            const words = text.split(/\s+/);
-            if (words.length <= 60) return text;
+            // clean text a bit
+            const cleaned = text.replace(/\s+/g, ' ').trim();
+            const words = cleaned.split(/\s+/);
+            if (words.length <= 60) return cleaned;
             return words.slice(0, 60).join(" ") + "...";
+        }
+
+        // --- Robust image loader helper ---
+        // Tries to validate image by preloading it, falls back to placeholder on fail/timeout.
+        function validateImageUrl(url, timeout = 4000) {
+            return new Promise((resolve) => {
+                if (!url || typeof url !== 'string') return resolve('image-2.png');
+                // if already using data: uri or same-origin, try directly
+                const candidate = url.trim();
+                // Quick check: must start with http(s) or data: or /
+                if (!/^https?:\/\//i.test(candidate) && !/^data:/.test(candidate) && !/^\//.test(candidate)) {
+                    // suspicious url - fallback
+                    return resolve('image-2.png');
+                }
+                let img = new Image();
+                let done = false;
+                const timer = setTimeout(() => {
+                    if (done) return;
+                    done = true;
+                    img.onload = img.onerror = null;
+                    resolve('image-2.png');
+                }, timeout);
+
+                img.onload = function() {
+                    if (done) return;
+                    done = true;
+                    clearTimeout(timer);
+                    resolve(candidate);
+                };
+                img.onerror = function() {
+                    if (done) return;
+                    done = true;
+                    clearTimeout(timer);
+                    resolve('image-2.png');
+                };
+                // set crossOrigin to anonymous to improve chances if the server supports it (won't break if not)
+                try { img.crossOrigin = "anonymous"; } catch(e){}
+                img.src = candidate;
+            });
+        }
+
+        // Apply validation to all images marked with data-src
+        async function attachImageLoaders(context = document) {
+            const lazyImgs = Array.from(context.querySelectorAll('img[data-src]'));
+            if (!lazyImgs.length) return;
+            // Validate concurrently but limit concurrency to avoid spikes
+            const concurrency = 6;
+            let idx = 0;
+            async function worker() {
+                while (idx < lazyImgs.length) {
+                    const i = idx++;
+                    const imgEl = lazyImgs[i];
+                    try {
+                        const good = await validateImageUrl(imgEl.getAttribute('data-src'));
+                        // only set src if still in DOM and not already set
+                        if (imgEl) imgEl.src = good;
+                        imgEl.removeAttribute('data-src');
+                    } catch (e) {
+                        if (imgEl) imgEl.src = 'image-2.png';
+                        imgEl.removeAttribute('data-src');
+                    }
+                }
+            }
+            // start workers
+            const workers = [];
+            for (let i=0;i<concurrency;i++) workers.push(worker());
+            await Promise.all(workers);
         }
 
         // --- Data Fetching ---
@@ -567,6 +687,10 @@
             }
 
             try {
+                // show loaders
+                showHomeLoader(true);
+                showReelsLoader(true);
+
                 // Fetch from all 5 sources simultaneously
                 const endpoints = ['newsapi', 'newsdata', 'gnews', 'currents', 'worldnews'];
                 const promises = endpoints.map(ep =>
@@ -584,11 +708,11 @@
                     raw.forEach(a => {
                         merged.push({
                             title: a.title,
-                            desc: a.description || a.content || "",
-                            img: a.urlToImage || a.image || a.imageurl || "image-2.png",
+                            desc: a.description || a.content || a.text || "",
+                            img: a.urlToImage || a.image || a.imageurl || a.urlToImage || "image-2.png",
                             url: a.url || a.link || "#",
                             source: (a.source && (typeof a.source === 'string' ? a.source : a.source.name)) || (a.source_id) || endpoints[i],
-                            date: a.publishedAt || a.pubDate || new Date().toISOString()
+                            date: a.publishedAt || a.pubDate || a.published || new Date().toISOString()
                         });
                     });
                 });
@@ -603,56 +727,188 @@
                 displayNews(allArticles);
             } catch (err) {
                 document.getElementById('newsList').innerHTML = `<div class='loading'>Failed to load. Check connection.</div>`;
+                document.getElementById('reelsContainer').innerHTML = `<div class='loading' style='color:white;'>Failed to load reels. Check connection.</div>`;
+            } finally {
+                showHomeLoader(false);
+                showReelsLoader(false);
             }
+        }
+
+        function showHomeLoader(show) {
+            const homeLoader = document.getElementById('homeLoader');
+            if (!homeLoader) return;
+            homeLoader.style.display = show ? 'flex' : 'none';
+        }
+        function showReelsLoader(show) {
+            const reelsLoader = document.getElementById('reelsLoader');
+            if (!reelsLoader) return;
+            reelsLoader.style.display = show ? 'block' : 'none';
         }
 
         function removeDuplicates(arr) {
             const seen = new Set();
             return arr.filter(item => {
-                const k = (item.title || "").substring(0, 40).toLowerCase();
-                return seen.has(k) ? false : seen.add(k);
+                const k = (item.title || "").substring(0, 40).toLowerCase() + '|' + (item.url || '').slice(0,40);
+                if (seen.has(k)) return false;
+                seen.add(k);
+                return true;
             });
         }
 
-        function displayNews(articles) {
+        function safeTextForHTML(s) {
+            if (!s) return '';
+            return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        async function displayNews(articles) {
             const list = document.getElementById('newsList');
             const reels = document.getElementById('reelsContainer');
 
             if (!articles.length) {
                 list.innerHTML = "<div class='loading'>No news found for this language.</div>";
+                reels.innerHTML = `<div class="loading" style="color:white;">No quick snippets available right now.</div>`;
                 return;
             }
 
-            // Home Grid
-            list.innerHTML = articles.map((a, i) => `
-                <div class="news-card" onclick="window.open('${a.url}', '_blank')">
-                    <img src="${a.img}" class="news-image" onerror="this.onerror=null; this.src='image-2.png'">
+            // 1) Home: ONLY first 10 articles
+            const homeArticles = articles.slice(0, 10);
+            // 2) Quick: shift most news (at least 50) into quick news (articles 10..59)
+            const quickArticles = articles.slice(10, 60); // will include up to 50 items if available
+
+            // Home Grid - show description and include Read Full Story button
+            list.innerHTML = homeArticles.map((a, i) => `
+                <div class="news-card" onclick="window.open('${a.url}', '_blank')" role="button" aria-label="Open article">
+                    <img data-src="${a.img}" src="image-2.png" class="news-image" alt="${safeTextForHTML(a.title || 'image')}" loading="lazy">
                     <div class="news-content">
-                        <div class="news-title">${a.title}</div>
-                        <div class="news-summary">${getSummary(a.desc)}</div>
+                        <div class="news-title">${safeTextForHTML(a.title)}</div>
+                        <div class="news-summary">${safeTextForHTML(getSummary(a.desc))}</div>
                         <div class="news-meta">
-                            <span class="source-tag">${a.source}</span>
+                            <span class="source-tag">${safeTextForHTML(a.source)}</span>
                             <span>${new Date(a.date).toLocaleDateString()}</span>
-                            <button onclick="event.stopPropagation(); saveArticle(${i})" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">🔖</button>
+                            <button onclick="event.stopPropagation(); saveArticle(${i})" style="border:none; background:none; font-size:1.2rem; cursor:pointer;" aria-label="Save article">🔖</button>
+                        </div>
+                        <div style="margin-top:8px;">
+                            <a href="${a.url}" target="_blank" class="read-more" onclick="event.stopPropagation()">Read Full Story</a>
                         </div>
                     </div>
                 </div>
             `).join('');
 
-            // Updated Reels Generation
-            reels.innerHTML = articles.slice(0, 20).map((a, i) => `
-                <div class="reel" onclick="window.open('${a.url}', '_blank')">
-                    <img src="${a.img}" class="reel-bg-image" onerror="this.onerror=null; this.src='image-2.png'">
-                    <div class="reel-content-overlay">
-                        <span class="reel-source">${a.source}</span>
-                        <div class="reel-title">${a.title}</div>
-                        <div class="reel-text">${getSummary(a.desc)}</div>
-                        <div class="tap-hint">Tap screen to read full story ↗</div>
+            // Quick/Reels - remaining articles (at least up to 50)
+            if (quickArticles.length === 0) {
+                reels.innerHTML = `<div class="loading" style="color:white;">No quick snippets available right now.</div>`;
+            } else {
+                // Build reels where each reel occupies full container height
+                reels.innerHTML = quickArticles.map((a, idx) => `
+                    <div class="reel" data-idx="${idx}">
+                        <img data-src="${a.img}" class="reel-bg-image" src="image-2.png" alt="${safeTextForHTML(a.title || 'image')}" loading="lazy">
+                        <div class="reel-content-overlay" onclick="window.open('${a.url}', '_blank')" role="link" aria-label="Open source">
+                            <span class="reel-source">${safeTextForHTML(a.source)}</span>
+                            <div class="reel-title">${safeTextForHTML(a.title)}</div>
+                            <div class="reel-text">${safeTextForHTML(getSummary(a.desc))}</div>
+                            <div class="tap-hint">Tap to open source ↗</div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-            
-            // Note: setupReelsLogic() removed as we now use CSS scroll-snap
+                `).join('');
+
+                // ensure the first reel is snapped into view
+                setTimeout(() => {
+                    currentIndex = 0;
+                    snapToIndex(0);
+                    // attach image loaders for these newly injected elements
+                    attachImageLoaders(reels);
+                }, 80);
+            }
+
+            // attach image loaders for home cards too
+            attachImageLoaders(list);
+        }
+
+        // --- Reels swipe logic: one swipe = one reel change (works cross-language)
+        const container = document.getElementById('reelsContainer');
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isTouching = false;
+        let currentIndex = 0;
+
+        function snapToIndex(index) {
+            const reels = Array.from(document.querySelectorAll('.reel'));
+            if (!reels.length) return;
+            index = Math.max(0, Math.min(index, reels.length - 1));
+            currentIndex = index;
+            const offset = index * container.clientHeight;
+            container.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+
+        // On resize, keep snapping to current index to keep full-screen fit
+        window.addEventListener('resize', () => snapToIndex(currentIndex));
+
+        // Touch handling: detect vertical swipe and snap to next/prev reel
+        if (container) {
+            container.addEventListener('touchstart', (e) => {
+                if (!e.touches || !e.touches[0]) return;
+                isTouching = true;
+                touchStartY = e.touches[0].clientY;
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+
+            container.addEventListener('touchend', (e) => {
+                if (!isTouching) return;
+                isTouching = false;
+                const touch = e.changedTouches && e.changedTouches[0];
+                if (!touch) return;
+                const dy = touchStartY - touch.clientY;
+                const dx = touchStartX - touch.clientX;
+                const threshold = 40; // pixels to consider a swipe
+                if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > threshold) {
+                    if (dy > 0) {
+                        // swipe up -> next
+                        snapToIndex(currentIndex + 1);
+                    } else {
+                        // swipe down -> prev
+                        snapToIndex(currentIndex - 1);
+                    }
+                } else {
+                    // minor move -> snap to nearest index based on scroll position
+                    const idx = Math.round(container.scrollTop / container.clientHeight);
+                    snapToIndex(idx);
+                }
+            }, { passive: true });
+
+            // also listen to scroll and snap to nearest after user stops scrolling (debounce)
+            let scrollTimer;
+            container.addEventListener('scroll', () => {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(() => {
+                    const idx = Math.round(container.scrollTop / container.clientHeight);
+                    snapToIndex(idx);
+                }, 120);
+            });
+
+            // Add wheel support (desktop): each wheel move snaps one reel
+            let wheelDebounce;
+            container.addEventListener('wheel', (e) => {
+                if (Math.abs(e.deltaY) < 30) return;
+                e.preventDefault();
+                clearTimeout(wheelDebounce);
+                wheelDebounce = setTimeout(() => {
+                    if (e.deltaY > 0) snapToIndex(currentIndex + 1);
+                    else snapToIndex(currentIndex - 1);
+                }, 40);
+            }, { passive: false });
+
+            // Keyboard support for accessibility
+            window.addEventListener('keydown', (e) => {
+                if (document.getElementById('quick') && document.getElementById('quick').classList.contains('active')) {
+                    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                        e.preventDefault();
+                        snapToIndex(currentIndex + 1);
+                    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        snapToIndex(currentIndex - 1);
+                    }
+                }
+            });
         }
 
         // --- Search ---
@@ -667,13 +923,16 @@
                     const list = document.getElementById('searchResults');
                     list.innerHTML = results.map(a => `
                         <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                            <img data-src="${a.img}" src="image-2.png" class="news-image" alt="${safeTextForHTML(a.title || 'image')}" loading="lazy">
                             <div class="news-content">
-                                <div class="news-title">${a.title}</div>
-                                <div class="news-meta"><span class="source-tag">${a.source}</span></div>
+                                <div class="news-title">${safeTextForHTML(a.title)}</div>
+                                <div class="news-meta"><span class="source-tag">${safeTextForHTML(a.source)}</span></div>
                             </div>
                         </div>
                     `).join('');
                     if(!results.length) list.innerHTML = "<div class='loading'>No matches found.</div>";
+                    // attach lazy images for results
+                    attachImageLoaders(list);
                 }, 500);
             };
         }
@@ -681,7 +940,9 @@
         // --- Bookmarks ---
         function saveArticle(idx) {
             let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || "[]");
-            bookmarks.push(allArticles[idx]);
+            const article = allArticles[idx];
+            if (!article) { alert("Unable to save article."); return; }
+            bookmarks.push(article);
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             alert("Article saved to bookmarks!");
         }
@@ -692,11 +953,13 @@
             if(!bookmarks.length) { list.innerHTML = "<div class='loading'>Empty. Save articles to see them here.</div>"; return; }
             list.innerHTML = bookmarks.map(a => `
                 <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                    <img data-src="${a.img}" src="image-2.png" class="news-image" alt="${safeTextForHTML(a.title || 'image')}" loading="lazy">
                     <div class="news-content">
-                        <div class="news-title">${a.title}</div>
+                        <div class="news-title">${safeTextForHTML(a.title)}</div>
                     </div>
                 </div>
             `).join('');
+            attachImageLoaders(list);
         }
 
         // --- Language ---
@@ -704,7 +967,9 @@
             currentLang = document.getElementById('langSelect').value;
             localStorage.setItem('lang', currentLang);
             closeModal('settings');
-            document.getElementById('newsList').innerHTML = `<div class='loading'>Fetching ${currentLang} news...</div>`;
+            // show professional loader text
+            document.getElementById('newsList').innerHTML = `<div class='loading'><div class="loader-wrap"><div class="spinner"></div><div class="loader-sub">Fetching latest headlines — compiling top stories for you...</div></div></div>`;
+            document.getElementById('reelsContainer').innerHTML = `<div class='loading' id='reelsLoader' style='color:white; padding-top:50vh;'><div class="loader-wrap" style="color:#fff;"><div class="spinner" style="border-top-color:#fff;"></div><div class="loader-sub" style="color:#ddd">Loading quick reels — swipe up or down to move between stories</div></div></div>`;
             fetchAllNews(true);
         }
 
