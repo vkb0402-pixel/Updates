@@ -1,1126 +1,1149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Updates - Short Crisp News</title>
-
-  <!-- Favicon and Icons -->
-  <link rel="icon" href="image-2.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg-color: #f8f9fa;
-      --card-bg: #ffffff;
-      --text-primary: #1a1a1a;
-      --text-secondary: #4a4a4a;
-      --text-meta: #888888;
-      --header-gradient-1: #3b82f6;
-      --header-gradient-2: #2563eb;
-      --border-color: #e5e7eb;
-      --accent-color: #3b82f6;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
-      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    [data-theme="dark"] {
-      --bg-color: #0f0f0f;
-      --card-bg: #1a1a1a;
-      --text-primary: #f0f0f0;
-      --text-secondary: #c0c0c0;
-      --text-meta: #888888;
-      --header-gradient-1: #1e3a8a;
-      --header-gradient-2: #1e40af;
-      --border-color: #2d2d2d;
-      --accent-color: #60a5fa;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100%;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-color);
-      padding-bottom: 70px;
-      transition: background 0.3s ease, color 0.3s ease;
-      color: var(--text-primary);
-      height: 100vh;
-      overflow: hidden; /* Prevent body scroll, handle inside pages */
-    }
-
-    /* Header */
-    header {
-      background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
-      color: #fff;
-      padding: 0.8rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(59, 130, 246, 0.25);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-    }
-
-    .menu-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      margin-right: 0.8rem;
-      border-radius: 8px;
-      transition: 0.2s;
-    }
-
-    .menu-btn:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: scale(1.03);
-    }
-
-    .header-center {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .logo {
-      height: 42px;
-      width: 42px;
-      margin-right: 0;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      object-fit: contain;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.06);
-      padding: 4px;
-      display: block;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    /* Sidebar Overlay */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 280px;
-      height: 100%;
-      background: var(--card-bg);
-      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-      transition: 0.35s ease;
-      z-index: 1000;
-      overflow-y: auto;
-    }
-
-    .sidebar.open {
-      left: 0;
-    }
-
-    .sidebar-header {
-      background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
-      color: white;
-      padding: 2rem 1.5rem;
-    }
-
-    .sidebar-header h2 {
-      margin-top: 0.5rem;
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-
-    .sidebar-menu {
-      list-style: none;
-    }
-
-    .sidebar-menu a {
-      display: block;
-      padding: 1rem 1.5rem;
-      color: var(--text-primary);
-      text-decoration: none;
-      border-bottom: 1px solid var(--border-color);
-      font-weight: 500;
-      transition: 0.2s;
-    }
-
-    .sidebar-menu a:hover {
-      background: var(--bg-color);
-      padding-left: 1.8rem;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      z-index: 999;
-      backdrop-filter: blur(2px);
-    }
-
-    .overlay.active {
-      display: block;
-    }
-
-    /* Main Content */
-    .page {
-      display: none;
-      animation: fadeIn 0.4s ease;
-      padding: 1rem;
-      height: calc(100vh - 130px); /* Adjust for header+nav */
-      overflow-y: auto;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .section-header {
-      text-align: center;
-      margin: 1.5rem 0 2rem;
-    }
-
-    .section-title {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--accent-color);
-      margin-bottom: 0.5rem;
-    }
-
-    /* Search Bar */
-    .search-container {
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      position: relative;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 1rem 1rem 1rem 3.5rem;
-      border-radius: 50px;
-      border: 2px solid var(--border-color);
-      background: var(--card-bg);
-      color: var(--text-primary);
-      font-size: 1rem;
-      outline: none;
-      transition: 0.3s;
-    }
-
-    .search-input:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 1.2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.3rem;
-      color: var(--text-meta);
-    }
-
-    /* News Cards */
-    .card-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-bottom: 2rem;
-    }
-
-    .news-card {
-      background: var(--card-bg);
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .news-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--accent-color);
-    }
-
-    /* FIX 1: More robust image display */
-    .news-image {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
-      background: #eee;
-    }
-
-    .news-content {
-      padding: 1.2rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .news-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 0.8rem;
-      line-height: 1.4;
-      color: var(--text-primary);
-    }
-
-    .news-summary {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-      flex: 1;
-    }
-
-    .news-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 0.8rem;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.85rem;
-      color: var(--text-meta);
-    }
-
-    .source-tag {
-      background: var(--accent-color);
-      color: white;
-      padding: 2px 8px;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 0.75rem;
-    }
-
-    /* Bottom Nav */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: var(--card-bg);
-      display: flex;
-      justify-content: space-around;
-      padding: 0.6rem 0;
-      box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
-      z-index: 100;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .nav-item {
-      text-align: center;
-      color: var(--text-meta);
-      text-decoration: none;
-      flex: 1;
-      font-size: 0.75rem;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-
-    .nav-item.active {
-      color: var(--accent-color);
-    }
-
-    .nav-icon {
-      font-size: 1.4rem;
-      margin-bottom: 2px;
-    }
-
-    /* Modals */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: 1rem;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: var(--card-bg);
-      width: 100%;
-      max-width: 500px;
-      border-radius: 20px;
-      padding: 2rem;
-      position: relative;
-      max-height: 85vh;
-      overflow-y: auto;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .modal-header {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: var(--accent-color);
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 1.2rem;
-      right: 1.5rem;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--text-meta);
-    }
-
-    .loading {
-      text-align: center;
-      padding: 3rem;
-      color: var(--text-meta);
-    }
-
-    .loader-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      flex-direction: column;
-      color: var(--text-meta);
-      font-weight: 600;
-    }
-
-    .spinner {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      border: 6px solid rgba(0, 0, 0, 0.08);
-      border-top-color: var(--accent-color);
-      animation: spin 1s linear infinite;
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.12);
-      background: white;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .loader-sub {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      max-width: 320px;
-      text-align: center;
-    }
-
-    .read-more {
-      display: inline-block;
-      background: var(--accent-color);
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      margin-top: 1rem;
-      transition: 0.2s;
-    }
-
-    .read-more:hover {
-      transform: scale(1.05);
-    }
-
-    /* QUICK NEWS: full-screen reels */
-    #quick.page {
-      padding: 0;
-      height: calc(100vh - 120px);
-      overflow: hidden;
-    }
-
-    .reels-container {
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory; /* One reel per swipe */
-      background: #000;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .reels-container::-webkit-scrollbar {
-      display: none;
-    }
-
-    .reel {
-      width: 100%;
-      height: 100%;
-      scroll-snap-align: start;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .reel-bg-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      opacity: 0.62;
-      transition: transform 0.5s ease;
-      display: block;
-      background: #111;
-    }
-
-    .reel:hover .reel-bg-image {
-      transform: scale(1.03);
-    }
-
-    .reel-content-overlay {
-      position: relative;
-      z-index: 2;
-      padding: 28px 20px 36px 20px;
-      background: linear-gradient(to top,
-        rgba(0, 0, 0, 0.95),
-        rgba(0, 0, 0, 0.6),
-        transparent 40%);
-      color: #fff;
-    }
-
-    .reel-source {
-      display: inline-block;
-      background: var(--accent-color);
-      color: #fff;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .reel-title {
-      font-size: 1.9rem;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 14px;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-      color: #fff;
-    }
-
-    /* FIX 3: 60-word summary text */
-    .reel-text {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: #e6e6e6;
-      margin-bottom: 14px;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-      max-height: calc(100vh - 300px);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .tap-hint {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.3rem; }
-      .card-list { grid-template-columns: 1fr; }
-      .news-image { height: 240px; }
-      .reel-title { font-size: 1.6rem; }
-      .reel-text { font-size: 1rem; }
-    }
-  </style>
-</head>
-<body data-theme="light">
-  <!-- Sidebar Overlay -->
-  <div class="overlay" id="overlay"></div>
-
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2>Updates Menu</h2>
-    </div>
-    <ul class="sidebar-menu">
-      <li><a href="#" onclick="openModal('settings')">Settings</a></li>
-      <li><a href="#" onclick="openModal('about')">About Developer</a></li>
-      <li><a href="#" onclick="location.reload()">Refresh App</a></li>
-    </ul>
-  </div>
-
-  <!-- Header -->
-  <header>
-    <div class="header-left">
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
-    </div>
-    <div class="header-center">
-      <img src="image-2.png" id="logoImg" alt="Updates Logo" class="logo" onclick="showPage('home', this)" onerror="this.onerror=null; this.src='image-2.png';">
-      <h1>Updates</h1>
-    </div>
-    <div style="width: 40px;"></div>
-  </header>
-
-  <!-- Pages -->
-  <main>
-    <!-- Home Page -->
-    <div id="home" class="page active">
-      <div id="newsList" class="card-list">
-        <!-- Loader -->
-        <div class="loading">
-          <div class="loader-wrap" id="homeLoader">
-            <div class="spinner" aria-hidden="true"></div>
-            <div class="loader-sub">Fetching latest headlines, compiling top stories for you...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Search Page -->
-    <div id="search" class="page">
-      <div class="section-header">
-        <h2 class="section-title">Search</h2>
-      </div>
-
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search for any topic...">
-      </div>
-
-      <div id="searchResults" class="card-list">
-        <div class="loading" style="padding:0;">Type something to search...</div>
-      </div>
-    </div>
-
-    <!-- Quick News Reels -->
-    <div id="quick" class="page">
-      <div class="reels-container" id="reelsContainer">
-        <div class="loading" id="reelsLoader" style="color:white; padding-top:50vh;">
-          <div class="loader-wrap" style="color:#fff;">
-            <div class="spinner" style="border-top-color:#fff;"></div>
-            <div class="loader-sub" style="color:#ddd;">Loading quick reels, swipe up or down to move between stories</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bookmarks -->
-    <div id="bookmarks" class="page">
-      <div class="section-header">
-        <h2 class="section-title">Saved Articles</h2>
-      </div>
-      <div id="bookmarksList" class="card-list">
-        <div class="loading">No bookmarks saved yet.</div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <a href="#" class="nav-item active" onclick="showPage('home', this)">
-      <div class="nav-icon">🏠</div>
-      <div>Home</div>
-    </a>
-    <a href="#" class="nav-item" onclick="showPage('search', this)">
-      <div class="nav-icon">🔍</div>
-      <div>Search</div>
-    </a>
-    <a href="#" class="nav-item" onclick="showPage('quick', this)">
-      <div class="nav-icon">⚡</div>
-      <div>Quick</div>
-    </a>
-    <a href="#" class="nav-item" onclick="showPage('bookmarks', this)">
-      <div class="nav-icon">⭐</div>
-      <div>Saved</div>
-    </a>
-  </div>
-
-  <!-- Settings Modal -->
-  <div id="settingsModal" class="modal">
-    <div class="modal-content">
-      <span class="close-modal" onclick="closeModal('settings')">&times;</span>
-      <div class="modal-header">Settings</div>
-
-      <div style="margin-bottom: 1.5rem;">
-        <label style="display:block;margin-bottom:0.5rem;font-weight:600;">Dark Mode</label>
-        <button onclick="toggleDarkMode()" id="themeBtn" style="padding:0.6rem 1.2rem;border-radius:8px;border:1px solid var(--border-color);cursor:pointer;background:var(--accent-color);color:white;width:100%;">Toggle Theme</button>
-      </div>
-
-      <div style="margin-bottom: 1.5rem;">
-        <label style="display:block;margin-bottom:0.5rem;font-weight:600;">News Language</label>
-        <select id="langSelect" onchange="changeLanguage()" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--border-color);background:var(--card-bg);color:var(--text-primary);">
-          <option value="en">English</option>
-          <option value="hi">Hindi</option>
-          <option value="es">Spanish</option>
-          <option value="fr">French</option>
-          <option value="de">German</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <!-- About Modal -->
-  <div id="aboutModal" class="modal">
-    <div class="modal-content">
-      <span class="close-modal" onclick="closeModal('about')">&times;</span>
-      <img src="image-2.png" style="width:80px;height:80px;border-radius:15px;margin-bottom:1rem;" onerror="this.onerror=null; this.src='image-2.png';">
-      <div class="modal-header">About Updates</div>
-      <p style="line-height:1.6;color:var(--text-secondary);">
-        Updates is a professional news aggregator bringing you headlines from multiple trusted sources.
-        <br><br>
-        <strong>Developer</strong> VIC team<br>
-        <strong>Version</strong> 7.0.0 Ultra-Secure
-      </p>
-    </div>
-  </div>
-
-  <script>
-    /* === CONFIGURATION === */
-    const BACKEND_URL = "https://backend-ml60.onrender.com/api";
-    const CACHE_TTL = 30 * 60 * 1000; // 30 Minutes
-    let currentLang = localStorage.getItem("lang") || "en";
-    let allArticles = [];
-
-    /* === CORE UI LOGIC === */
-    const menuBtn = document.getElementById("menuBtn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
-
-    menuBtn.onclick = () => {
-      sidebar.classList.add("open");
-      overlay.classList.add("active");
-    };
-
-    overlay.onclick = () => {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-    };
-
-    function showPage(id, el) {
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      const page = document.getElementById(id);
-      if (page) page.classList.add("active");
-
-      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-      if (el && el.classList.contains("nav-item")) el.classList.add("active");
-
-      const bottomMap = { home: 0, search: 1, quick: 2, bookmarks: 3 };
-      const idx = bottomMap[id];
-      if (typeof idx !== "undefined") {
-        const items = document.querySelectorAll(".nav-item");
-        if (items[idx]) items[idx].classList.add("active");
-      }
-
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-
-      if (id !== "quick") {
-        window.scrollTo(0, 0);
-      } else {
-        const container = document.getElementById("reelsContainer");
-        if (container) container.scrollTo({ top: 0, behavior: "instant" });
-      }
-
-      if (id === "bookmarks") {
-        loadBookmarks();
-      }
-    }
-
-    function openModal(id) {
-      const m = document.getElementById(id + "Modal");
-      if (m) m.classList.add("active");
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-    }
-
-    function closeModal(id) {
-      const m = document.getElementById(id + "Modal");
-      if (m) m.classList.remove("active");
-    }
-
-    /* === THEME LOGIC === */
-    function toggleDarkMode() {
-      const body = document.body;
-      const isDark = body.getAttribute("data-theme") === "dark";
-      body.setAttribute("data-theme", isDark ? "light" : "dark");
-      localStorage.setItem("theme", isDark ? "light" : "dark");
-    }
-
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.setAttribute("data-theme", "dark");
-    }
-
-    /* === SUMMARY HELPER (60 words max) === */
-    function getSummary(text) {
-      if (!text || typeof text !== "string") return "Click to read the full story.";
-      const words = text.split(/\s+/).filter(Boolean);
-      if (words.length <= 60) return text;
-      return words.slice(0, 60).join(" ") + "…";
-    }
-
-    /* === SIMPLE LANGUAGE FILTER (Frontend) === */
-    function isMostlyLanguage(text, lang) {
-      if (!text) return true;
-
-      const lower = text.toLowerCase();
-
-      const langHints = {
-        en: /the|and|of|in|on|with|for|from|this|that/,
-        hi: /है|था|की|के|यह|जो|से/,
-        es: /el|la|los|las|de|que|para|por|con|una|uno/,
-        fr: /le|la|les|des|une|un|pour|avec|dans/,
-        de: /der|die|das|und|mit|für|auf/
-      };
-
-      const re = langHints[lang];
-      if (!re) return true;
-      return re.test(lower);
-    }
-
-    /* === DATA FETCHING === */
-    async function fetchAllNews(force = false) {
-      const cacheKey = "news_" + currentLang;
-      const cached = localStorage.getItem(cacheKey);
-      const cacheTime = localStorage.getItem(cacheKey + "_time");
-
-      if (!force && cached && cacheTime && Date.now() - cacheTime < CACHE_TTL) {
-        allArticles = JSON.parse(cached);
-        displayNews(allArticles);
-        return;
-      }
-
-      try {
-        showHomeLoader(true);
-        showReelsLoader(true);
-
-        const endpoints = ["newsapi", "newsdata", "gnews", "currents", "worldnews"];
-        const promises = endpoints.map(ep =>
-          fetch(`${BACKEND_URL}/${ep}?country=in&language=${currentLang}`)
-            .then(r => r.json())
-            .catch(() => ({ articles: [], results: [], news: [] }))
-        );
-
-        const results = await Promise.all(promises);
-        let merged = [];
-
-        results.forEach((data, i) => {
-          const raw = data.articles || data.results || data.news || [];
-          raw.forEach(a => {
-            merged.push({
-              title: a.title,
-              desc: a.description || a.content || "",
-              img: a.urlToImage || a.image || a.imageurl || "image-2.png",
-              url: a.url || a.link,
-              source: (typeof a.source === "string" ? a.source : (a.source && a.source.name)) || endpoints[i],
-              date: a.publishedAt || a.pubDate || (a.date || new Date().toISOString())
-            });
-          });
-        });
-
-        /* FIX 4: filter by selected language */
-        merged = merged.filter(a =>
-          isMostlyLanguage((a.title || "") + " " + (a.desc || ""), currentLang)
-        );
-
-        merged = removeDuplicates(merged).sort((a, b) => new Date(b.date) - new Date(a.date));
-        allArticles = merged;
-
-        localStorage.setItem(cacheKey, JSON.stringify(allArticles));
-        localStorage.setItem(cacheKey + "_time", Date.now());
-
-        displayNews(allArticles);
-      } catch (err) {
-        document.getElementById("newsList").innerHTML =
-          "<div class='loading'>Failed to load. Check connection.</div>";
-        document.getElementById("reelsContainer").innerHTML =
-          "<div class='loading' style='color:white'>Failed to load reels. Check connection.</div>";
-      } finally {
-        showHomeLoader(false);
-        showReelsLoader(false);
-      }
-    }
-
-    function showHomeLoader(show) {
-      const homeLoader = document.getElementById("homeLoader");
-      if (!homeLoader) return;
-      homeLoader.style.display = show ? "flex" : "none";
-    }
-
-    function showReelsLoader(show) {
-      const reelsLoader = document.getElementById("reelsLoader");
-      if (!reelsLoader) return;
-      reelsLoader.style.display = show ? "block" : "none";
-    }
-
-    function removeDuplicates(arr) {
-      const seen = new Set();
-      return arr.filter(item => {
-        const key = (item.title || "").substring(0, 40).toLowerCase();
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-    }
-
-    /* === RENDER NEWS === */
-    function displayNews(articles) {
-      const list = document.getElementById("newsList");
-      const reels = document.getElementById("reelsContainer");
-
-      if (!articles.length) {
-        list.innerHTML = "<div class='loading'>No news found for this language.</div>";
-        reels.innerHTML = "<div class='loading' style='color:white'>No quick snippets available right now.</div>";
-        return;
-      }
-
-      /* Home: first 10 */
-      const homeArticles = articles.slice(0, 10);
-      /* Quick: next up to 50 */
-      const quickArticles = articles.slice(10, 60);
-
-      /* Home grid with description + Read Full Story */
-      list.innerHTML = homeArticles.map((a, i) => `
-        <div class="news-card" onclick="window.open('${a.url}', '_blank')">
-          <img src="${a.img || 'image-2.png'}" class="news-image"
-               onerror="this.onerror=null;this.src='image-2.png';">
-          <div class="news-content">
-            <div class="news-title">${a.title || ""}</div>
-            <div class="news-summary">${getSummary(a.desc || "")}</div>
-            <div class="news-meta">
-              <span class="source-tag">${a.source || "Unknown"}</span>
-              <span>${new Date(a.date).toLocaleDateString()}</span>
-            </div>
-          </div>
-        </div>
-      `).join("");
-
-      /* Quick reels */
-      if (!quickArticles.length) {
-        reels.innerHTML = "<div class='loading' style='color:white'>No quick snippets available right now.</div>";
-      } else {
-        reels.innerHTML = quickArticles.map((a, idx) => `
-          <div class="reel" data-idx="${idx}">
-            <img src="${a.img || 'image-2.png'}" class="reel-bg-image"
-                 onerror="this.onerror=null;this.src='image-2.png';">
-            <div class="reel-content-overlay" onclick="window.open('${a.url}', '_blank')">
-              <span class="reel-source">${a.source || "Source"}</span>
-              <div class="reel-title">${a.title || ""}</div>
-              <div class="reel-text">${getSummary(a.desc || "")}</div>
-              <div class="tap-hint">Tap to open source • Swipe up/down for more</div>
-            </div>
-          </div>
-        `).join("");
-
-        setTimeout(() => snapToIndex(0), 80);
-      }
-    }
-
-    /* === REELS SWIPE LOGIC: one swipe = one article === */
-    const container = document.getElementById("reelsContainer");
-    let touchStartY = 0;
-    let touchStartX = 0;
-    let isTouching = false;
-    let currentIndex = 0;
-
-    function snapToIndex(index) {
-      const reels = Array.from(document.querySelectorAll(".reel"));
-      if (!reels.length) return;
-      index = Math.max(0, Math.min(index, reels.length - 1));
-      currentIndex = index;
-      const offset = index * container.clientHeight;
-      container.scrollTo({ top: offset, behavior: "smooth" });
-    }
-
-    window.addEventListener("resize", () => snapToIndex(currentIndex));
-
-    if (container) {
-      container.addEventListener("touchstart", e => {
-        if (!e.touches || !e.touches[0]) return;
-        isTouching = true;
-        touchStartY = e.touches[0].clientY;
-        touchStartX = e.touches[0].clientX;
-      }, { passive: true });
-
-      container.addEventListener("touchend", e => {
-        if (!isTouching) return;
-        isTouching = false;
-        const touch = e.changedTouches && e.changedTouches[0];
-        if (!touch) return;
-
-        const dy = touchStartY - touch.clientY;
-        const dx = touchStartX - touch.clientX;
-        const threshold = 40;
-
-        if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > threshold) {
-          if (dy > 0) snapToIndex(currentIndex + 1);   // swipe up
-          else snapToIndex(currentIndex - 1);          // swipe down
-        } else {
-          const idx = Math.round(container.scrollTop / container.clientHeight);
-          snapToIndex(idx);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updates - Short Crisp News</title>
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" href="image-2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-meta: #888888;
+            --header-gradient-1: #3b82f6;
+            --header-gradient-2: #2563eb;
+            --border-color: #e5e7eb;
+            --accent-color: #3b82f6;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
         }
-      }, { passive: true });
+        
+        [data-theme="dark"] {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #c0c0c0;
+            --text-meta: #888888;
+            --header-gradient-1: #1e3a8a;
+            --header-gradient-2: #1e40af;
+            --border-color: #2d2d2d;
+            --accent-color: #60a5fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            padding-bottom: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+            color: var(--text-primary);
+        }
+        
+        /* === Header === */
+        header {
+            background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
+            color: #fff;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(59, 130, 246, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-left { display: flex; align-items: center; }
+        
+        .menu-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 0.8rem;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.03);
+        }
+        
+        .header-center {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            height: 42px;
+            width: 42px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            object-fit: contain;
+            cursor: pointer;
+            background: rgba(255,255,255,0.06);
+            padding: 4px;
+        }
+        
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        /* === Sidebar === */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+            transition: 0.35s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar.open { left: 0; }
+        
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
+            color: white;
+            padding: 2rem 1.5rem;
+        }
+        
+        .sidebar-header h2 {
+            margin-top: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        
+        .sidebar-menu a:hover {
+            background: var(--bg-color);
+            padding-left: 1.8rem;
+        }
+        
+        .sidebar-menu a .icon {
+            font-size: 1.2rem;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+            backdrop-filter: blur(2px);
+        }
+        
+        .overlay.active { display: block; }
+        
+        /* === Main Content === */
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+            padding: 1rem;
+            min-height: calc(100vh - 130px);
+        }
+        
+        .page.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-header {
+            text-align: center;
+            margin: 1.5rem 0 2rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* === Search Bar === */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            color: var(--text-meta);
+        }
+        
+        /* === News Cards === */
+        .card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 2rem;
+        }
+        
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-color);
+        }
+        
+        .news-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            background: #eee;
+        }
+        
+        .news-content {
+            padding: 1.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .news-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+        
+        .news-summary {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-meta);
+        }
+        
+        .source-tag {
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        /* === Bottom Nav === */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.6rem 0;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .nav-item {
+            text-align: center;
+            color: var(--text-meta);
+            text-decoration: none;
+            flex: 1;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .nav-item.active {
+            color: var(--accent-color);
+        }
+        
+        .nav-icon {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+        
+        /* === ENHANCED QUICK NEWS REELS - ULTRA SMOOTH === */
+        #quick.page {
+            padding: 0;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+        }
+        
+        .reels-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            background: #000;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            will-change: scroll-position;
+        }
+        
+        .reels-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .reel {
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: #111;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .reel-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            opacity: 0.62;
+            transition: transform 0.5s ease;
+            display: block;
+            will-change: transform;
+        }
+        
+        .reel:hover .reel-bg-image {
+            transform: scale(1.03);
+        }
+        
+        .reel-content-overlay {
+            position: relative;
+            z-index: 2;
+            padding: 28px 20px 36px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent 40%);
+            color: #fff;
+        }
+        
+        .reel-source {
+            display: inline-block;
+            background: var(--accent-color);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .reel-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 14px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+            color: #fff;
+        }
+        
+        .reel-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #e6e6e6;
+            margin-bottom: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .tap-hint {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* === Modals === */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal.active { display: flex; }
+        
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-meta);
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .faq-question {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .faq-answer {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        .contact-email {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin: 1rem 0;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        
+        .contact-email:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .loader-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-direction: column;
+            color: var(--text-meta);
+            font-weight: 600;
+        }
+        
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 6px solid rgba(0,0,0,0.08);
+            border-top-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-meta);
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 1.3rem; }
+            .card-list { grid-template-columns: 1fr; }
+            .news-image { height: 240px; }
+            .reel-title { font-size: 1.6rem; }
+            .reel-text { font-size: 1rem; }
+        }
+    </style>
+</head>
 
-      let scrollTimer;
-      container.addEventListener("scroll", () => {
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => {
-          const idx = Math.round(container.scrollTop / container.clientHeight);
-          snapToIndex(idx);
-        }, 120);
-      });
-    }
-
-    /* === SEARCH === */
-    let searchTimer;
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput) {
-      searchInput.oninput = e => {
-        clearTimeout(searchTimer);
-        const query = e.target.value.toLowerCase();
-
-        searchTimer = setTimeout(() => {
-          const results = allArticles.filter(a =>
-            (a.title || "").toLowerCase().includes(query) ||
-            (a.desc || "").toLowerCase().includes(query)
-          );
-
-          const list = document.getElementById("searchResults");
-          if (!results.length) {
-            list.innerHTML = "<div class='loading'>No matches found.</div>";
-            return;
-          }
-
-          list.innerHTML = results.map(a => `
-            <div class="news-card" onclick="window.open('${a.url}', '_blank')">
-              <img src="${a.img || 'image-2.png'}" class="news-image"
-                   onerror="this.onerror=null;this.src='image-2.png';">
-              <div class="news-content">
-                <div class="news-title">${a.title || ""}</div>
-                <div class="news-meta">
-                  <span class="source-tag">${a.source || "Source"}</span>
-                  <span>${new Date(a.date).toLocaleDateString()}</span>
+<body data-theme="light">
+    
+    <!-- Sidebar + Overlay -->
+    <div class="overlay" id="overlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Updates Menu</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="openModal('settings')"><span class="icon">⚙️</span> Settings</a></li>
+            <li><a href="#" onclick="openModal('help')"><span class="icon">❓</span> Help & FAQ</a></li>
+            <li><a href="#" onclick="openModal('about')"><span class="icon">ℹ️</span> About Developer</a></li>
+            <li><a href="#" onclick="refreshNews()"><span class="icon">🔄</span> Refresh News</a></li>
+        </ul>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+        </div>
+        <div class="header-center">
+            <img src="image-2.png" id="logoImg" alt="Updates Logo" class="logo" onclick="showPage('home', this)" onerror="this.onerror=null; this.src='image-2.png';">
+            <h1>Updates</h1>
+        </div>
+        <div style="width: 40px;"></div>
+    </header>
+    
+    <!-- Pages -->
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div id="newsList" class="card-list">
+                <div class="loading">
+                    <div class="loader-wrap" id="homeLoader">
+                        <div class="spinner"></div>
+                        <div>Loading top 10 trending headlines...</div>
+                    </div>
                 </div>
-              </div>
             </div>
-          `).join("");
-        }, 500);
-      };
-    }
-
-    /* === BOOKMARKS === */
-    function saveArticle(idx) {
-      let bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-      const article = allArticles[idx];
-      if (!article) return alert("Unable to save article.");
-      bookmarks.push(article);
-      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-      alert("Article saved to bookmarks!");
-    }
-
-    function loadBookmarks() {
-      const list = document.getElementById("bookmarksList");
-      const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-      if (!bookmarks.length) {
-        list.innerHTML = "<div class='loading'>Empty. Save articles to see them here.</div>";
-        return;
-      }
-
-      list.innerHTML = bookmarks.map(a => `
-        <div class="news-card" onclick="window.open('${a.url}', '_blank')">
-          <img src="${a.img || 'image-2.png'}" class="news-image"
-               onerror="this.onerror=null;this.src='image-2.png';">
-          <div class="news-content">
-            <div class="news-title">${a.title || ""}</div>
-            <div class="news-meta">
-              <span class="source-tag">${a.source || "Source"}</span>
-              <span>${new Date(a.date).toLocaleDateString()}</span>
-            </div>
-          </div>
         </div>
-      `).join("");
-    }
-
-    /* === LANGUAGE CHANGE === */
-    function changeLanguage() {
-      currentLang = document.getElementById("langSelect").value;
-      localStorage.setItem("lang", currentLang);
-
-      document.getElementById("newsList").innerHTML = `
-        <div class="loading">
-          <div class="loader-wrap">
-            <div class="spinner"></div>
-            <div class="loader-sub">
-              Fetching latest headlines, compiling top stories for you...
+        
+        <!-- Search Page -->
+        <div id="search" class="page">
+            <div class="section-header">
+                <h2 class="section-title">Search</h2>
             </div>
-          </div>
-        </div>
-      `;
-      document.getElementById("reelsContainer").innerHTML = `
-        <div class="loading" id="reelsLoader" style="color:white; padding-top:50vh;">
-          <div class="loader-wrap" style="color:#fff;">
-            <div class="spinner" style="border-top-color:#fff;"></div>
-            <div class="loader-sub" style="color:#ddd;">
-              Loading quick reels, swipe up or down to move between stories
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for any topic...">
             </div>
-          </div>
+            <div id="searchResults" class="card-list">
+                <div class="loading">Type something to search...</div>
+            </div>
         </div>
-      `;
-      fetchAllNews(true);
-    }
-
-    /* === INIT === */
-    document.getElementById("langSelect").value = currentLang;
-    fetchAllNews();
-    console.log("Updates App Initialized - Developer VIC team - Source: 5 APIs Connected");
-  </script>
+        
+        <!-- Quick News Reels -->
+        <div id="quick" class="page">
+            <div class="reels-container" id="reelsContainer">
+                <div class="loading" id="reelsLoader" style="color:white; padding-top: 50vh;">
+                    <div class="loader-wrap" style="color: #fff;">
+                        <div class="spinner" style="border-top-color: #fff;"></div>
+                        <div style="color: #ddd;">Loading quick news reels...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bookmarks -->
+        <div id="bookmarks" class="page">
+            <div class="section-header">
+                <h2 class="section-title">Saved Articles</h2>
+            </div>
+            <div id="bookmarksList" class="card-list">
+                <div class="loading">No bookmarks saved yet.</div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showPage('home', this)">
+            <div class="nav-icon">🏠</div>
+            <div>Home</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('search', this)">
+            <div class="nav-icon">🔍</div>
+            <div>Search</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('quick', this)">
+            <div class="nav-icon">⚡</div>
+            <div>Quick</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('bookmarks', this)">
+            <div class="nav-icon">💾</div>
+            <div>Saved</div>
+        </a>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('settings')">×</span>
+            <div class="modal-header">Settings</div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom: 0.5rem; font-weight:600;">Dark Mode</label>
+                <button onclick="toggleDarkMode()" id="themeBtn" style="padding:0.6rem 1.2rem; border-radius:8px; border:1px solid var(--border-color); cursor:pointer; background:var(--accent-color); color:white; width:100%;">Toggle Theme</button>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom: 0.5rem; font-weight:600;">News Language</label>
+                <select id="langSelect" onchange="changeLanguage()" style="width:100%; padding:0.8rem; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-primary);">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="ar">Arabic</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ja">Japanese</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ru">Russian</option>
+                    <option value="it">Italian</option>
+                    <option value="ko">Korean</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help & FAQ Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('help')">×</span>
+            <div class="modal-header">Help & FAQ</div>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">Need help? Contact us securely:</p>
+                <a href="mailto:vivivictor.11111@gmail.com" class="contact-email">📧 vivivictor.11111@gmail.com</a>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: How do I change the language?</div>
+                <div class="faq-answer">A: Go to Settings (☰ menu) and select your preferred language from the dropdown. News will automatically refresh in your chosen language.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: What is Quick News?</div>
+                <div class="faq-answer">A: Quick News is a reel-style feature showing 60-word summaries. Swipe up for next article, swipe down for previous. Tap to read full story.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: How to save articles?</div>
+                <div class="faq-answer">A: Click the bookmark icon (🔖) on any article card. Access saved articles from the "Saved" tab at the bottom.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: How often does news update?</div>
+                <div class="faq-answer">A: News updates every 30 minutes automatically. You can manually refresh anytime from the menu.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: Which news sources do you use?</div>
+                <div class="faq-answer">A: We aggregate from 5 premium APIs: NewsAPI, GNews, NewsData, Currents, and WorldNews - ensuring diverse, verified content.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: Is my data secure?</div>
+                <div class="faq-answer">A: Yes! We use military-grade encryption, rate limiting, and never store personal data. All preferences are saved locally on your device.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: Why are some images missing?</div>
+                <div class="faq-answer">A: Some news sources don't provide images. We show placeholders in such cases while maintaining full article access.</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('about')">×</span>
+            <img src="image-2.png" style="width:80px; height:80px; border-radius:15px; margin-bottom: 1rem;" onerror="this.onerror=null; this.src='image-2.png';">
+            <div class="modal-header">About Updates</div>
+            <p style="line-height:1.6; color:var(--text-secondary);">
+                Updates is a professional news aggregator bringing you headlines from multiple trusted sources worldwide.
+                <br><br>
+                <strong>Developer:</strong> VIC Team<br>
+                <strong>Version:</strong> 1.0.0<br>
+                <strong>Release:</strong> January 2026<br>
+                <br>
+                Built with ❤️ for news enthusiasts who value speed, accuracy, and privacy.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // === CONFIGURATION ===
+        const BACKEND_URL = 'https://backend-ml60.onrender.com/api';
+        const CACHE_TTL = 30 * 60 * 1000; // 30 Minutes
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let allArticles = { home: [], quick: [] };
+        
+        // === CORE UI LOGIC ===
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        
+        menuBtn.onclick = () => {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        };
+        
+        overlay.onclick = () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        };
+        
+        function showPage(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const page = document.getElementById(id);
+            if (page) page.classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (el && el.classList.contains('nav-item')) {
+                el.classList.add('active');
+            } else {
+                const bottomMap = { home: 0, search: 1, quick: 2, bookmarks: 3 };
+                const idx = bottomMap[id];
+                if (typeof idx !== 'undefined') {
+                    const items = document.querySelectorAll('.nav-item');
+                    if (items[idx]) items[idx].classList.add('active');
+                }
+            }
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            
+            if (id !== 'quick') {
+                window.scrollTo(0, 0);
+            } else {
+                const container = document.getElementById('reelsContainer');
+                if (container) {
+                    container.scrollTo({ top: 0, behavior: 'instant' });
+                    setTimeout(() => snapToIndex(0), 50);
+                }
+            }
+            
+            if (id === 'bookmarks') loadBookmarks();
+        }
+        
+        function openModal(id) {
+            const m = document.getElementById(id + 'Modal');
+            if (m) m.classList.add('active');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+        
+        function closeModal(id) {
+            const m = document.getElementById(id + 'Modal');
+            if (m) m.classList.remove('active');
+        }
+        
+        function refreshNews() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            localStorage.removeItem('news_' + currentLang);
+            localStorage.removeItem('news_' + currentLang + '_time');
+            fetchAllNews(true);
+        }
+        
+        // === THEME LOGIC ===
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        }
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+        
+        // === SUMMARY HELPER (60 words max) ===
+        function getSummary(text) {
+            if (!text || typeof text !== 'string') return 'Click to read the full story.';
+            const words = text.split(/\s+/).filter(Boolean);
+            if (words.length <= 60) return text;
+            return words.slice(0, 60).join(' ') + '…';
+        }
+        
+        // === DATA FETCHING - BACKEND v8.0 COMPATIBLE ===
+        async function fetchAllNews(force = false) {
+            const cacheKey = 'news_' + currentLang;
+            const cached = localStorage.getItem(cacheKey);
+            const cacheTime = localStorage.getItem(cacheKey + '_time');
+            
+            if (!force && cached && cacheTime && (Date.now() - cacheTime < CACHE_TTL)) {
+                allArticles = JSON.parse(cached);
+                displayNews(allArticles);
+                return;
+            }
+            
+            try {
+                showHomeLoader(true);
+                showReelsLoader(true);
+                
+                const endpoints = ['newsapi', 'newsdata', 'gnews', 'currents', 'worldnews'];
+                const promises = endpoints.map(ep =>
+                    fetch(`${BACKEND_URL}/${ep}?country=in&language=${currentLang}`)
+                        .then(r => r.json())
+                        .catch(() => ({ home: [], quick: [] }))
+                );
+                
+                const results = await Promise.all(promises);
+                
+                // Merge home and quick separately
+                let mergedHome = [];
+                let mergedQuick = [];
+                
+                results.forEach(data => {
+                    if (data.home && Array.isArray(data.home)) {
+                        mergedHome = mergedHome.concat(data.home);
+                    }
+                    if (data.quick && Array.isArray(data.quick)) {
+                        mergedQuick = mergedQuick.concat(data.quick);
+                    }
+                });
+                
+                // Sort by date
+                mergedHome = mergedHome.sort((a, b) => 
+                    new Date(b.publishedAt || b.date) - new Date(a.publishedAt || a.date)
+                );
+                mergedQuick = mergedQuick.sort((a, b) => 
+                    new Date(b.publishedAt || b.date) - new Date(a.publishedAt || a.date)
+                );
+                
+                allArticles = {
+                    home: mergedHome.slice(0, 10), // Top 10 for home
+                    quick: mergedQuick.slice(0, 100) // Up to 100 for quick
+                };
+                
+                localStorage.setItem(cacheKey, JSON.stringify(allArticles));
+                localStorage.setItem(cacheKey + '_time', Date.now());
+                
+                displayNews(allArticles);
+            } catch (err) {
+                console.error('Fetch Error:', err);
+                document.getElementById('newsList').innerHTML = '<div class="loading">Failed to load. Check connection.</div>';
+                document.getElementById('reelsContainer').innerHTML = '<div class="loading" style="color:white;">Failed to load reels.</div>';
+            } finally {
+                showHomeLoader(false);
+                showReelsLoader(false);
+            }
+        }
+        
+        function showHomeLoader(show) {
+            const homeLoader = document.getElementById('homeLoader');
+            if (!homeLoader) return;
+            homeLoader.style.display = show ? 'flex' : 'none';
+        }
+        
+        function showReelsLoader(show) {
+            const reelsLoader = document.getElementById('reelsLoader');
+            if (!reelsLoader) return;
+            reelsLoader.style.display = show ? 'block' : 'none';
+        }
+        
+        function displayNews(articles) {
+            const list = document.getElementById('newsList');
+            const reels = document.getElementById('reelsContainer');
+            
+            if (!articles.home || !articles.home.length) {
+                list.innerHTML = '<div class="loading">No news found for this language.</div>';
+                reels.innerHTML = '<div class="loading" style="color:white;">No quick news available.</div>';
+                return;
+            }
+            
+            // Home: Top 10 trending
+            list.innerHTML = articles.home.map((a, i) => `
+                <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                    <img src="${a.urlToImage || a.img || 'https://via.placeholder.com/400x280/3b82f6/ffffff?text=No+Image'}" 
+                         class="news-image" 
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/400x280/3b82f6/ffffff?text=No+Image';">
+                    <div class="news-content">
+                        <div class="news-title">${a.title || ''}</div>
+                        <div class="news-summary">${getSummary(a.description || a.desc || '')}</div>
+                        <div class="news-meta">
+                            <span class="source-tag">${(typeof a.source === 'string' ? a.source : (a.source?.name || 'Source'))}</span>
+                            <span>${new Date(a.publishedAt || a.date || Date.now()).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Quick: Remaining articles as reels
+            if (!articles.quick || !articles.quick.length) {
+                reels.innerHTML = '<div class="loading" style="color:white;">No quick news available.</div>';
+            } else {
+                reels.innerHTML = articles.quick.map((a, idx) => `
+                    <div class="reel" data-idx="${idx}">
+                        <img src="${a.urlToImage || a.img || 'https://via.placeholder.com/400x600/1e3a8a/ffffff?text=No+Image'}" 
+                             class="reel-bg-image" 
+                             onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/1e3a8a/ffffff?text=No+Image';">
+                        <div class="reel-content-overlay" onclick="window.open('${a.url}', '_blank')">
+                            <span class="reel-source">${(typeof a.source === 'string' ? a.source : (a.source?.name || 'Source'))}</span>
+                            <div class="reel-title">${a.title || ''}</div>
+                            <div class="reel-text">${getSummary(a.description || a.desc || '')}</div>
+                            <div class="tap-hint">Tap to open • Swipe for more</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                setTimeout(() => snapToIndex(0), 100);
+            }
+        }
+        
+        // === ULTRA-SMOOTH REELS SWIPE LOGIC ===
+        const container = document.getElementById('reelsContainer');
+        let touchStartY = 0;
+        let isTouching = false;
+        let currentIndex = 0;
+        let isScrolling = false;
+        
+        function snapToIndex(index) {
+            const reels = Array.from(document.querySelectorAll('.reel'));
+            if (!reels.length) return;
+            
+            index = Math.max(0, Math.min(index, reels.length - 1));
+            currentIndex = index;
+            
+            if (isScrolling) return;
+            isScrolling = true;
+            
+            const offset = index * container.clientHeight;
+            container.scrollTo({ top: offset, behavior: 'smooth' });
+            
+            setTimeout(() => { isScrolling = false; }, 500);
+        }
+        
+        if (container) {
+            let lastY = 0;
+            
+            container.addEventListener('touchstart', (e) => {
+                if (!e.touches || !e.touches[0]) return;
+                isTouching = true;
+                touchStartY = e.touches[0].clientY;
+                lastY = touchStartY;
+            }, { passive: true });
+            
+            container.addEventListener('touchmove', (e) => {
+                if (!isTouching || !e.touches || !e.touches[0]) return;
+                lastY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            container.addEventListener('touchend', (e) => {
+                if (!isTouching) return;
+                isTouching = false;
+                
+                const dy = touchStartY - lastY;
+                const threshold = 50;
+                
+                if (Math.abs(dy) > threshold) {
+                    if (dy > 0) {
+                        snapToIndex(currentIndex + 1);
+                    } else {
+                        snapToIndex(currentIndex - 1);
+                    }
+                } else {
+                    snapToIndex(currentIndex);
+                }
+            }, { passive: true });
+            
+            let scrollTimer;
+            container.addEventListener('scroll', () => {
+                if (isScrolling) return;
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(() => {
+                    const idx = Math.round(container.scrollTop / container.clientHeight);
+                    if (idx !== currentIndex) {
+                        currentIndex = idx;
+                    }
+                }, 150);
+            }, { passive: true });
+        }
+        
+        // === SEARCH ===
+        let searchTimer;
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.oninput = (e) => {
+                clearTimeout(searchTimer);
+                const query = e.target.value.toLowerCase();
+                
+                searchTimer = setTimeout(() => {
+                    const combined = [...allArticles.home, ...allArticles.quick];
+                    const results = combined.filter(a =>
+                        (a.title || '').toLowerCase().includes(query) ||
+                        (a.description || a.desc || '').toLowerCase().includes(query)
+                    );
+                    
+                    const list = document.getElementById('searchResults');
+                    if (!results.length) {
+                        list.innerHTML = '<div class="loading">No matches found.</div>';
+                        return;
+                    }
+                    
+                    list.innerHTML = results.map(a => `
+                        <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                            <div class="news-content">
+                                <div class="news-title">${a.title || ''}</div>
+                                <div class="news-meta">
+                                    <span class="source-tag">${(typeof a.source === 'string' ? a.source : (a.source?.name || 'Source'))}</span>
+                                    <span>${new Date(a.publishedAt || a.date || Date.now()).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }, 500);
+            };
+        }
+        
+        // === BOOKMARKS ===
+        function loadBookmarks() {
+            const list = document.getElementById('bookmarksList');
+            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            if (!bookmarks.length) {
+                list.innerHTML = '<div class="loading">Empty. Save articles to see them here.</div>';
+                return;
+            }
+            
+            list.innerHTML = bookmarks.map(a => `
+                <div class="news-card" onclick="window.open('${a.url}', '_blank')">
+                    <div class="news-content">
+                        <div class="news-title">${a.title || ''}</div>
+                        <div class="news-meta">
+                            <span class="source-tag">${(typeof a.source === 'string' ? a.source : (a.source?.name || 'Source'))}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // === LANGUAGE CHANGE ===
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            localStorage.setItem('lang', currentLang);
+            closeModal('settings');
+            
+            document.getElementById('newsList').innerHTML = '<div class="loading"><div class="loader-wrap"><div class="spinner"></div><div>Loading top 10 trending headlines...</div></div></div>';
+            document.getElementById('reelsContainer').innerHTML = '<div class="loading" id="reelsLoader" style="color:white; padding-top:50vh;"><div class="loader-wrap" style="color:#fff;"><div class="spinner" style="border-top-color:#fff;"></div><div style="color:#ddd;">Loading quick news reels...</div></div></div>';
+            
+            fetchAllNews(true);
+        }
+        
+        // === INIT ===
+        document.getElementById('langSelect').value = currentLang;
+        fetchAllNews();
+        
+        console.log('✅ Updates v1.0.0 Initialized | Language:', currentLang);
+    </script>
 </body>
 </html>
