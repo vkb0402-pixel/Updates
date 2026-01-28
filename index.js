@@ -1,9 +1,10 @@
 // ============================================
-// 🔐 ULTRA-SECURE NEWS API BACKEND v8.0
+// 🔐 ULTRA-SECURE NEWS API BACKEND v9.0
 // ============================================
 // Production-ready backend for Updates news platform
-// Advanced Language Detection & Organization
-// Home: 10 Trending | Quick: Remaining Articles
+// Perfect Frontend Integration | Advanced Language Detection
+// Ultra-Efficient API Collection | Professional Error Handling
+// Home: 10 Trending | Quick: Up to 100 Articles
 // ============================================
 
 require('dotenv').config();
@@ -25,7 +26,7 @@ const seenArticlesGlobal = new Set();
 const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
 const MAX_CACHE_SIZE = 3000;
 const HOME_LIMIT = 10; // Only 10 articles for home
-const QUICK_LIMIT = 100; // Rest for quick news
+const QUICK_LIMIT = 100; // Up to 100 for quick news
 
 // ============================================
 // 🌍 LANGUAGE DETECTION SYSTEM
@@ -130,7 +131,10 @@ function detectLanguage(text, requestedLang) {
 
 // Filter articles by language
 function filterByLanguage(articles, requestedLang) {
+    if (!Array.isArray(articles)) return [];
+    
     return articles.filter(article => {
+        if (!article || !article.title) return false;
         const text = `${article.title || ''} ${article.description || ''}`;
         const detectedLang = detectLanguage(text, requestedLang);
         return detectedLang === requestedLang;
@@ -149,9 +153,11 @@ function createArticleHash(article) {
 }
 
 function removeDuplicates(articles) {
+    if (!Array.isArray(articles)) return [];
+    
     const seen = new Set();
     return articles.filter(article => {
-        if (!article.title || (!article.url && !article.link)) return false;
+        if (!article || !article.title || (!article.url && !article.link)) return false;
         const hash = createArticleHash(article);
         if (seen.has(hash) || seenArticlesGlobal.has(hash)) return false;
         seen.add(hash);
@@ -169,6 +175,7 @@ function cleanOldCache() {
         seenArticlesGlobal.clear();
         entries.slice(-1500).forEach(hash => seenArticlesGlobal.add(hash));
     }
+    
     if (newsCache.size > 150) {
         const entries = Array.from(newsCache.entries());
         const sortedByTime = entries.sort((a, b) => b[1].timestamp - a[1].timestamp);
@@ -212,7 +219,7 @@ app.use(helmet({
 // Layer 2: Multi-Tier Rate Limiting
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 3000,
+    max: 5000,
     message: {
         error: 'Too many requests. Please try again in 15 minutes.',
         code: 'RATE_LIMIT_EXCEEDED'
@@ -229,19 +236,10 @@ const globalLimiter = rateLimit({
 
 const apiLimiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 200,
+    max: 300,
     message: { 
         error: 'Too many API requests. Please slow down.',
         code: 'API_RATE_LIMIT'
-    }
-});
-
-const searchLimiter = rateLimit({
-    windowMs: 60 * 1000,
-    max: 60,
-    message: { 
-        error: 'Too many search requests. Please slow down.',
-        code: 'SEARCH_RATE_LIMIT'
     }
 });
 
@@ -288,7 +286,6 @@ app.use((req, res, next) => {
                 if (key.startsWith('$') || key.includes('.') || key.includes('__proto__')) {
                     delete obj[key];
                 } else if (typeof obj[key] === 'string') {
-                    // Remove potentially dangerous characters
                     obj[key] = obj[key]
                         .replace(/[<>]/g, '')
                         .replace(/javascript:/gi, '')
@@ -360,46 +357,10 @@ function validateInput(country, language) {
     };
 }
 
-function validateSearchQuery(query) {
-    if (!query || typeof query !== 'string') return '';
-    return query
-        .trim()
-        .replace(/[<>]/g, '')
-        .replace(/javascript:/gi, '')
-        .replace(/on\w+=/gi, '')
-        .substring(0, 100);
-}
-
-// ============================================
-// 🔒 SECURITY HEADERS
-// ============================================
-app.use((req, res, next) => {
-    res.removeHeader('X-Powered-By');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-    res.setHeader('X-DNS-Prefetch-Control', 'off');
-    res.setHeader('Expect-CT', 'max-age=86400, enforce');
-    next();
-});
-
-// ============================================
-// 📝 ADVANCED REQUEST LOGGING
-// ============================================
-app.use((req, res, next) => {
-    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 
-               req.headers['x-real-ip'] || 
-               req.ip;
-    const anonymizedIP = ip.substring(0, ip.lastIndexOf('.')) + '.xxx';
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - IP: ${anonymizedIP}`);
-    next();
-});
-
 // ============================================
 // 🌐 FETCH WITH TIMEOUT & RETRY
 // ============================================
-async function fetchWithTimeout(url, timeout = 18000, retries = 2) {
+async function fetchWithTimeout(url, timeout = 15000, retries = 2) {
     for (let i = 0; i <= retries; i++) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -408,7 +369,7 @@ async function fetchWithTimeout(url, timeout = 18000, retries = 2) {
             const response = await fetch(url, {
                 signal: controller.signal,
                 headers: {
-                    'User-Agent': 'NewsProxy/8.0 (VKB Updates Platform)',
+                    'User-Agent': 'NewsProxy/9.0 (VKB Updates Platform)',
                     'Accept': 'application/json',
                     'Accept-Language': 'en-US,en;q=0.9',
                     'Cache-Control': 'no-cache'
@@ -436,24 +397,24 @@ async function fetchWithTimeout(url, timeout = 18000, retries = 2) {
 app.get('/', (req, res) => {
     res.json({
         status: 'online',
-        message: '📰 Updates News API - Ultra-Secure Backend v8.0',
-        version: '8.0.0',
+        message: '📰 Updates News API - Ultra-Secure Backend v9.0',
+        version: '9.0.0',
         timestamp: new Date().toISOString(),
         endpoints: [
             '/api/newsapi',
             '/api/newsdata',
             '/api/gnews',
             '/api/currents',
-            '/api/worldnews',
-            '/api/search'
+            '/api/worldnews'
         ],
         features: {
             totalAPIs: 5,
-            searchEnabled: true,
             languageDetection: true,
             homeLimit: HOME_LIMIT,
             quickLimit: QUICK_LIMIT,
-            supportedLanguages: Object.keys(LANGUAGE_PATTERNS)
+            supportedLanguages: Object.keys(LANGUAGE_PATTERNS),
+            cacheEnabled: true,
+            cacheDuration: '30 minutes'
         }
     });
 });
@@ -486,7 +447,7 @@ app.get('/api/newsapi', apiLimiter, async (req, res) => {
     try {
         const { country, language } = validateInput(req.query.country, req.query.language);
         const cacheKey = `newsapi_${country}_${language}`;
-
+        
         if (newsCache.has(cacheKey)) {
             const cached = newsCache.get(cacheKey);
             if (Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -494,15 +455,15 @@ app.get('/api/newsapi', apiLimiter, async (req, res) => {
                 return res.json(cached.data);
             }
         }
-
+        
         console.log(`📰 Fetching NewsAPI: ${language}`);
         const url = `https://newsapi.org/v2/top-headlines?country=${country}&language=${language}&apiKey=${API_KEYS.newsapi}&pageSize=100`;
         const response = await fetchWithTimeout(url);
-
+        
         if (!response.ok) {
             throw new Error(`NewsAPI: ${response.status}`);
         }
-
+        
         const data = await response.json();
         let articles = removeDuplicates(data.articles || []);
         
@@ -517,18 +478,26 @@ app.get('/api/newsapi', apiLimiter, async (req, res) => {
             quick: articles.slice(HOME_LIMIT, HOME_LIMIT + QUICK_LIMIT),
             language: language
         };
-
+        
         newsCache.set(cacheKey, { data: result, timestamp: Date.now() });
         console.log(`✅ NewsAPI: ${result.home.length} home, ${result.quick.length} quick (${language})`);
         res.json(result);
+        
     } catch (error) {
         console.error('NewsAPI Error:', error.message);
         const { country, language } = validateInput(req.query.country, req.query.language);
         const cacheKey = `newsapi_${country}_${language}`;
+        
         if (newsCache.has(cacheKey)) {
             return res.json(newsCache.get(cacheKey).data);
         }
-        res.status(500).json({ error: 'Failed to fetch from NewsAPI' });
+        
+        res.status(500).json({ 
+            error: 'Failed to fetch from NewsAPI',
+            home: [],
+            quick: [],
+            status: 'error'
+        });
     }
 });
 
@@ -537,7 +506,7 @@ app.get('/api/gnews', apiLimiter, async (req, res) => {
     try {
         const { country, language } = validateInput(req.query.country, req.query.lang || req.query.language);
         const cacheKey = `gnews_${country}_${language}`;
-
+        
         if (newsCache.has(cacheKey)) {
             const cached = newsCache.get(cacheKey);
             if (Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -545,15 +514,15 @@ app.get('/api/gnews', apiLimiter, async (req, res) => {
                 return res.json(cached.data);
             }
         }
-
+        
         console.log(`📰 Fetching GNews: ${language}`);
         const url = `https://gnews.io/api/v4/top-headlines?country=${country}&lang=${language}&apikey=${API_KEYS.gnews}&max=100`;
         const response = await fetchWithTimeout(url);
-
+        
         if (!response.ok) {
             throw new Error(`GNews: ${response.status}`);
         }
-
+        
         const data = await response.json();
         let articles = removeDuplicates(data.articles || []);
         
@@ -567,18 +536,26 @@ app.get('/api/gnews', apiLimiter, async (req, res) => {
             quick: articles.slice(HOME_LIMIT, HOME_LIMIT + QUICK_LIMIT),
             language: language
         };
-
+        
         newsCache.set(cacheKey, { data: result, timestamp: Date.now() });
         console.log(`✅ GNews: ${result.home.length} home, ${result.quick.length} quick (${language})`);
         res.json(result);
+        
     } catch (error) {
         console.error('GNews Error:', error.message);
         const { country, language } = validateInput(req.query.country, req.query.lang || req.query.language);
         const cacheKey = `gnews_${country}_${language}`;
+        
         if (newsCache.has(cacheKey)) {
             return res.json(newsCache.get(cacheKey).data);
         }
-        res.status(500).json({ error: 'Failed to fetch from GNews' });
+        
+        res.status(500).json({ 
+            error: 'Failed to fetch from GNews',
+            home: [],
+            quick: [],
+            status: 'error'
+        });
     }
 });
 
@@ -587,7 +564,7 @@ app.get('/api/newsdata', apiLimiter, async (req, res) => {
     try {
         const { country, language } = validateInput(req.query.country, req.query.language);
         const cacheKey = `newsdata_${country}_${language}`;
-
+        
         if (newsCache.has(cacheKey)) {
             const cached = newsCache.get(cacheKey);
             if (Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -595,15 +572,15 @@ app.get('/api/newsdata', apiLimiter, async (req, res) => {
                 return res.json(cached.data);
             }
         }
-
+        
         console.log(`📰 Fetching NewsData: ${language}`);
         const url = `https://newsdata.io/api/1/news?apikey=${API_KEYS.newsdata}&country=${country}&language=${language}`;
         const response = await fetchWithTimeout(url);
-
+        
         if (!response.ok) {
             throw new Error(`NewsData: ${response.status}`);
         }
-
+        
         const data = await response.json();
         let articles = removeDuplicates((data.results || []).map(r => ({
             title: r.title,
@@ -613,7 +590,7 @@ app.get('/api/newsdata', apiLimiter, async (req, res) => {
             source: { name: r.source_id || 'NewsData' },
             publishedAt: r.pubDate
         })));
-
+        
         // Language filtering
         articles = filterByLanguage(articles, language);
         
@@ -624,18 +601,26 @@ app.get('/api/newsdata', apiLimiter, async (req, res) => {
             quick: articles.slice(HOME_LIMIT, HOME_LIMIT + QUICK_LIMIT),
             language: language
         };
-
+        
         newsCache.set(cacheKey, { data: result, timestamp: Date.now() });
         console.log(`✅ NewsData: ${result.home.length} home, ${result.quick.length} quick (${language})`);
         res.json(result);
+        
     } catch (error) {
         console.error('NewsData Error:', error.message);
         const { country, language } = validateInput(req.query.country, req.query.language);
         const cacheKey = `newsdata_${country}_${language}`;
+        
         if (newsCache.has(cacheKey)) {
             return res.json(newsCache.get(cacheKey).data);
         }
-        res.status(500).json({ error: 'Failed to fetch from NewsData' });
+        
+        res.status(500).json({ 
+            error: 'Failed to fetch from NewsData',
+            home: [],
+            quick: [],
+            status: 'error'
+        });
     }
 });
 
@@ -644,7 +629,7 @@ app.get('/api/currents', apiLimiter, async (req, res) => {
     try {
         const { country, language } = validateInput(req.query.country, req.query.language);
         const cacheKey = `currents_${country}_${language}`;
-
+        
         if (newsCache.has(cacheKey)) {
             const cached = newsCache.get(cacheKey);
             if (Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -652,15 +637,15 @@ app.get('/api/currents', apiLimiter, async (req, res) => {
                 return res.json(cached.data);
             }
         }
-
+        
         console.log(`📰 Fetching Currents: ${language}`);
         const url = `https://api.currentsapi.services/v1/latest-news?apiKey=${API_KEYS.currents}&language=${language}&region=${country}`;
         const response = await fetchWithTimeout(url);
-
+        
         if (!response.ok) {
             throw new Error(`Currents: ${response.status}`);
         }
-
+        
         const data = await response.json();
         let articles = removeDuplicates((data.news || []).map(n => ({
             title: n.title,
@@ -670,7 +655,7 @@ app.get('/api/currents', apiLimiter, async (req, res) => {
             source: { name: n.author || 'Currents' },
             publishedAt: n.published
         })));
-
+        
         // Language filtering
         articles = filterByLanguage(articles, language);
         
@@ -681,18 +666,26 @@ app.get('/api/currents', apiLimiter, async (req, res) => {
             quick: articles.slice(HOME_LIMIT, HOME_LIMIT + QUICK_LIMIT),
             language: language
         };
-
+        
         newsCache.set(cacheKey, { data: result, timestamp: Date.now() });
         console.log(`✅ Currents: ${result.home.length} home, ${result.quick.length} quick (${language})`);
         res.json(result);
+        
     } catch (error) {
         console.error('Currents Error:', error.message);
         const { country, language } = validateInput(req.query.country, req.query.language);
         const cacheKey = `currents_${country}_${language}`;
+        
         if (newsCache.has(cacheKey)) {
             return res.json(newsCache.get(cacheKey).data);
         }
-        res.status(500).json({ error: 'Failed to fetch from Currents API' });
+        
+        res.status(500).json({ 
+            error: 'Failed to fetch from Currents API',
+            home: [],
+            quick: [],
+            status: 'error'
+        });
     }
 });
 
@@ -701,7 +694,7 @@ app.get('/api/worldnews', apiLimiter, async (req, res) => {
     try {
         const { language } = validateInput('in', req.query.language);
         const cacheKey = `worldnews_${language}`;
-
+        
         if (newsCache.has(cacheKey)) {
             const cached = newsCache.get(cacheKey);
             if (Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -709,15 +702,15 @@ app.get('/api/worldnews', apiLimiter, async (req, res) => {
                 return res.json(cached.data);
             }
         }
-
+        
         console.log(`📰 Fetching WorldNews: ${language}`);
         const url = `https://api.worldnewsapi.com/search-news?language=${language}&number=100&api-key=${API_KEYS.worldnews}`;
         const response = await fetchWithTimeout(url);
-
+        
         if (!response.ok) {
             throw new Error(`WorldNews: ${response.status}`);
         }
-
+        
         const data = await response.json();
         let articles = removeDuplicates((data.news || []).map(n => ({
             title: n.title,
@@ -727,102 +720,37 @@ app.get('/api/worldnews', apiLimiter, async (req, res) => {
             source: { name: n.author || 'World News' },
             publishedAt: n.publish_date
         })));
-
+        
         // Language filtering
         articles = filterByLanguage(articles, language);
         
         const result = {
-            status: 'success',
+            status: 'ok',
             totalResults: articles.length,
             home: articles.slice(0, HOME_LIMIT),
             quick: articles.slice(HOME_LIMIT, HOME_LIMIT + QUICK_LIMIT),
             language: language
         };
-
+        
         newsCache.set(cacheKey, { data: result, timestamp: Date.now() });
         console.log(`✅ WorldNews: ${result.home.length} home, ${result.quick.length} quick (${language})`);
         res.json(result);
+        
     } catch (error) {
         console.error('WorldNews Error:', error.message);
         const { language } = validateInput('in', req.query.language);
         const cacheKey = `worldnews_${language}`;
+        
         if (newsCache.has(cacheKey)) {
             return res.json(newsCache.get(cacheKey).data);
         }
-        res.status(500).json({ error: 'Failed to fetch from World News API' });
-    }
-});
-
-// ============================================
-// 🔍 ADVANCED SEARCH ENDPOINT
-// ============================================
-app.get('/api/search', searchLimiter, async (req, res) => {
-    try {
-        const query = validateSearchQuery(req.query.q);
-        const { language } = validateInput('in', req.query.language);
-
-        if (!query || query.length < 2) {
-            return res.status(400).json({ 
-                error: 'Search query must be at least 2 characters long' 
-            });
-        }
-
-        const cacheKey = `search_${query}_${language}`;
-        if (newsCache.has(cacheKey)) {
-            const cached = newsCache.get(cacheKey);
-            if (Date.now() - cached.timestamp < CACHE_DURATION) {
-                console.log(`✅ Cache hit: Search "${query}" (${language})`);
-                return res.json(cached.data);
-            }
-        }
-
-        console.log(`🔍 Search: "${query}" (${language})`);
-
-        const searchPromises = [
-            fetchWithTimeout(`https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=${language}&apiKey=${API_KEYS.newsapi}&pageSize=50&sortBy=relevancy`)
-                .then(r => r.json())
-                .then(d => d.articles || [])
-                .catch(() => []),
-
-            fetchWithTimeout(`https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=${language}&apikey=${API_KEYS.gnews}&max=50`)
-                .then(r => r.json())
-                .then(d => d.articles || [])
-                .catch(() => []),
-
-            fetchWithTimeout(`https://newsdata.io/api/1/news?apikey=${API_KEYS.newsdata}&q=${encodeURIComponent(query)}&language=${language}`)
-                .then(r => r.json())
-                .then(d => (d.results || []).map(r => ({
-                    title: r.title,
-                    description: r.description,
-                    url: r.link,
-                    urlToImage: r.image_url,
-                    source: { name: r.source_id },
-                    publishedAt: r.pubDate
-                })))
-                .catch(() => [])
-        ];
-
-        const results = await Promise.all(searchPromises);
-        let allArticles = results.flat();
         
-        // Language filtering for search results
-        allArticles = filterByLanguage(allArticles, language);
-        allArticles = removeDuplicates(allArticles);
-
-        const responseData = {
-            status: 'ok',
-            totalResults: allArticles.length,
-            articles: allArticles.slice(0, 50),
-            language: language,
-            query: query
-        };
-
-        newsCache.set(cacheKey, { data: responseData, timestamp: Date.now() });
-        console.log(`✅ Search: ${allArticles.length} results for "${query}" (${language})`);
-        res.json(responseData);
-    } catch (error) {
-        console.error('Search Error:', error.message);
-        res.status(500).json({ error: 'Search failed' });
+        res.status(500).json({ 
+            error: 'Failed to fetch from World News API',
+            home: [],
+            quick: [],
+            status: 'error'
+        });
     }
 });
 
@@ -839,8 +767,7 @@ app.use((req, res) => {
             '/api/newsdata',
             '/api/gnews',
             '/api/currents',
-            '/api/worldnews',
-            '/api/search'
+            '/api/worldnews'
         ]
     });
 });
@@ -855,7 +782,7 @@ app.use((err, req, res, next) => {
         method: req.method,
         timestamp: new Date().toISOString()
     });
-
+    
     res.status(err.status || 500).json({
         error: 'Internal server error',
         timestamp: new Date().toISOString(),
@@ -904,29 +831,30 @@ process.on('uncaughtException', (err) => {
 // ============================================
 const server = app.listen(PORT, () => {
     console.log(`
-╔════════════════════════════════════════════════════════════════╗
-║  🚀 UPDATES NEWS API - ULTRA-SECURE BACKEND v8.0             ║
-╠════════════════════════════════════════════════════════════════╣
-║  📡 Port: ${PORT}                                              ║
-║  🌍 Environment: ${process.env.NODE_ENV || 'development'}     ║
-║  📅 Started: ${new Date().toISOString()}                       ║
-╠════════════════════════════════════════════════════════════════╣
+╔═══════════════════════════════════════════════════════════════╗
+║  🚀 UPDATES NEWS API - ULTRA-SECURE BACKEND v9.0             ║
+╠═══════════════════════════════════════════════════════════════╣
+║  📡 Port: ${PORT.toString().padEnd(54)}║
+║  🌍 Environment: ${(process.env.NODE_ENV || 'development').padEnd(44)}║
+║  📅 Started: ${new Date().toISOString().padEnd(47)}║
+╠═══════════════════════════════════════════════════════════════╣
 ║  📰 5 NEWS APIs CONNECTED                                     ║
-║  📊 Home: ${HOME_LIMIT} trending articles per API             ║
-║  ⚡ Quick: ${QUICK_LIMIT} articles per API                    ║
-║  🌐 Languages: ${Object.keys(LANGUAGE_PATTERNS).length} supported ║
-╠════════════════════════════════════════════════════════════════╣
+║  📊 Home: ${HOME_LIMIT} trending articles per API${' '.repeat(31)}║
+║  ⚡ Quick: ${QUICK_LIMIT} articles per API${' '.repeat(34)}║
+║  🌐 Languages: ${Object.keys(LANGUAGE_PATTERNS).length} supported${' '.repeat(41)}║
+╠═══════════════════════════════════════════════════════════════╣
 ║  🛡️ SECURITY FEATURES:                                        ║
-║  ✅ Advanced language detection & filtering                   ║
-║  ✅ Multi-tier rate limiting                                  ║
-║  ✅ Enhanced helmet security headers                          ║
-║  ✅ Request retry mechanism                                   ║
-║  ✅ Input sanitization & validation                           ║
-║  ✅ Hash-based deduplication                                  ║
-║  ✅ Intelligent caching (30min TTL)                           ║
-║  ✅ Graceful shutdown handling                                ║
-╚════════════════════════════════════════════════════════════════╝
-    `);
+║  ✅ Advanced language detection & filtering                  ║
+║  ✅ Multi-tier rate limiting (5000/15min)                    ║
+║  ✅ Enhanced helmet security headers                         ║
+║  ✅ Fetch retry mechanism (2 retries)                        ║
+║  ✅ Input sanitization & validation                          ║
+║  ✅ Hash-based deduplication                                 ║
+║  ✅ Intelligent caching (30min TTL)                          ║
+║  ✅ Graceful shutdown handling                               ║
+║  ✅ Perfect frontend integration                             ║
+╚═══════════════════════════════════════════════════════════════╝
+`);
 });
 
 module.exports = app;
