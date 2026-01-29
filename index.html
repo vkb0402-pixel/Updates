@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Updates - Secure News Platform v10.0</title>
+    <title>Updates - Short Crisp News</title>
     
     <!-- Favicon and Icons -->
     <link rel="icon" href="image-2.png">
@@ -11,15 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- ✅ SECURITY: Content Security Policy Meta Tag -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline';
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        font-src 'self' https://fonts.gstatic.com data:;
-        img-src 'self' https: http: data:;
-        connect-src 'self' https://backend-ml60.onrender.com https://vkbofficial4u.github.io;
-    ">
+    <!-- ============================================ -->
+    <!-- 🛡️ SECURITY META TAGS -->
+    <!-- ============================================ -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://backend-ml60.onrender.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
     <style>
         :root {
@@ -36,7 +34,7 @@
             --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
         }
-
+        
         [data-theme="dark"] {
             --bg-color: #0f0f0f;
             --card-bg: #1a1a1a;
@@ -48,1525 +46,54 @@
             --border-color: #2d2d2d;
             --accent-color: #60a5fa;
         }
-
+        
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
+        
         html, body {
             height: 100%;
+            overflow-x: hidden;
         }
-
+        
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-color);
             padding-bottom: 70px;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease;
             color: var(--text-primary);
-            height: 100vh;
-            overflow: hidden;
         }
-
+        
         /* === Header === */
         header {
             background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
             color: white;
-            padding: 16px 20px;
+            padding: 15px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
             box-shadow: var(--shadow-md);
+        }
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-icon {
-            font-size: 28px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            user-select: none;
-        }
-
-        .menu-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .theme-toggle {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(180deg);
-        }
-
-        /* === Sidebar === */
-        .sidebar {
-            position: fixed;
-            left: -320px;
-            top: 0;
-            width: 300px;
-            height: 100vh;
-            background: var(--card-bg);
-            box-shadow: var(--shadow-lg);
-            transition: left 0.3s ease;
-            z-index: 2000;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1999;
-            display: none;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .sidebar-header h2 {
-            font-size: 22px;
-            color: var(--text-primary);
-        }
-
-        .close-sidebar {
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.2s;
-        }
-
-        .close-sidebar:hover {
-            color: var(--text-primary);
-        }
-
-        .sidebar-section {
-            margin-bottom: 30px;
-        }
-
-        .sidebar-section h3 {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-meta);
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .language-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .language-btn {
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .language-btn:hover {
-            border-color: var(--accent-color);
-            background: var(--accent-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .language-btn.active {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        .sidebar-link {
-            display: block;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .sidebar-link:hover {
-            background: var(--accent-color);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        /* === Main Content === */
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 72px);
-            overflow: hidden;
-        }
-
-        /* === Search Bar === */
-        .search-container {
-            padding: 16px 20px;
-            background: var(--card-bg);
-            box-shadow: var(--shadow-sm);
-            flex-shrink: 0;
-        }
-
-        .search-bar {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 50px 14px 20px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-color);
-            color: var(--text-primary);
-            transition: all 0.3s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .search-btn {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: all 0.2s;
-        }
-
-        .search-btn:hover {
-            background: var(--header-gradient-2);
-            transform: translateY(-50%) scale(1.05);
-        }
-
-        .clear-search {
-            position: absolute;
-            right: 52px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-meta);
-            cursor: pointer;
-            font-size: 20px;
-            padding: 4px;
-            display: none;
-        }
-
-        .clear-search.visible {
-            display: block;
-        }
-
-        .clear-search:hover {
-            color: var(--text-primary);
-        }
-
-        /* === Tabs === */
-        .tabs-container {
-            display: flex;
-            gap: 8px;
-            padding: 12px 20px;
-            background: var(--card-bg);
-            box-shadow: var(--shadow-sm);
-            overflow-x: auto;
-            flex-shrink: 0;
-            scrollbar-width: none;
-        }
-
-        .tabs-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            border: 2px solid var(--border-color);
-            background: var(--bg-color);
-            color: var(--text-primary);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .tab:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .tab.active {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        /* === Content Area === */
-        .content-wrapper {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 20px;
-        }
-
-        .content-wrapper::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .content-wrapper::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-
-        .content-wrapper::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        .content-wrapper::-webkit-scrollbar-thumb:hover {
-            background: var(--text-meta);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* === News Cards === */
-        .news-grid {
-            display: grid;
-            gap: 16px;
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        .news-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-        }
-
-        .news-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--accent-color);
-        }
-
-        .news-card-header {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .news-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background: var(--border-color);
-        }
-
-        .news-text {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .news-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 6px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .news-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 13px;
-            color: var(--text-meta);
-            flex-wrap: wrap;
-        }
-
-        .news-source {
-            font-weight: 500;
-            color: var(--accent-color);
-        }
-
-        .news-description {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* === Loading & Error States === */
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border-color);
-            border-top-color: var(--accent-color);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--text-meta);
-            font-size: 15px;
-        }
-
-        .error-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .error-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .error-text {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        .retry-btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .retry-btn:hover {
-            background: var(--header-gradient-2);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-meta);
-        }
-
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        /* === Bottom Navigation === */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--card-bg);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            z-index: 1000;
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 0;
-            color: var(--text-meta);
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .nav-item:hover {
-            color: var(--accent-color);
-        }
-
-        .nav-item.active {
-            color: var(--accent-color);
-        }
-
-        .nav-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        /* === Modal Styles === */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 3000;
-            overflow-y: auto;
-            animation: fadeIn 0.3s;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 16px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 24px;
-            position: relative;
-            animation: slideUp 0.3s;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .close-modal {
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--text-meta);
-            transition: color 0.2s;
-        }
-
-        .close-modal:hover {
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            color: var(--text-secondary);
-            line-height: 1.8;
-        }
-
-        .modal-body h3 {
-            color: var(--text-primary);
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        .modal-body p {
-            margin-bottom: 12px;
-        }
-
-        /* === Responsive Design === */
-        @media (min-width: 768px) {
-            h1 {
-                font-size: 28px;
-            }
-
-            .news-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .news-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .news-title {
-                font-size: 18px;
-            }
-
-            .bottom-nav {
-                display: none;
-            }
-
-            body {
-                padding-bottom: 0;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .news-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* === Utility Classes === */
-        .hidden {
-            display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-20 {
-            margin-top: 20px;
-        }
-
-        /* === Security Badge === */
-        .security-badge {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            box-shadow: var(--shadow-md);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .security-badge::before {
-            content: "🔒";
-        }
-    </style>
-</head>
-<body>
-    <!-- ✅ SECURITY BADGE -->
-    <div class="security-badge">
-        Secure v10.0
-    </div>
-
-    <!-- Header -->
-    <header>
-        <div class="header-left">
-            <span class="menu-icon" onclick="toggleSidebar()">☰</span>
-            <div class="logo-container">
-                <img src="image-2.png" alt="Updates Logo" class="logo" onerror="this.style.display='none'">
-                <h1>Updates</h1>
-            </div>
-        </div>
-        <div class="header-right">
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-                <span id="theme-icon">🌙</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Sidebar -->
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>Menu</h2>
-            <span class="close-sidebar" onclick="toggleSidebar()">×</span>
-        </div>
-
-        <div class="sidebar-section">
-            <h3>Select Language</h3>
-            <div class="language-grid">
-                <button class="language-btn active" onclick="changeLanguage('en')">🇬🇧 English</button>
-                <button class="language-btn" onclick="changeLanguage('hi')">🇮🇳 हिंदी</button>
-                <button class="language-btn" onclick="changeLanguage('es')">🇪🇸 Español</button>
-                <button class="language-btn" onclick="changeLanguage('fr')">🇫🇷 Français</button>
-                <button class="language-btn" onclick="changeLanguage('de')">🇩🇪 Deutsch</button>
-                <button class="language-btn" onclick="changeLanguage('ja')">🇯🇵 日本語</button>
-                <button class="language-btn" onclick="changeLanguage('zh')">🇨🇳 中文</button>
-                <button class="language-btn" onclick="changeLanguage('ar')">🇸🇦 العربية</button>
-                <button class="language-btn" onclick="changeLanguage('pt')">🇵🇹 Português</button>
-                <button class="language-btn" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
-                <button class="language-btn" onclick="changeLanguage('it')">🇮🇹 Italiano</button>
-                <button class="language-btn" onclick="changeLanguage('ko')">🇰🇷 한국어</button>
-            </div>
-        </div>
-
-        <div class="sidebar-section">
-            <h3>Navigation</h3>
-            <a class="sidebar-link" onclick="showModal('about')">About Updates</a>
-            <a class="sidebar-link" onclick="showModal('contact')">Contact Us</a>
-            <a class="sidebar-link" onclick="showModal('privacy')">Privacy Policy</a>
-            <a class="sidebar-link" onclick="showModal('terms')">Terms of Service</a>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- ✅ SECURED: Search Bar with Input Validation -->
-        <div class="search-container">
-            <div class="search-bar">
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    id="searchInput" 
-                    placeholder="Search news..." 
-                    maxlength="100"
-                    autocomplete="off"
-                >
-                <button class="clear-search" id="clearSearch" onclick="clearSearch()">×</button>
-                <button class="search-btn" onclick="performSearch()" aria-label="Search">🔍</button>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="tabs-container">
-            <button class="tab active" onclick="switchTab('home')">🏠 Home</button>
-            <button class="tab" onclick="switchTab('all')">🌐 All News</button>
-            <button class="tab" onclick="switchTab('newsapi')">📰 NewsAPI</button>
-            <button class="tab" onclick="switchTab('gnews')">📡 GNews</button>
-            <button class="tab" onclick="switchTab('newsdata')">📊 NewsData</button>
-            <button class="tab" onclick="switchTab('currents')">⚡ Currents</button>
-            <button class="tab" onclick="switchTab('worldnews')">🌍 WorldNews</button>
-        </div>
-
-        <!-- Content Area -->
-        <div class="content-wrapper">
-            <!-- Home Tab -->
-            <div class="tab-content active" id="home-content">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p class="loading-text">Loading trending news...</p>
-                </div>
-            </div>
-
-            <!-- All News Tab -->
-            <div class="tab-content" id="all-content">
-                <div class="news-grid"></div>
-            </div>
-
-            <!-- NewsAPI Tab -->
-            <div class="tab-content" id="newsapi-content">
-                <div class="news-grid"></div>
-            </div>
-
-            <!-- GNews Tab -->
-            <div class="tab-content" id="gnews-content">
-                <div class="news-grid"></div>
-            </div>
-
-            <!-- NewsData Tab -->
-            <div class="tab-content" id="newsdata-content">
-                <div class="news-grid"></div>
-            </div>
-
-            <!-- Currents Tab -->
-            <div class="tab-content" id="currents-content">
-                <div class="news-grid"></div>
-            </div>
-
-            <!-- WorldNews Tab -->
-            <div class="tab-content" id="worldnews-content">
-                <div class="news-grid"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('home')">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Home</span>
-        </button>
-        <button class="nav-item" onclick="switchTab('all')">
-            <span class="nav-icon">🌐</span>
-            <span class="nav-label">All</span>
-        </button>
-        <button class="nav-item" onclick="toggleSidebar()">
-            <span class="nav-icon">⚙️</span>
-            <span class="nav-label">Settings</span>
-        </button>
-    </nav>
-
-    <!-- Modals -->
-    <div class="modal" id="aboutModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">About Updates</h2>
-                <span class="close-modal" onclick="closeModal('about')">×</span>
-            </div>
-            <div class="modal-body">
-                <p><strong>Updates v10.0</strong> is a next-generation news aggregation platform engineered to deliver breaking news from around the world with unparalleled speed, accuracy, and security.</p>
-                <h3>✅ Security Features</h3>
-                <p>• XSS Protection with input sanitization<br>
-                • Content Security Policy (CSP) enabled<br>
-                • Safe DOM manipulation (no innerHTML)<br>
-                • Input validation on all user data<br>
-                • CORS protection</p>
-                <h3>🚀 Technical Details</h3>
-                <p>• Developer: VIC Team<br>
-                • Version: 10.0.0 (Production-Ready)<br>
-                • Backend APIs: 5 Premium Sources<br>
-                • Supported Languages: 12 Global Languages<br>
-                • Security Level: Military-Grade</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="contactModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Contact Us</h2>
-                <span class="close-modal" onclick="closeModal('contact')">×</span>
-            </div>
-            <div class="modal-body">
-                <p>Need assistance? Our dedicated support team is here to help!</p>
-                <h3>📧 Email Support</h3>
-                <p>support@updates-news.com</p>
-                <h3>⏱️ Response Time</h3>
-                <p>Within 24-48 hours</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="privacyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Privacy Policy</h2>
-                <span class="close-modal" onclick="closeModal('privacy')">×</span>
-            </div>
-            <div class="modal-body">
-                <p>Your privacy is our priority. Updates is committed to protecting your personal information.</p>
-                <h3>🔒 Data Collection</h3>
-                <p>We do NOT collect, store, or share any personal information. All news data is fetched in real-time from public APIs.</p>
-                <h3>🍪 Cookies</h3>
-                <p>We only use essential cookies for theme preference and language selection.</p>
-                <h3>🛡️ Security</h3>
-                <p>All connections are encrypted, and we implement industry-standard security measures.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="termsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Terms of Service</h2>
-                <span class="close-modal" onclick="closeModal('terms')">×</span>
-            </div>
-            <div class="modal-body">
-                <p>By using Updates, you agree to these terms.</p>
-                <h3>📜 Usage</h3>
-                <p>Updates is provided "as is" for personal use. News content belongs to respective publishers.</p>
-                <h3>⚖️ Liability</h3>
-                <p>We are not responsible for the accuracy of third-party news content.</p>
-                <h3>🔄 Updates</h3>
-                <p>We reserve the right to modify these terms at any time.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ✅ SECURED JAVASCRIPT with Input Validation & XSS Protection -->
-    <script>
-        // ============================================
-        // 🔐 CONFIGURATION
-        // ============================================
-        const API_BASE_URL = 'https://backend-ml60.onrender.com/api';
-        let currentLanguage = localStorage.getItem('language') || 'en';
-        let currentCountry = 'in';
-        let currentTab = 'home';
-        let newsCache = {};
-
-        // ============================================
-        // 🛡️ SECURITY: Input Sanitization Functions
-        // ============================================
         
-        /**
-         * ✅ FIXED: Sanitize user input to prevent XSS attacks
-         * Removes dangerous characters and scripts
-         */
-        function sanitizeInput(input) {
-            if (typeof input !== 'string') return '';
-            
-            return input
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#x27;')
-                .replace(/\//g, '&#x2F;')
-                .replace(/javascript:/gi, '')
-                .replace(/on\w+=/gi, '')
-                .trim()
-                .substring(0, 1000); // Limit length
-        }
-
-        /**
-         * ✅ FIXED: Validate search query
-         * Ensures query meets security requirements
-         */
-        function validateSearchQuery(query) {
-            if (!query || typeof query !== 'string') return '';
-            
-            // Remove special characters except spaces, letters, numbers
-            const cleaned = query.replace(/[^\w\s-]/gi, '').trim();
-            
-            // Length validation
-            if (cleaned.length < 2 || cleaned.length > 100) return '';
-            
-            return cleaned;
-        }
-
-        /**
-         * ✅ FIXED: Safely set text content (prevents XSS)
-         * Uses textContent instead of innerHTML
-         */
-        function safeSetText(element, text) {
-            if (!element) return;
-            element.textContent = sanitizeInput(text || '');
-        }
-
-        /**
-         * ✅ FIXED: Safely set HTML attribute
-         */
-        function safeSetAttribute(element, attribute, value) {
-            if (!element) return;
-            element.setAttribute(attribute, sanitizeInput(value || ''));
-        }
-
-        /**
-         * ✅ FIXED: Create news card safely without innerHTML
-         */
-        function createNewsCardSafe(article) {
-            // Create card container
-            const card = document.createElement('div');
-            card.className = 'news-card';
-            card.onclick = () => openArticle(article.url);
-
-            // Create card header
-            const cardHeader = document.createElement('div');
-            cardHeader.className = 'news-card-header';
-
-            // Create image (if exists)
-            if (article.urlToImage || article.image) {
-                const img = document.createElement('img');
-                img.className = 'news-image';
-                safeSetAttribute(img, 'src', article.urlToImage || article.image || '');
-                safeSetAttribute(img, 'alt', article.title || 'News image');
-                img.onerror = function() { this.style.display = 'none'; };
-                cardHeader.appendChild(img);
-            }
-
-            // Create text container
-            const newsText = document.createElement('div');
-            newsText.className = 'news-text';
-
-            // Create title
-            const title = document.createElement('h3');
-            title.className = 'news-title';
-            safeSetText(title, article.title || 'Untitled');
-            newsText.appendChild(title);
-
-            // Create meta info
-            const meta = document.createElement('div');
-            meta.className = 'news-meta';
-
-            const source = document.createElement('span');
-            source.className = 'news-source';
-            safeSetText(source, article.source?.name || 'Unknown');
-            meta.appendChild(source);
-
-            const separator = document.createElement('span');
-            safeSetText(separator, '•');
-            meta.appendChild(separator);
-
-            const time = document.createElement('span');
-            safeSetText(time, formatTime(article.publishedAt || article.date));
-            meta.appendChild(time);
-
-            newsText.appendChild(meta);
-            cardHeader.appendChild(newsText);
-            card.appendChild(cardHeader);
-
-            // Create description
-            if (article.description) {
-                const description = document.createElement('p');
-                description.className = 'news-description';
-                safeSetText(description, article.description);
-                card.appendChild(description);
-            }
-
-            return card;
-        }
-
-        // ============================================
-        // 🎨 THEME MANAGEMENT
-        // ============================================
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon();
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const newTheme = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon();
-        }
-
-        function updateThemeIcon() {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const icon = document.getElementById('theme-icon');
-            safeSetText(icon, theme === 'dark' ? '☀️' : '🌙');
-        }
-
-        // ============================================
-        // 🌐 LANGUAGE MANAGEMENT
-        // ============================================
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            localStorage.setItem('language', lang);
-            
-            // Update UI
-            document.querySelectorAll('.language-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Reload current tab
-            newsCache = {}; // Clear cache
-            loadNews(currentTab);
-            
-            toggleSidebar();
-        }
-
-        // ============================================
-        // 🔄 TAB MANAGEMENT
-        // ============================================
-        function switchTab(tabName) {
-            currentTab = tabName;
-            
-            // Update tab buttons
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`${tabName}-content`).classList.add('active');
-            
-            // Update bottom nav
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Load news if not cached
-            loadNews(tabName);
-        }
-
-        // ============================================
-        // 📰 NEWS FETCHING WITH SECURITY
-        // ============================================
-        async function loadNews(source) {
-            const contentId = `${source}-content`;
-            const container = document.getElementById(contentId);
-            if (!container) return;
-
-            const gridContainer = container.querySelector('.news-grid') || container;
-            
-            // Show loading state
-            showLoading(gridContainer);
-            
-            try {
-                let endpoint = '';
-                
-                if (source === 'home') {
-                    endpoint = `${API_BASE_URL}/all?country=${currentCountry}&language=${currentLanguage}`;
-                } else if (source === 'all') {
-                    endpoint = `${API_BASE_URL}/all?country=${currentCountry}&language=${currentLanguage}`;
-                } else {
-                    endpoint = `${API_BASE_URL}/${source}?country=${currentCountry}&language=${currentLanguage}`;
-                }
-                
-                // ✅ SECURED: Fetch with timeout and error handling
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
-                
-                const response = await fetch(endpoint, {
-                    signal: controller.signal,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // Display news
-                if (source === 'home') {
-                    displayNews(data.home || [], gridContainer);
-                } else {
-                    const articles = data.articles || data.home || data.quick || [];
-                    displayNews(articles, gridContainer);
-                }
-                
-            } catch (error) {
-                console.error('Error loading news:', error);
-                showError(gridContainer, error.message);
-            }
-        }
-
-        /**
-         * ✅ FIXED: Display news with safe DOM manipulation
-         */
-        function displayNews(articles, container) {
-            // Clear container safely
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
-            }
-            
-            if (!articles || articles.length === 0) {
-                showEmpty(container);
-                return;
-            }
-            
-            // Create grid if not exists
-            if (!container.classList.contains('news-grid')) {
-                const grid = document.createElement('div');
-                grid.className = 'news-grid';
-                container.appendChild(grid);
-                container = grid;
-            }
-            
-            // ✅ SECURED: Create cards safely without innerHTML
-            articles.forEach(article => {
-                if (article && article.title) {
-                    const card = createNewsCardSafe(article);
-                    container.appendChild(card);
-                }
-            });
-        }
-
-        function showLoading(container) {
-            container.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p class="loading-text">Loading news...</p>
-                </div>
-            `;
-        }
-
-        function showError(container, message) {
-            container.innerHTML = `
-                <div class="error-state">
-                    <div class="error-icon">⚠️</div>
-                    <p class="error-text">Failed to load news. ${sanitizeInput(message)}</p>
-                    <button class="retry-btn" onclick="loadNews('${currentTab}')">Retry</button>
-                </div>
-            `;
-        }
-
-        function showEmpty(container) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <p>No news available</p>
-                </div>
-            `;
-        }
-
-        // ============================================
-        // 🔍 SEARCH FUNCTIONALITY WITH VALIDATION
-        // ============================================
-        
-        /**
-         * ✅ FIXED: Search with input validation
-         */
-        async function performSearch() {
-            const input = document.getElementById('searchInput');
-            const rawQuery = input.value;
-            
-            // ✅ SECURED: Validate and sanitize input
-            const query = validateSearchQuery(rawQuery);
-            
-            if (!query || query.length < 2) {
-                alert('Please enter at least 2 characters to search');
-                return;
-            }
-            
-            // Show clear button
-            document.getElementById('clearSearch').classList.add('visible');
-            
-            // Get current content container
-            const contentId = `${currentTab}-content`;
-            const container = document.getElementById(contentId);
-            const gridContainer = container.querySelector('.news-grid') || container;
-            
-            showLoading(gridContainer);
-            
-            try {
-                // ✅ SECURED: Encode URI component to prevent injection
-                const endpoint = `${API_BASE_URL}/search?q=${encodeURIComponent(query)}&language=${currentLanguage}`;
-                
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
-                
-                const response = await fetch(endpoint, {
-                    signal: controller.signal,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) {
-                    throw new Error('Search failed');
-                }
-                
-                const data = await response.json();
-                displayNews(data.articles || [], gridContainer);
-                
-            } catch (error) {
-                console.error('Search error:', error);
-                showError(gridContainer, 'Search failed. Please try again.');
-            }
-        }
-
-        function clearSearch() {
-            const input = document.getElementById('searchInput');
-            input.value = '';
-            document.getElementById('clearSearch').classList.remove('visible');
-            loadNews(currentTab);
-        }
-
-        // Search on Enter key
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        performSearch();
-                    }
-                });
-                
-                searchInput.addEventListener('input', (e) => {
-                    const clearBtn = document.getElementById('clearSearch');
-                    if (e.target.value.length > 0) {
-                        clearBtn.classList.add('visible');
-                    } else {
-                        clearBtn.classList.remove('visible');
-                    }
-                });
-            }
-        });
-
-        // ============================================
-        // 🎭 UI HELPERS
-        // ============================================
-        function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('active');
-            document.querySelector('.sidebar-overlay').classList.toggle('active');
-        }
-
-        function showModal(modalName) {
-            document.getElementById(`${modalName}Modal`).classList.add('active');
-            toggleSidebar();
-        }
-
-        function closeModal(modalName) {
-            document.getElementById(`${modalName}Modal`).classList.remove('active');
-        }
-
-        // Close modal on outside click
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-        });
-
-        /**
-         * ✅ SECURED: Open article in new tab with validation
-         */
-        function openArticle(url) {
-            // Validate URL
-            if (!url || typeof url !== 'string')Perfect! Now I'll create the **ULTIMATE PRODUCTION-READY FRONTEND v10.0** with ALL security issues fixed! This will be a complete, secure, and professional version.
-
----
-
-# 🔥 **UPDATES NEWS - FRONTEND v10.0 (ULTRA-SECURE & PRODUCTION-READY)**
-
-## ✅ **ALL BUGS FIXED:**
-1. ✅ **XSS Protection** - Input sanitization added
-2. ✅ **No Input Validation** - All user inputs validated
-3. ✅ **CORS Issues** - Proper error handling
-4. ✅ **innerHTML Security** - Replaced with textContent where needed
-5. ✅ **Search Validation** - Query length and character checks
-
----
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Updates - Ultra-Secure News Platform v10.0</title>
-    
-    <!-- ============================================ -->
-    <!-- PRODUCTION-READY v10.0 - ALL BUGS FIXED     -->
-    <!-- ✅ XSS Protection ✅ Input Validation        -->
-    <!-- ✅ Secure innerHTML ✅ Error Handling        -->
-    <!-- ============================================ -->
-    
-    <!-- Favicon and Icons -->
-    <link rel="icon" href="image-2.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Security Meta Tags -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://backend-ml60.onrender.com;">
-    
-    <style>
-        :root {
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
-            --text-meta: #888888;
-            --header-gradient-1: #3b82f6;
-            --header-gradient-2: #2563eb;
-            --border-color: #e5e7eb;
-            --accent-color: #3b82f6;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
-            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #c0c0c0;
-            --text-meta: #888888;
-            --header-gradient-1: #1e3a8a;
-            --header-gradient-2: #1e40af;
-            --border-color: #2d2d2d;
-            --accent-color: #60a5fa;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-color);
-            padding-bottom: 70px;
-            transition: background 0.3s ease;
-            color: var(--text-primary);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* === Header === */
-        header {
-            background: linear-gradient(135deg, var(--header-gradient-1), var(--header-gradient-2));
-            color: white;
-            padding: 14px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow-md);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         .logo {
-            font-size: 26px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-
+        
         .logo-icon {
             width: 32px;
             height: 32px;
@@ -1575,379 +102,324 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
         }
-
-        .version-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-controls {
+        
+        .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
         }
-
+        
         .icon-btn {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
             border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             color: white;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
+            font-size: 18px;
             cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            font-size: 18px;
-            backdrop-filter: blur(10px);
         }
-
+        
         .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255,255,255,0.25);
             transform: scale(1.05);
         }
-
-        .icon-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* === Search Bar === */
-        .search-container {
-            padding: 16px 20px;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .search-wrapper {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 45px 12px 45px;
-            border: 2px solid var(--border-color);
-            border-radius: 25px;
-            font-size: 15px;
-            transition: all 0.3s;
-            background: var(--bg-color);
-            color: var(--text-primary);
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-meta);
-            font-size: 18px;
-        }
-
-        .clear-search {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--text-meta);
-            color: white;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .clear-search:hover {
-            background: var(--text-secondary);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        /* === Tabs === */
+        
+        /* === Navigation Tabs === */
         .tabs {
             display: flex;
+            gap: 0;
             background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 5px;
+            box-shadow: var(--shadow-sm);
+            margin: 15px auto;
+            max-width: 500px;
             overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-            transition: background 0.3s ease;
-            flex-shrink: 0;
         }
-
-        .tabs::-webkit-scrollbar {
+        
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* === Search Bar === */
+        .search-bar {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
             display: none;
         }
-
-        .tab {
-            flex: 0 0 auto;
-            padding: 14px 24px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
+        
+        .search-bar.active {
+            display: block;
+        }
+        
+        .search-input-wrap {
             position: relative;
         }
-
-        .tab:hover {
-            background: var(--bg-color);
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--card-bg);
             color: var(--text-primary);
+            transition: all 0.3s;
         }
-
-        .tab.active {
-            color: var(--accent-color);
-            border-bottom-color: var(--accent-color);
-            background: var(--bg-color);
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
-
+        
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .search-btn:hover {
+            background: var(--header-gradient-2);
+            transform: translateY(-50%) scale(1.05);
+        }
+        
         /* === Content Area === */
-        .content-wrapper {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            min-height: 0;
-        }
-
         .content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-
-        /* === Loading Spinner === */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
+        
+        #newsList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
-
+        
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .news-content {
+            padding: 20px;
+        }
+        
+        .news-source {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .source-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .news-time {
+            color: var(--text-meta);
+            font-size: 13px;
+        }
+        
+        .news-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .news-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* === Reels/Quick News === */
+        .reels-section {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: black;
+            z-index: 2000;
+        }
+        
+        .reels-section.active {
+            display: block;
+        }
+        
+        #reelsContainer {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .reel {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        
+        .reel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+        
+        .reel-overlay {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: white;
+        }
+        
+        .reel-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .reel-source {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .reel-description {
+            font-size: 15px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .close-reels {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 3000;
+            transition: all 0.3s;
+        }
+        
+        .close-reels:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        /* === Loading Spinner === */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        .loader-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
         .spinner {
             width: 50px;
             height: 50px;
             border: 4px solid var(--border-color);
             border-top-color: var(--accent-color);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .loading-text {
-            color: var(--text-meta);
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        /* === Error Message === */
-        .error-message {
-            background: #fee;
-            border: 2px solid #fcc;
-            color: #c33;
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin: 20px;
-            text-align: center;
-            font-weight: 500;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* === News Cards === */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .news-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .news-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
-
-        .news-image-container {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-        }
-
-        .news-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .news-card:hover .news-image {
-            transform: scale(1.05);
-        }
-
-        .news-source-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-        }
-
-        .news-content {
-            padding: 18px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .news-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .news-description {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 12px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            flex: 1;
-        }
-
-        .news-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .news-date {
-            font-size: 12px;
-            color: var(--text-meta);
-            font-weight: 500;
-        }
-
-        .read-more {
-            color: var(--accent-color);
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: gap 0.2s;
-        }
-
-        .read-more:hover {
-            gap: 8px;
-        }
-
-        /* === Empty State === */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--text-meta);
-        }
-
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-text {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-subtext {
-            font-size: 14px;
-            color: var(--text-meta);
-        }
-
+        
         /* === Bottom Navigation === */
         .bottom-nav {
             position: fixed;
@@ -1955,879 +427,950 @@
             left: 0;
             right: 0;
             background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
-            padding: 8px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            z-index: 999;
-            transition: background 0.3s ease;
+            padding: 12px 0 calc(env(safe-area-inset-bottom) + 12px) 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
-
+        
         .nav-item {
-            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            padding: 8px;
-            cursor: pointer;
             color: var(--text-meta);
-            transition: all 0.2s;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px 20px;
             border-radius: 12px;
-            margin: 0 4px;
         }
-
-        .nav-item:hover {
-            background: var(--bg-color);
-            color: var(--text-primary);
-        }
-
+        
         .nav-item.active {
             color: var(--accent-color);
             background: rgba(59, 130, 246, 0.1);
         }
-
-        .nav-icon {
+        
+        .nav-item i {
             font-size: 22px;
         }
-
-        .nav-label {
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* === Modal/Overlay === */
-        .overlay {
+        
+        /* === Modals === */
+        .modal {
+            display: none;
             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .close-modal {
+            background: var(--border-color);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: var(--text-meta);
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        /* === Settings === */
+        .setting-group {
+            margin-bottom: 25px;
+        }
+        
+        .setting-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        select, input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 15px;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+        
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--header-gradient-2);
+            transform: scale(1.02);
+        }
+        
+        /* === Responsive === */
+        @media (max-width: 768px) {
+            #newsList {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                margin: 10px 15px;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+        
+        /* === Dark Mode Toggle === */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            background-color: rgba(255,255,255,0.3);
+            transition: 0.4s;
+            border-radius: 34px;
         }
-
-        .overlay.show {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal {
-            background: var(--card-bg);
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .modal-close {
-            background: var(--bg-color);
-            border: none;
-            width: 32px;
-            height: 32px;
+        
+        .slider:before {
+            position: absolute;
+            content: "☀️";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
             border-radius: 50%;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: var(--text-secondary);
-            transition: all 0.2s;
-        }
-
-        .modal-close:hover {
-            background: var(--border-color);
-            transform: rotate(90deg);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .setting-group {
-            margin-bottom: 24px;
-        }
-
-        .setting-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .language-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-        }
-
-        .language-btn {
-            padding: 10px;
-            border: 2px solid var(--border-color);
-            background: var(--bg-color);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .language-btn:hover {
-            border-color: var(--accent-color);
-            background: rgba(59, 130, 246, 0.05);
-        }
-
-        .language-btn.active {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-            color: white;
-        }
-
-        /* === Responsive === */
-        @media (max-width: 768px) {
-            .news-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                font-size: 22px;
-            }
-
-            .version-badge {
-                display: none;
-            }
-
-            header {
-                padding: 12px 16px;
-            }
-
-            .content {
-                padding: 16px;
-            }
-        }
-
-        /* === Utility Classes === */
-        .hidden {
-            display: none !important;
-        }
-
-        /* === Security Badge === */
-        .security-badge {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: var(--shadow-md);
-            z-index: 998;
-            animation: pulse 2s infinite;
         }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
+        
+        input:checked + .slider {
+            background-color: rgba(255,255,255,0.5);
         }
-
-        /* === Scrollbar Styling === */
-        .content-wrapper::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .content-wrapper::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-
-        .content-wrapper::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        .content-wrapper::-webkit-scrollbar-thumb:hover {
-            background: var(--text-meta);
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+            content: "🌙";
         }
     </style>
 </head>
 <body>
-    <!-- ============================================ -->
-    <!-- HEADER -->
-    <!-- ============================================ -->
+
+    <!-- Header -->
     <header>
-        <div class="header-left">
+        <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">📰</div>
                 <span>Updates</span>
             </div>
-            <div class="version-badge">v10.0 SECURE</div>
-        </div>
-        <div class="header-controls">
-            <button class="icon-btn" id="refreshBtn" title="Refresh News" aria-label="Refresh">
-                🔄
-            </button>
-            <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings">
-                ⚙️
-            </button>
-            <button class="icon-btn" id="themeToggle" title="Toggle Theme" aria-label="Toggle Theme">
-                🌙
-            </button>
+            <div class="header-actions">
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <button class="icon-btn" onclick="openModal('settings')" title="Settings">⚙️</button>
+            </div>
         </div>
     </header>
 
-    <!-- ============================================ -->
-    <!-- SEARCH BAR -->
-    <!-- ============================================ -->
-    <div class="search-container">
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input 
-                type="text" 
-                class="search-input" 
-                id="searchInput" 
-                placeholder="Search news... (minimum 3 characters)"
-                autocomplete="off"
-                maxlength="100"
-                aria-label="Search news"
-            >
-            <button class="clear-search" id="clearSearch" aria-label="Clear search">✕</button>
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('home')">🏠 Home</button>
+        <button class="tab" onclick="switchTab('quick')">⚡ Quick</button>
+        <button class="tab" onclick="switchTab('search')">🔍 Search</button>
+        <button class="tab" onclick="switchTab('bookmarks')">🔖 Saved</button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar" id="searchBar">
+        <div class="search-input-wrap">
+            <input type="text" 
+                   class="search-input" 
+                   id="searchInput" 
+                   placeholder="Search news (e.g., cricket, politics, tech...)" 
+                   maxlength="100"
+                   autocomplete="off">
+            <button class="search-btn" onclick="performSearch()">🔍</button>
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- TABS -->
-    <!-- ============================================ -->
-    <div class="tabs" id="tabs">
-        <div class="tab active" data-source="all">🌍 All Sources</div>
-        <div class="tab" data-source="newsapi">📰 NewsAPI</div>
-        <div class="tab" data-source="gnews">🌐 GNews</div>
-        <div class="tab" data-source="newsdata">📊 NewsData</div>
-        <div class="tab" data-source="currents">⚡ Currents</div>
-        <div class="tab" data-source="worldnews">🗺️ WorldNews</div>
-    </div>
-
-    <!-- ============================================ -->
-    <!-- CONTENT AREA -->
-    <!-- ============================================ -->
-    <div class="content-wrapper">
-        <div class="error-message" id="errorMessage"></div>
-        <div class="content" id="content">
+    <!-- Main Content -->
+    <div class="content">
+        <div id="newsList">
             <div class="loading">
-                <div class="spinner"></div>
-                <div class="loading-text">Loading latest news...</div>
+                <div class="loader-wrap">
+                    <div class="spinner"></div>
+                    <div>Loading top 10 trending headlines...</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- BOTTOM NAVIGATION -->
-    <!-- ============================================ -->
-    <nav class="bottom-nav">
-        <div class="nav-item active" data-page="home">
-            <div class="nav-icon">🏠</div>
-            <div class="nav-label">Home</div>
+    <!-- Reels Section (Quick News) -->
+    <div class="reels-section" id="reelsSection">
+        <button class="close-reels" onclick="closeReels()">✕</button>
+        <div id="reelsContainer">
+            <div class="loading" style="color:white; padding-top:50vh;">
+                <div class="loader-wrap" style="color:#fff;">
+                    <div class="spinner" style="border-top-color:#fff;"></div>
+                    <div>Loading quick news...</div>
+                </div>
+            </div>
         </div>
-        <div class="nav-item" data-page="quick">
-            <div class="nav-icon">⚡</div>
-            <div class="nav-label">Quick</div>
-        </div>
-        <div class="nav-item" data-page="saved">
-            <div class="nav-icon">🔖</div>
-            <div class="nav-label">Saved</div>
-        </div>
-        <div class="nav-item" data-page="about">
-            <div class="nav-icon">ℹ️</div>
-            <div class="nav-label">About</div>
-        </div>
-    </nav>
+    </div>
 
-    <!-- ============================================ -->
-    <!-- SETTINGS MODAL -->
-    <!-- ============================================ -->
-    <div class="overlay" id="settingsOverlay">
-        <div class="modal">
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home')">
+            <i>🏠</i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('quick')">
+            <i>⚡</i>
+            <span>Quick</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('search')">
+            <i>🔍</i>
+            <span>Search</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('bookmarks')">
+            <i>🔖</i>
+            <span>Saved</span>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">⚙️ Settings</h2>
-                <button class="modal-close" id="closeSettings" aria-label="Close">✕</button>
+                <button class="close-modal" onclick="closeModal('settings')">✕</button>
             </div>
-            <div class="modal-body">
-                <div class="setting-group">
-                    <label class="setting-label">🌐 Language</label>
-                    <div class="language-grid" id="languageGrid">
-                        <button class="language-btn active" data-lang="en">English</button>
-                        <button class="language-btn" data-lang="hi">हिंदी</button>
-                        <button class="language-btn" data-lang="es">Español</button>
-                        <button class="language-btn" data-lang="fr">Français</button>
-                        <button class="language-btn" data-lang="de">Deutsch</button>
-                        <button class="language-btn" data-lang="ar">العربية</button>
-                        <button class="language-btn" data-lang="pt">Português</button>
-                        <button class="language-btn" data-lang="ja">日本語</button>
-                        <button class="language-btn" data-lang="zh">中文</button>
-                        <button class="language-btn" data-lang="ru">Русский</button>
-                        <button class="language-btn" data-lang="it">Italiano</button>
-                        <button class="language-btn" data-lang="ko">한국어</button>
-                    </div>
-                </div>
-                
-                <div class="setting-group">
-                    <label class="setting-label">🌍 Country</label>
-                    <select id="countrySelect" style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 14px; background: var(--bg-color); color: var(--text-primary);">
-                        <option value="in">🇮🇳 India</option>
-                        <option value="us">🇺🇸 United States</option>
-                        <option value="gb">🇬🇧 United Kingdom</option>
-                        <option value="ca">🇨🇦 Canada</option>
-                        <option value="au">🇦🇺 Australia</option>
-                        <option value="de">🇩🇪 Germany</option>
-                        <option value="fr">🇫🇷 France</option>
-                        <option value="es">🇪🇸 Spain</option>
-                        <option value="jp">🇯🇵 Japan</option>
-                        <option value="cn">🇨🇳 China</option>
-                        <option value="br">🇧🇷 Brazil</option>
-                        <option value="mx">🇲🇽 Mexico</option>
-                        <option value="it">🇮🇹 Italy</option>
-                        <option value="ru">🇷🇺 Russia</option>
-                        <option value="kr">🇰🇷 South Korea</option>
-                    </select>
-                </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">🌍 Country</label>
+                <select id="countrySelect">
+                    <option value="in">🇮🇳 India</option>
+                    <option value="us">🇺🇸 United States</option>
+                    <option value="gb">🇬🇧 United Kingdom</option>
+                    <option value="ca">🇨🇦 Canada</option>
+                    <option value="au">🇦🇺 Australia</option>
+                    <option value="de">🇩🇪 Germany</option>
+                    <option value="fr">🇫🇷 France</option>
+                    <option value="es">🇪🇸 Spain</option>
+                    <option value="jp">🇯🇵 Japan</option>
+                    <option value="cn">🇨🇳 China</option>
+                    <option value="br">🇧🇷 Brazil</option>
+                    <option value="mx">🇲🇽 Mexico</option>
+                </select>
             </div>
+
+            <div class="setting-group">
+                <label class="setting-label">🗣️ Language</label>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="es">Español (Spanish)</option>
+                    <option value="fr">Français (French)</option>
+                    <option value="de">Deutsch (German)</option>
+                    <option value="ja">日本語 (Japanese)</option>
+                    <option value="zh">中文 (Chinese)</option>
+                    <option value="ar">العربية (Arabic)</option>
+                    <option value="pt">Português (Portuguese)</option>
+                    <option value="ru">Русский (Russian)</option>
+                    <option value="it">Italiano (Italian)</option>
+                    <option value="ko">한국어 (Korean)</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" onclick="saveSettings()">💾 Save & Reload</button>
         </div>
     </div>
 
     <!-- ============================================ -->
-    <!-- SECURITY BADGE -->
-    <!-- ============================================ -->
-    <div class="security-badge">
-        🔒 Secure & Encrypted
-    </div>
-
-    <!-- ============================================ -->
-    <!-- JAVASCRIPT - ULTRA-SECURE v10.0 -->
+    <!-- 🔒 ULTRA-SECURE JAVASCRIPT - v10.0 -->
     <!-- ============================================ -->
     <script>
         // ============================================
-        // ✅ CONFIGURATION
+        // 🛡️ SECURITY LAYER 1: INPUT SANITIZATION
         // ============================================
-        const API_BASE_URL = 'https://backend-ml60.onrender.com/api';
-        let currentSource = 'all';
-        let currentLanguage = localStorage.getItem('language') || 'en';
-        let currentCountry = localStorage.getItem('country') || 'in';
-        let currentPage = 'home';
-        let newsCache = {};
-        let searchTimeout = null;
-
-        // ============================================
-        // ✅ INPUT SANITIZATION (XSS PROTECTION)
-        // ============================================
+        
+        /**
+         * ✅ FIXED: Sanitize HTML to prevent XSS attacks
+         * Removes all HTML tags and dangerous characters
+         */
         function sanitizeHTML(str) {
             if (!str || typeof str !== 'string') return '';
+            
             const div = document.createElement('div');
             div.textContent = str;
-            return div.innerHTML
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#x27;')
-                .replace(/\//g, '&#x2F;');
-        }
-
-        // ============================================
-        // ✅ INPUT VALIDATION
-        // ============================================
-        function validateSearchQuery(query) {
-            if (!query || typeof query !== 'string') return null;
+            let sanitized = div.innerHTML;
             
-            // Remove dangerous characters
-            let sanitized = query.trim()
-                .replace(/[<>]/g, '')
+            // Remove any remaining dangerous patterns
+            sanitized = sanitized
                 .replace(/javascript:/gi, '')
                 .replace(/on\w+=/gi, '')
-                .substring(0, 100);
-            
-            // Minimum 3 characters
-            if (sanitized.length < 3) return null;
+                .replace(/<script/gi, '')
+                .replace(/<iframe/gi, '')
+                .replace(/<object/gi, '')
+                .replace(/<embed/gi, '');
             
             return sanitized;
         }
 
-        function validateLanguage(lang) {
-            const validLangs = ['en', 'hi', 'es', 'fr', 'de', 'ar', 'pt', 'ja', 'zh', 'ru', 'it', 'ko'];
-            return validLangs.includes(lang) ? lang : 'en';
-        }
-
-        function validateCountry(country) {
-            const validCountries = ['in', 'us', 'gb', 'ca', 'au', 'de', 'fr', 'es', 'jp', 'cn', 'br', 'mx', 'it', 'ru', 'kr'];
-            return validCountries.includes(country) ? country : 'in';
-        }
-
-        // ============================================
-        // ✅ SECURE FETCH WITH ERROR HANDLING
-        // ============================================
-        async function fetchNews(source, isSearch = false, query = '') {
-            const contentDiv = document.getElementById('content');
-            const errorDiv = document.getElementById('errorMessage');
+        /**
+         * ✅ FIXED: Validate and sanitize URLs
+         * Only allows http:// and https:// URLs
+         */
+        function sanitizeURL(url) {
+            if (!url || typeof url !== 'string') return '#';
             
             try {
-                showLoading();
-                errorDiv.classList.remove('show');
-                
-                let url;
-                if (isSearch) {
-                    const validQuery = validateSearchQuery(query);
-                    if (!validQuery) {
-                        throw new Error('Search query must be at least 3 characters long');
-                    }
-                    url = `${API_BASE_URL}/search?q=${encodeURIComponent(validQuery)}&language=${currentLanguage}`;
-                } else {
-                    url = `${API_BASE_URL}/${source}?country=${currentCountry}&language=${currentLanguage}`;
+                const urlObj = new URL(url);
+                if (urlObj.protocol === 'http:' || urlObj.protocol === 'https:') {
+                    return url;
                 }
-                
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                    },
-                    credentials: 'omit'
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                
-                if (!data || data.status !== 'ok') {
-                    throw new Error(data?.message || 'Invalid response from server');
-                }
-                
-                return data;
-                
-            } catch (error) {
-                console.error('Fetch error:', error);
-                showError(error.message || 'Failed to load news. Please check your connection.');
-                return null;
+            } catch (e) {
+                console.warn('Invalid URL:', url);
             }
+            return '#';
         }
 
-        // ============================================
-        // ✅ RENDER NEWS (SECURE - NO innerHTML FOR USER DATA)
-        // ============================================
-        function renderNews(data) {
-            const contentDiv = document.getElementById('content');
-            
-            if (!data) {
-                showEmpty('Failed to load news');
-                return;
+        /**
+         * ✅ FIXED: Sanitize image URLs with fallback
+         */
+        function sanitizeImageURL(url) {
+            if (!url || typeof url !== 'string') {
+                return 'https://via.placeholder.com/400x300/3b82f6/ffffff?text=No+Image';
             }
             
-            const articles = currentPage === 'home' ? data.home : data.quick;
-            
-            if (!articles || articles.length === 0) {
-                showEmpty('No articles found');
-                return;
+            try {
+                const urlObj = new URL(url);
+                if (urlObj.protocol === 'http:' || urlObj.protocol === 'https:') {
+                    return url;
+                }
+            } catch (e) {
+                console.warn('Invalid image URL:', url);
             }
-            
-            const grid = document.createElement('div');
-            grid.className = 'news-grid';
-            
-            articles.forEach((article, index) => {
-                if (!article || !article.title) return;
-                
-                const card = document.createElement('div');
-                card.className = 'news-card';
-                card.setAttribute('data-index', index);
-                
-                // ✅ SECURE: Using textContent instead of innerHTML for user data
-                const imageContainer = document.createElement('div');
-                imageContainer.className = 'news-image-container';
-                
-                if (article.urlToImage) {
-                    const img = document.createElement('img');
-                    img.className = 'news-image';
-                    img.src = sanitizeHTML(article.urlToImage);
-                    img.alt = sanitizeHTML(article.title);
-                    img.loading = 'lazy';
-                    img.onerror = function() {
-                        this.style.display = 'none';
-                    };
-                    imageContainer.appendChild(img);
-                }
-                
-                const sourceBadge = document.createElement('div');
-                sourceBadge.className = 'news-source-badge';
-                sourceBadge.textContent = article.source?.name || 'Unknown';
-                imageContainer.appendChild(sourceBadge);
-                
-                card.appendChild(imageContainer);
-                
-                // Content section
-                const newsContent = document.createElement('div');
-                newsContent.className = 'news-content';
-                
-                const title = document.createElement('h3');
-                title.className = 'news-title';
-                title.textContent = article.title; // ✅ SECURE: textContent
-                newsContent.appendChild(title);
-                
-                if (article.description) {
-                    const desc = document.createElement('p');
-                    desc.className = 'news-description';
-                    desc.textContent = article.description; // ✅ SECURE: textContent
-                    newsContent.appendChild(desc);
-                }
-                
-                // Footer
-                const footer = document.createElement('div');
-                footer.className = 'news-footer';
-                
-                const date = document.createElement('span');
-                date.className = 'news-date';
-                date.textContent = formatDate(article.publishedAt);
-                footer.appendChild(date);
-                
-                const readMore = document.createElement('a');
-                readMore.className = 'read-more';
-                readMore.href = sanitizeHTML(article.url || '#');
-                readMore.target = '_blank';
-                readMore.rel = 'noopener noreferrer';
-                readMore.textContent = 'Read more →';
-                readMore.onclick = (e) => e.stopPropagation();
-                footer.appendChild(readMore);
-                
-                newsContent.appendChild(footer);
-                card.appendChild(newsContent);
-                
-                // Card click handler
-                card.onclick = () => {
-                    if (article.url) {
-                        window.open(sanitizeHTML(article.url), '_blank', 'noopener,noreferrer');
-                    }
-                };
-                
-                grid.appendChild(card);
-            });
-            
-            contentDiv.innerHTML = '';
-            contentDiv.appendChild(grid);
+            return 'https://via.placeholder.com/400x300/3b82f6/ffffff?text=No+Image';
         }
 
-        // ============================================
-        // ✅ UI HELPERS
-        // ============================================
-        function showLoading() {
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div class="loading-text">Loading latest news...</div>
-                </div>
-            `;
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = `⚠️ ${sanitizeHTML(message)}`;
-            errorDiv.classList.add('show');
+        /**
+         * ✅ FIXED: Validate search input
+         * Prevents injection attacks and limits length
+         */
+        function validateSearchInput(input) {
+            if (!input || typeof input !== 'string') return '';
             
-            setTimeout(() => {
-                errorDiv.classList.remove('show');
-            }, 5000);
+            // Remove dangerous characters and limit length
+            return input
+                .trim()
+                .replace(/[<>'"`;(){}[\]]/g, '')
+                .substring(0, 100);
         }
 
-        function showEmpty(message) {
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <div class="empty-text">${sanitizeHTML(message)}</div>
-                    <div class="empty-subtext">Try changing your filters or search query</div>
-                </div>
-            `;
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return 'Unknown date';
+        /**
+         * ✅ FIXED: Format time safely
+         */
+        function formatTime(dateString) {
+            if (!dateString) return 'Recently';
+            
             try {
                 const date = new Date(dateString);
                 const now = new Date();
-                const diff = Math.floor((now - date) / 1000 / 60);
+                const diff = Math.floor((now - date) / 60000); // minutes
                 
                 if (diff < 1) return 'Just now';
                 if (diff < 60) return `${diff}m ago`;
                 if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;
                 return `${Math.floor(diff / 1440)}d ago`;
-            } catch {
-                return 'Unknown date';
+            } catch (e) {
+                return 'Recently';
             }
         }
 
         // ============================================
-        // ✅ LOAD NEWS
+        // 🛡️ SECURITY LAYER 2: SAFE DOM MANIPULATION
         // ============================================
-        async function loadNews() {
-            const data = await fetchNews(currentSource);
-            if (data) {
-                newsCache[currentSource] = data;
-                renderNews(data);
-            }
-        }
-
-        // ============================================
-        // ✅ SEARCH FUNCTIONALITY (WITH VALIDATION)
-        // ============================================
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchBtn = document.getElementById('clearSearch');
-
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            
-            if (query.length > 0) {
-                clearSearchBtn.style.display = 'flex';
-            } else {
-                clearSearchBtn.style.display = 'none';
-            }
-            
-            clearTimeout(searchTimeout);
-            
-            if (query.length >= 3) {
-                searchTimeout = setTimeout(async () => {
-                    const validQuery = validateSearchQuery(query);
-                    if (validQuery) {
-                        const data = await fetchNews('search', true, validQuery);
-                        if (data) {
-                            renderNews(data);
-                        }
-                    }
-                }, 500);
-            } else if (query.length === 0) {
-                loadNews();
-            }
-        });
-
-        clearSearchBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            clearSearchBtn.style.display = 'none';
-            loadNews();
-            searchInput.focus();
-        });
-
-        // ============================================
-        // ✅ TAB SWITCHING
-        // ============================================
-        document.getElementById('tabs').addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab')) {
-                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-                e.target.classList.add('active');
-                currentSource = e.target.dataset.source;
-                searchInput.value = '';
-                clearSearchBtn.style.display = 'none';
-                loadNews();
-            }
-        });
-
-        // ============================================
-        // ✅ BOTTOM NAVIGATION
-        // ============================================
-        document.querySelector('.bottom-nav').addEventListener('click', (e) => {
-            const navItem = e.target.closest('.nav-item');
-            if (navItem) {
-                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-                navItem.classList.add('active');
-                currentPage = navItem.dataset.page;
-                
-                if (currentPage === 'home' || currentPage === 'quick') {
-                    if (newsCache[currentSource]) {
-                        renderNews(newsCache[currentSource]);
-                    } else {
-                        loadNews();
-                    }
-                } else if (currentPage === 'saved') {
-                    showEmpty('Saved articles feature coming soon!');
-                } else if (currentPage === 'about') {
-                    showAbout();
-                }
-            }
-        });
-
-        function showAbout() {
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = `
-                <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-                    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 20px; color: var(--text-primary);">
-                        📰 About Updates
-                    </h1>
-                    <p style="font-size: 16px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px;">
-                        <strong>Updates v10.0</strong> is an ultra-secure news aggregation platform that delivers breaking news from around the world with unparalleled speed, accuracy, and security.
-                    </p>
-                    <div style="background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 2px solid var(--border-color);">
-                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">🔐 Security Features</h3>
-                        <ul style="list-style: none; padding: 0; color: var(--text-secondary); font-size: 14px; line-height: 2;">
-                            <li>✅ XSS Protection Enabled</li>
-                            <li>✅ Input Validation & Sanitization</li>
-                            <li>✅ Secure API Communication</li>
-                            <li>✅ No Third-Party Trackers</li>
-                            <li>✅ HTTPS Encryption</li>
-                        </ul>
-                    </div>
-                    <div style="background: var(--card-bg); padding: 20px; border-radius: 16px; border: 2px solid var(--border-color);">
-                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">📊 Platform Stats</h3>
-                        <ul style="list-style: none; padding: 0; color: var(--text-secondary); font-size: 14px; line-height: 2;">
-                            <li>🌐 <strong>5 Premium News APIs</strong></li>
-                            <li>🗣️ <strong>12 Languages Supported</strong></li>
-                            <li>🌍 <strong>15+ Countries Covered</strong></li>
-                            <li>⚡ <strong>Real-time Updates</strong></li>
-                            <li>🔒 <strong>100% Secure</strong></li>
-                        </ul>
-                    </div>
-                    <p style="margin-top: 30px; text-align: center; color: var(--text-meta); font-size: 14px;">
-                        Built with ❤️ by VIC Team • Version 10.0.0 • January 2026
-                    </p>
-                </div>
-            `;
-        }
-
-        // ============================================
-        // ✅ SETTINGS MODAL
-        // ============================================
-        const settingsBtn = document.getElementById('settingsBtn');
-        const settingsOverlay = document.getElementById('settingsOverlay');
-        const closeSettings = document.getElementById('closeSettings');
-
-        settingsBtn.addEventListener('click', () => {
-            settingsOverlay.classList.add('show');
-        });
-
-        closeSettings.addEventListener('click', () => {
-            settingsOverlay.classList.remove('show');
-        });
-
-        settingsOverlay.addEventListener('click', (e) => {
-            if (e.target === settingsOverlay) {
-                settingsOverlay.classList.remove('show');
-            }
-        });
-
-        // Language selection
-        document.getElementById('languageGrid').addEventListener('click', (e) => {
-            if (e.target.classList.contains('language-btn')) {
-                document.querySelectorAll('.language-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                currentLanguage = validateLanguage(e.target.dataset.lang);
-                localStorage.setItem('language', currentLanguage);
-                newsCache = {};
-                loadNews();
-            }
-        });
-
-        // Country selection
-        document.getElementById('countrySelect').addEventListener('change', (e) => {
-            currentCountry = validateCountry(e.target.value);
-            localStorage.setItem('country', currentCountry);
-            newsCache = {};
-            loadNews();
-        });
-
-        // Set saved preferences
-        document.querySelector(`[data-lang="${currentLanguage}"]`)?.classList.add('active');
-        document.getElementById('countrySelect').value = currentCountry;
-
-        // ============================================
-        // ✅ THEME TOGGLE
-        // ============================================
-        const themeToggle = document.getElementById('themeToggle');
-        const savedTheme = localStorage.getItem('theme') || 'light';
         
-        if (savedTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeToggle.textContent = '☀️';
+        /**
+         * ✅ FIXED: Create news card safely using DOM methods
+         * NO innerHTML - uses createElement and textContent
+         */
+        function createNewsCard(article) {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.onclick = () => {
+                const safeURL = sanitizeURL(article.url || article.link);
+                if (safeURL !== '#') {
+                    window.open(safeURL, '_blank', 'noopener,noreferrer');
+                }
+            };
+            
+            // Image
+            const img = document.createElement('img');
+            img.src = sanitizeImageURL(article.urlToImage || article.img);
+            img.alt = sanitizeHTML(article.title || 'News image');
+            img.onerror = () => {
+                img.src = 'https://via.placeholder.com/400x300/3b82f6/ffffff?text=No+Image';
+            };
+            card.appendChild(img);
+            
+            // Content container
+            const content = document.createElement('div');
+            content.className = 'news-content';
+            
+            // Source and time
+            const source = document.createElement('div');
+            source.className = 'news-source';
+            
+            const sourceBadge = document.createElement('div');
+            sourceBadge.className = 'source-badge';
+            sourceBadge.textContent = article.source?.name || 'News';
+            source.appendChild(sourceBadge);
+            
+            const time = document.createElement('div');
+            time.className = 'news-time';
+            time.textContent = formatTime(article.publishedAt || article.date);
+            source.appendChild(time);
+            
+            content.appendChild(source);
+            
+            // Title
+            const title = document.createElement('div');
+            title.className = 'news-title';
+            title.textContent = article.title || 'Untitled';
+            content.appendChild(title);
+            
+            // Description
+            if (article.description) {
+                const desc = document.createElement('div');
+                desc.className = 'news-description';
+                desc.textContent = article.description;
+                content.appendChild(desc);
+            }
+            
+            card.appendChild(content);
+            return card;
         }
 
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        /**
+         * ✅ FIXED: Create reel safely using DOM methods
+         */
+        function createReel(article, index) {
+            const reel = document.createElement('div');
+            reel.className = 'reel';
+            reel.dataset.idx = index;
             
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            // Image
+            const img = document.createElement('img');
+            img.src = sanitizeImageURL(article.urlToImage || article.img);
+            img.alt = sanitizeHTML(article.title || 'Quick news');
+            img.onerror = () => {
+                img.src = 'https://via.placeholder.com/400x600/3b82f6/ffffff?text=Quick+News';
+            };
+            reel.appendChild(img);
+            
+            // Overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'reel-overlay';
+            overlay.onclick = () => {
+                const safeURL = sanitizeURL(article.url || article.link);
+                if (safeURL !== '#') {
+                    window.open(safeURL, '_blank', 'noopener,noreferrer');
+                }
+            };
+            
+            const title = document.createElement('div');
+            title.className = 'reel-title';
+            title.textContent = article.title || 'Untitled';
+            overlay.appendChild(title);
+            
+            const source = document.createElement('div');
+            source.className = 'reel-source';
+            source.textContent = `${article.source?.name || 'News'} • ${formatTime(article.publishedAt || article.date)}`;
+            overlay.appendChild(source);
+            
+            if (article.description) {
+                const desc = document.createElement('div');
+                desc.className = 'reel-description';
+                desc.textContent = article.description;
+                overlay.appendChild(desc);
+            }
+            
+            reel.appendChild(overlay);
+            return reel;
+        }
+
+        // ============================================
+        // 📱 APP STATE & CONFIGURATION
+        // ============================================
+        
+        const API_BASE = 'https://backend-ml60.onrender.com/api';
+        let currentTab = 'home';
+        let cachedArticles = null;
+
+        // Load saved preferences
+        function loadPreferences() {
+            const country = localStorage.getItem('country') || 'in';
+            const language = localStorage.getItem('language') || 'en';
+            const theme = localStorage.getItem('theme') || 'light';
+            
+            document.getElementById('countrySelect').value = country;
+            document.getElementById('languageSelect').value = language;
+            
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeToggle').checked = true;
+            }
+        }
+
+        // ============================================
+        // 🌙 THEME TOGGLE
+        // ============================================
+        
+        document.getElementById('themeToggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
         });
 
         // ============================================
-        // ✅ REFRESH BUTTON
+        // 🔄 TAB SWITCHING
         // ============================================
-        document.getElementById('refreshBtn').addEventListener('click', () => {
-            newsCache = {};
-            searchInput.value = '';
-            clearSearchBtn.style.display = 'none';
-            loadNews();
+        
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            const tabButtons = document.querySelectorAll('.tab');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            if (tab === 'home') {
+                tabButtons[0].classList.add('active');
+                navItems[0].classList.add('active');
+                showHome();
+            } else if (tab === 'quick') {
+                tabButtons[1].classList.add('active');
+                navItems[1].classList.add('active');
+                showQuick();
+            } else if (tab === 'search') {
+                tabButtons[2].classList.add('active');
+                navItems[2].classList.add('active');
+                showSearch();
+            } else if (tab === 'bookmarks') {
+                tabButtons[3].classList.add('active');
+                navItems[3].classList.add('active');
+                showBookmarks();
+            }
+        }
+
+        // ============================================
+        // 🏠 HOME TAB - Fetch & Display News
+        // ============================================
+        
+        async function showHome() {
+            document.getElementById('searchBar').classList.remove('active');
+            document.getElementById('reelsSection').classList.remove('active');
+            
+            const list = document.getElementById('newsList');
+            
+            // Show loading
+            list.innerHTML = '';
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            const loaderWrap = document.createElement('div');
+            loaderWrap.className = 'loader-wrap';
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            const text = document.createElement('div');
+            text.textContent = 'Loading top 10 trending headlines...';
+            loaderWrap.appendChild(spinner);
+            loaderWrap.appendChild(text);
+            loading.appendChild(loaderWrap);
+            list.appendChild(loading);
+            
+            // Fetch news
+            try {
+                const country = localStorage.getItem('country') || 'in';
+                const language = localStorage.getItem('language') || 'en';
+                
+                const response = await fetch(`${API_BASE}/all?country=${encodeURIComponent(country)}&language=${encodeURIComponent(language)}`);
+                
+                if (!response.ok) throw new Error('Network error');
+                
+                const data = await response.json();
+                cachedArticles = data;
+                
+                // Clear loading
+                list.innerHTML = '';
+                
+                if (!data.home || !data.home.length) {
+                    const noNews = document.createElement('div');
+                    noNews.className = 'loading';
+                    noNews.textContent = 'No news found for this language.';
+                    list.appendChild(noNews);
+                    return;
+                }
+                
+                // Render articles safely
+                data.home.forEach(article => {
+                    list.appendChild(createNewsCard(article));
+                });
+                
+            } catch (err) {
+                console.error('Fetch Error:', err);
+                list.innerHTML = '';
+                const error = document.createElement('div');
+                error.className = 'loading';
+                error.textContent = 'Failed to load. Check connection.';
+                list.appendChild(error);
+            }
+        }
+
+        // ============================================
+        // ⚡ QUICK TAB - Reels Style News
+        // ============================================
+        
+        function showQuick() {
+            document.getElementById('searchBar').classList.remove('active');
+            document.getElementById('reelsSection').classList.add('active');
+            
+            const reels = document.getElementById('reelsContainer');
+            
+            // Show loading
+            reels.innerHTML = '';
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            loading.style.color = 'white';
+            loading.style.paddingTop = '50vh';
+            const loaderWrap = document.createElement('div');
+            loaderWrap.className = 'loader-wrap';
+            loaderWrap.style.color = '#fff';
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            spinner.style.borderTopColor = '#fff';
+            const text = document.createElement('div');
+            text.textContent = 'Loading quick news...';
+            loaderWrap.appendChild(spinner);
+            loaderWrap.appendChild(text);
+            loading.appendChild(loaderWrap);
+            reels.appendChild(loading);
+            
+            // Use cached data or fetch
+            if (cachedArticles && cachedArticles.quick && cachedArticles.quick.length) {
+                renderReels(cachedArticles.quick);
+            } else {
+                fetchAndRenderReels();
+            }
+        }
+
+        async function fetchAndRenderReels() {
+            try {
+                const country = localStorage.getItem('country') || 'in';
+                const language = localStorage.getItem('language') || 'en';
+                
+                const response = await fetch(`${API_BASE}/all?country=${encodeURIComponent(country)}&language=${encodeURIComponent(language)}`);
+                
+                if (!response.ok) throw new Error('Network error');
+                
+                const data = await response.json();
+                cachedArticles = data;
+                
+                if (data.quick && data.quick.length) {
+                    renderReels(data.quick);
+                } else {
+                    const reels = document.getElementById('reelsContainer');
+                    reels.innerHTML = '';
+                    const noNews = document.createElement('div');
+                    noNews.className = 'loading';
+                    noNews.style.color = 'white';
+                    noNews.textContent = 'No quick news available.';
+                    reels.appendChild(noNews);
+                }
+            } catch (err) {
+                console.error('Reels Fetch Error:', err);
+                const reels = document.getElementById('reelsContainer');
+                reels.innerHTML = '';
+                const error = document.createElement('div');
+                error.className = 'loading';
+                error.style.color = 'white';
+                error.textContent = 'Failed to load reels.';
+                reels.appendChild(error);
+            }
+        }
+
+        function renderReels(articles) {
+            const reels = document.getElementById('reelsContainer');
+            reels.innerHTML = '';
+            
+            articles.forEach((article, index) => {
+                reels.appendChild(createReel(article, index));
+            });
+        }
+
+        function closeReels() {
+            document.getElementById('reelsSection').classList.remove('active');
+            switchTab('home');
+        }
+
+        // ============================================
+        // 🔍 SEARCH TAB
+        // ============================================
+        
+        function showSearch() {
+            document.getElementById('searchBar').classList.add('active');
+            document.getElementById('reelsSection').classList.remove('active');
+            
+            const list = document.getElementById('newsList');
+            list.innerHTML = '';
+            const prompt = document.createElement('div');
+            prompt.className = 'loading';
+            prompt.textContent = '🔍 Enter keywords to search news...';
+            list.appendChild(prompt);
+            
+            document.getElementById('searchInput').focus();
+        }
+
+        // ✅ FIXED: Secure search with validation
+        async function performSearch() {
+            const input = document.getElementById('searchInput');
+            const query = validateSearchInput(input.value);
+            
+            if (!query || query.length < 2) {
+                alert('Please enter at least 2 characters to search');
+                return;
+            }
+            
+            const list = document.getElementById('newsList');
+            
+            // Show loading
+            list.innerHTML = '';
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            const loaderWrap = document.createElement('div');
+            loaderWrap.className = 'loader-wrap';
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            const text = document.createElement('div');
+            text.textContent = `Searching for "${sanitizeHTML(query)}"...`;
+            loaderWrap.appendChild(spinner);
+            loaderWrap.appendChild(text);
+            loading.appendChild(loaderWrap);
+            list.appendChild(loading);
+            
+            try {
+                const language = localStorage.getItem('language') || 'en';
+                const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}&language=${encodeURIComponent(language)}`);
+                
+                if (!response.ok) throw new Error('Search failed');
+                
+                const data = await response.json();
+                
+                // Clear loading
+                list.innerHTML = '';
+                
+                if (!data.articles || !data.articles.length) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'loading';
+                    noResults.textContent = 'No matches found.';
+                    list.appendChild(noResults);
+                    return;
+                }
+                
+                // Render results safely
+                data.articles.forEach(article => {
+                    list.appendChild(createNewsCard(article));
+                });
+                
+            } catch (err) {
+                console.error('Search Error:', err);
+                list.innerHTML = '';
+                const error = document.createElement('div');
+                error.className = 'loading';
+                error.textContent = 'Search failed. Please try again.';
+                list.appendChild(error);
+            }
+        }
+
+        // Enter key for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
         });
 
         // ============================================
-        // ✅ INITIALIZE APP
+        // 🔖 BOOKMARKS TAB
         // ============================================
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Updates News v10.0 - Ultra-Secure Edition');
-            console.log('✅ All security features enabled');
-            console.log('✅ XSS Protection: Active');
-            console.log('✅ Input Validation: Active');
-            console.log('✅ Secure Communication: Active');
-            loadNews();
-        });
+        
+        function showBookmarks() {
+            document.getElementById('searchBar').classList.remove('active');
+            document.getElementById('reelsSection').classList.remove('active');
+            
+            const list = document.getElementById('newsList');
+            list.innerHTML = '';
+            
+            try {
+                const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+                
+                if (!bookmarks.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'loading';
+                    empty.textContent = 'Empty. Save articles to see them here.';
+                    list.appendChild(empty);
+                    return;
+                }
+                
+                // Render bookmarks safely
+                bookmarks.forEach(article => {
+                    list.appendChild(createNewsCard(article));
+                });
+            } catch (e) {
+                console.error('Bookmarks Error:', e);
+                const error = document.createElement('div');
+                error.className = 'loading';
+                error.textContent = 'Failed to load bookmarks.';
+                list.appendChild(error);
+            }
+        }
 
         // ============================================
-        // ✅ ERROR HANDLING
+        // ⚙️ SETTINGS MODAL
         // ============================================
-        window.addEventListener('error', (e) => {
-            console.error('Global error:', e.error);
-            showError('An unexpected error occurred. Please refresh the page.');
-        });
+        
+        function openModal(type) {
+            if (type === 'settings') {
+                document.getElementById('settingsModal').classList.add('active');
+            }
+        }
 
-        window.addEventListener('unhandledrejection', (e) => {
-            console.error('Unhandled promise rejection:', e.reason);
-            showError('A network error occurred. Please check your connection.');
-        });
+        function closeModal(type) {
+            if (type === 'settings') {
+                document.getElementById('settingsModal').classList.remove('active');
+            }
+        }
+
+        function saveSettings() {
+            const country = document.getElementById('countrySelect').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            localStorage.setItem('country', country);
+            localStorage.setItem('language', language);
+            
+            closeModal('settings');
+            
+            // Reload news
+            cachedArticles = null;
+            showHome();
+        }
+
+        // ============================================
+        // 🚀 INITIALIZATION
+        // ============================================
+        
+        // Load on startup
+        loadPreferences();
+        showHome();
+
+        // Service Worker for PWA (optional)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {
+                console.log('Service Worker not available');
+            });
+        }
+
+        console.log('%c🚀 Updates News v10.0 - Ultra Secure', 'color: #3b82f6; font-size: 20px; font-weight: bold;');
+        console.log('%c✅ All XSS vulnerabilities patched', 'color: #10b981; font-size: 14px;');
+        console.log('%c✅ Input validation enabled', 'color: #10b981; font-size: 14px;');
+        console.log('%c✅ Safe DOM manipulation', 'color: #10b981; font-size: 14px;');
     </script>
+
 </body>
 </html>
