@@ -1,206 +1,45 @@
 # ============================================
-# 🔐 ENVIRONMENT & SECRETS - NEVER COMMIT
+# 🔐 SECURITY - Never commit these files!
 # ============================================
+
+# Environment Variables
 .env
 .env.local
+.env.*.local
 .env.production
 .env.development
-.env.test
-.env.staging
-.env.backup
-.env.*
-website.env
-secrets.env
 
-# ============================================
-# 📦 DEPENDENCIES
-# ============================================
+# Dependency Directories
 node_modules/
 npm-debug.log*
-yarn-error.log
 yarn-debug.log*
-package-lock.json
-yarn.lock
-pnpm-debug.log*
-pnpm-lock.yaml
-.pnpm-debug.log*
-bower_components/
-jspm_packages/
+yarn-error.log*
 
-# ============================================
-# 🏗️ BUILD FILES & OUTPUTS
-# ============================================
-dist/
-build/
-out/
-*.log
-logs/
-*.tgz
-*.tar.gz
-.next/
-.nuxt/
-.vercel
-.netlify/
-.cache/
-
-# ============================================
-# 💻 IDE & EDITOR FILES
-# ============================================
-.vscode/
-!.vscode/extensions.json
-!.vscode/settings.json
-.idea/
+# OS Files
+.DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
-.project
-.settings/
+
+# IDE
+.vscode/
+.idea/
 *.sublime-project
 *.sublime-workspace
-.DS_Store
-*.code-workspace
 
-# ============================================
-# 🖥️ OS-SPECIFIC FILES
-# ============================================
-.DS_Store
-.DS_Store?
-Thumbs.db
-Desktop.ini
-.AppleDouble
-.LSOverride
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-ehthumbs_vista.db
-*.lnk
-$RECYCLE.BIN/
+# Logs
+logs/
+*.log
 
-# ============================================
-# 🔒 SECRETS, KEYS & CERTIFICATES
-# ============================================
-secrets/
-*.pem
-*.key
-*.cert
-*.crt
-*.p12
-*.pfx
-credentials.json
-service-account.json
-private-key.json
-*.asc
-*.gpg
-
-# ============================================
-# 💾 BACKUP & TEMPORARY FILES
-# ============================================
-*.backup
-*.bak
-*.tmp
-*.temp
-*.old
-*.orig
-*~
-*.swn
-*.swo
-*.swp
-.~lock.*
-
-# ============================================
-# 🧪 TESTING & COVERAGE
-# ============================================
+# Coverage
 coverage/
 .nyc_output/
-test-results/
-*.test.js.snap
-__tests__/coverage/
-junit.xml
-.jest-cache/
-*.lcov
-htmlcov/
-.coverage
-.pytest_cache/
 
-# ============================================
-# 📊 CACHE FILES
-# ============================================
-.cache/
-.eslintcache
-.stylelintcache
-*.cache
-.parcel-cache/
-.sass-cache/
-.npm/
-.yarn/
+# Build
+dist/
+build/
 
-# ============================================
-# 🚀 DEPLOYMENT & PRODUCTION
-# ============================================
-/build
-/dist
-/out
-.vercel
-.netlify
-.serverless/
-.fusebox/
-.dynamodb/
-.tern-port
-
-# ============================================
-# 🔄 PROCESS MANAGERS
-# ============================================
-.pm2/
-pm2.config.js
-ecosystem.config.js
-.pid
-*.pid
-*.seed
-*.pid.lock
-
-# ============================================
-# 📖 DOCUMENTATION BUILD
-# ============================================
-/docs/build
-/docs/_build
-/docs/.doctrees
-
-# ============================================
-# 🎨 DESIGN FILES (optional - uncomment if needed)
-# ============================================
-# *.psd
-# *.ai
-# *.sketch
-# *.fig
-
-# ============================================
-# 🎥 MEDIA FILES (optional - uncomment if needed)
-# ============================================
-# *.mp4
-# *.avi
-# *.mov
-# *.wmv
-# *.flv
-
-# ============================================
-# 📱 MOBILE DEVELOPMENT (optional)
-# ============================================
-# *.mobileprovision
-# *.dSYM.zip
-# *.dSYM
-# *.ipa
-# *.apk
-
-# ============================================
-# 🔧 MISCELLANEOUS
-# ============================================
-connect.lock
-typings/
-.tern-project
-.history/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Temporary files
+tmp/
+temp/
